@@ -1,0 +1,49 @@
+# Dependency directories
+node_modules/
+dist/
+
+# Build outputs
+build/
+out/
+
+# NestJS specific directories
+dist/
+coverage/
+
+# React specific directories
+build/
+coverage/
+
+# Logs
+logs/
+*.log
+
+# Temp files
+temp/
+.tmp/
+
+# Transpiled files
+*.js.map
+*.d.ts
+
+# Specific file patterns to ignore
+*.min.js
+bundle.js
+
+# Config files
+*.config.js
+
+# Environment files
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# Test directories
+__tests__/
+__mocks__/
+
+# Cache directories
+.cache/
+.pnp.*
