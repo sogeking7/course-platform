@@ -9,7 +9,7 @@ export const encrypt = async (paylod: any) => {
   return await new SignJWT(paylod)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
-    .setExpirationTime('10 sec from now')
+    .setExpirationTime('7d')
     .sign(key);
 };
 
@@ -31,7 +31,7 @@ export const updateSession = async (request: NextRequest) => {
   if (!session) return;
 
   const parsed = await decrypt(session);
-  parsed.expires = new Date(Date.now() + 1000 * 10);
+  parsed.expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7);
   const res = NextResponse.next();
   res.cookies.set('session', await encrypt(parsed), {
     expires: parsed.expires,

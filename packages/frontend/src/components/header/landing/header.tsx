@@ -1,7 +1,6 @@
 import { Logo } from '../../logo';
-
-import { LoginButton } from '../../user/login-btn';
 import { Navigations } from './navigations';
+import { UserButton } from '@/components/user/user-btn';
 
 const links = [
   {
@@ -29,7 +28,7 @@ export const Header = () => {
         <ul className="flex justify-between items-center">
           <Logo />
           <Navigations links={links} />
-          <LoginButton />
+          <UserButton />
         </ul>
       </nav>
     </header>

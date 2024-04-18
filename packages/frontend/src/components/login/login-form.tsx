@@ -15,8 +15,12 @@ import { z } from 'zod';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { login } from '@/server/actions/auth';
+import { useRouter } from 'next/navigation';
+import { Loader2 } from 'lucide-react';
 
 export default function LoginForm() {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -25,8 +29,8 @@ export default function LoginForm() {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof loginSchema>) => {
-    login(data);
+  const onSubmit = async (data: z.infer<typeof loginSchema>) => {
+    await login(data);
   };
 
   return (
@@ -58,7 +62,16 @@ export default function LoginForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button disabled={form.formState.isSubmitting} type="submit">
+          {form.formState.isSubmitting ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Please wait
+            </>
+          ) : (
+            <>Submit</>
+          )}
+        </Button>
       </form>
     </Form>
   );
