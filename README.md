@@ -2,13 +2,11 @@
 
 Project uses `lerna` which allows parallel running/linting/building etc. within the packages(frontend, backend).
 
-Tech.stack: Nest, React, PrismaORM.
+Tech.stack: Nest, Next, PrismaORM.
 
-## Steps for development/contribution
+## Steps for development
 
-Fork this repository and then clone the fork.
-
-Add your code, contribute to the project and create pull-request: after you fix issue or make new feature
+Clone repo or Pull repo changes. Create new branch and make changes. Create pull-request: after you fix issue or make new feature.
 
 #### `yarn install`
 
@@ -30,4 +28,8 @@ Makes linting over backend and frontend
 Builds the app for production to the `build`, `dist` folders.
 Need for deploying
 
-####
+### To run apps seperately:
+
+`yarn start:forntend` & `yarn start:frontend`
+
+or go to package directory and make `yarn start` or `yarn dev`
