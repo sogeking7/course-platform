@@ -3,3 +3,8 @@ export class User {
   username: string;
   password: string;
 }
+
+export class UserDto {
+  id: number;
+  username: string;
+}
