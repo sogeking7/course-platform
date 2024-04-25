@@ -24,12 +24,16 @@
     "@nestjs/jwt": "^10.2.0",
     "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^10.3.2",
+    "@nestjs/serve-static": "^2.2.2",
+    "@nestjs/swagger": "^5.0.8",
     "bcryptjs": "^2.4.3",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "reflect-metadata": "^0.2.1",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "swagger": "^0.0.1",
+    "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
