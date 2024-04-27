@@ -1,4 +1,4 @@
-import { HomeHeader } from '@/components/home-header';
+import { HomeHeader } from '@/components/header/home/header';
 import { LogoutButton } from '@/components/user/user-btn';
 import { getSession } from '@/lib';
 
@@ -8,7 +8,7 @@ export default async function ProfileSettings() {
   return (
     <div>
       <HomeHeader title={'Settings'} />
-      <div className="p-8">
+      <div className="p-12">
         {user ? (
           <div>
             {user.email}

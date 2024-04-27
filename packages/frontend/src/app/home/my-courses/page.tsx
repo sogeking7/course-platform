@@ -1,10 +1,10 @@
-import { HomeHeader } from '@/components/home-header';
+import { HomeHeader } from '@/components/header/home/header';
 
 export default function MyCoursesPage() {
   return (
     <div>
       <HomeHeader title={'My Courses'} />
-      <div className="p-8"></div>
+      <div className="p-12"></div>
     </div>
   );
 }

@@ -18,7 +18,7 @@ const links = [
 
 export const Footer = () => {
   return (
-    <footer className="py-10 bg-my_cyan">
+    <footer className="py-10 bg-blue-50">
       <nav className="container flex justify-between items-center">
         <Logo />
         <ul className="flex gap-4 list-none">

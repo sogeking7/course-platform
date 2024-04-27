@@ -1,6 +1,6 @@
-import { HomeHeader } from '@/components/home-header';
+import { HomeHeader } from '@/components/header/home/header';
 import { Button } from '@/components/ui/button';
-import { LogoutButton } from '@/components/user/user-btn';
+import { LogoutButton, UserInfoBox } from '@/components/user/user-btn';
 
 import { getSession } from '@/lib';
 import { logout } from '@/server/actions/auth';
@@ -14,15 +14,8 @@ export default async function ProfilePage() {
   return (
     <div>
       <HomeHeader title={'Profile'} />
-      <div className="p-8">
-        {user ? (
-          <div>
-            {user.email}
-            <LogoutButton />
-          </div>
-        ) : (
-          <div>You must be logged in.</div>
-        )}
+      <div className="px-12">
+        <UserInfoBox user={user} />
       </div>
     </div>
   );
