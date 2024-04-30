@@ -5,15 +5,18 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const options = new DocumentBuilder()
-    .setTitle('Course Platform')
-    .setDescription('Johny ozi biled (NA)')
-    .setVersion('1.0')
-    .build();
+  try {
+    const options = new DocumentBuilder()
+      .setTitle('Course Platform')
+      .setDescription('Johny ozi biled (NA)')
+      .setVersion('1.0')
+      .build();
 
-  const document = SwaggerModule.createDocument(app, options);
-
-  SwaggerModule.setup('api/docs', app, document);
+    const document = SwaggerModule.createDocument(app, options);
+    SwaggerModule.setup('api/docs', app, document);
+  } catch (error) {
+    console.error('Error setting up Swagger', error);
+  }
 
   await app.listen(3001);
 }
