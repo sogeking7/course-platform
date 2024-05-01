@@ -24,7 +24,7 @@ export const MySheetTrigger = () => {
   );
 };
 
-export const MySheet = () => {
+export const MySheet = (props: any) => {
   const { isMySheetOpen, setIsMySheetOpen } = useSidebar();
 
   return (
@@ -40,7 +40,7 @@ export const MySheet = () => {
             <LogoHome />
           </div>
         </SheetHeader>
-        <SideBar isSheet />
+        <SideBar isLoggedIn={props.isLoggedIn} isSheet />
       </SheetContent>
     </Sheet>
   );
@@ -61,22 +61,29 @@ export const SideBarTrigger = () => {
   );
 };
 
-export const SideBar = ({ isSheet = false, noText = false }: any) => {
+export const SideBar = ({
+  isSheet = false,
+  noText = false,
+  isLoggedIn,
+}: any) => {
   const pathname = usePathname();
 
   return (
     <nav className="my-1">
       <ul className="space-y-1">
-        {sidebar_links.map((item) => (
-          <li className="w-full" key={item.title}>
-            <SideBarButton
-              noText={noText}
-              isSheet
-              pathname={pathname}
-              item={item}
-            />
-          </li>
-        ))}
+        {sidebar_links.map((item) => {
+          if (!isLoggedIn && item.auth) return null;
+          return (
+            <li className="w-full" key={item.title}>
+              <SideBarButton
+                noText={noText}
+                isSheet
+                pathname={pathname}
+                item={item}
+              />
+            </li>
+          );
+        })}
       </ul>
     </nav>
   );
@@ -94,18 +101,18 @@ export const SideBarSkeleton = () => {
   );
 };
 
-export const SideBarResizable = () => {
+export const SideBarResizable = (props: any) => {
   const { isSideBarOpen } = useSidebar();
   if (isSideBarOpen) {
     return (
       <aside className="max-xl:hidden min-w-[91px] pt-[73px] fixed border-r min-h-screen max-h-full ">
-        <SideBar noText />
+        <SideBar isLoggedIn={props.isLoggedIn} noText />
       </aside>
     );
   }
   return (
     <aside className="max-xl:hidden min-w-[360px] pt-[73px] fixed border-r min-h-screen max-h-full ">
-      <SideBar />
+      <SideBar isLoggedIn={props.isLoggedIn} />
     </aside>
   );
 };
