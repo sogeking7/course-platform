@@ -1,14 +1,27 @@
-import { HomeHeader } from '@/components/home-header';
-import { SideBar } from '@/components/sidebar';
-import { useRouter } from 'next/navigation';
+import { HomeHeader } from "@/components/header";
+import { LogoHome } from "@/components/logo";
+import {
+  SideBar,
+  SideBarResizable,
+  SideBarSkeleton,
+} from "@/components/sidebar";
+import { useSidebar } from "../../../hooks/sidebar";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function HomeLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <div className="flex flex-row w-full min-h-screen">
-      <div className="min-w-[340px] h-full">
-        <SideBar />
+    <div className="flex w-full">
+      <SideBarResizable />
+      <div className="fixed top-0 w-full bg-white">
+        <HomeHeader />
       </div>
-      <main className=" h-full w-full">{children}</main>
+      <main className="h-full w-full overflow-y-auto flex">
+        <SideBarSkeleton />
+        <div className="w-full pt-[73px]">{children}</div>
+      </main>
     </div>
   );
 }
