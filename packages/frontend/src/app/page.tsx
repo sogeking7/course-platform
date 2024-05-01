@@ -1,29 +1,13 @@
-import { Footer } from '@/components/footer';
-import { Header } from '@/components/header/landing/header';
-import { getSession } from '@/lib';
-import axios from 'axios';
+import HomeLayout from "./home/layout";
+import { MyContainer } from "@/components/container";
+import { TypographyH1 } from "@/components/ui/typography";
 
-export default async function Home() {
-  const posts = await axios.get('https://jsonplaceholder.typicode.com/todos');
-  console.log(posts);
-
+export default function HomePage() {
   return (
-    <div className="grid grid-cols-1 gap-8 min-h-screen">
-      <Header />
-      <p className="container">
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga rem quos,
-        suscipit itaque adipisci tempore facilis est voluptatum corrupti
-        voluptates aperiam delectus perferendis, atque asperiores eius minima
-        non ea! Atque.
-      </p>
-      <p className="container">
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga rem quos,
-        suscipit itaque adipisci tempore facilis est voluptatum corrupti
-        voluptates aperiam delectus perferendis, atque asperiores eius minima
-        non ea! Atque.
-      </p>
-
-      <Footer />
-    </div>
+    <HomeLayout>
+      <MyContainer>
+        <TypographyH1>Home</TypographyH1>
+      </MyContainer>
+    </HomeLayout>
   );
 }

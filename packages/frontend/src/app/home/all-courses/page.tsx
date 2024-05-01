@@ -1,6 +1,7 @@
 import { CourseCard } from "@/components/course/course-card";
-import { HomeHeader } from "@/components/header/home/header";
 import { Course } from "../../../../types";
+import { MyContainer } from "@/components/container";
+import { TypographyH1 } from "@/components/ui/typography";
 
 const pageTitle = "Курстар";
 
@@ -25,17 +26,13 @@ const data = [
 
 export default function AllCoursesPage() {
   return (
-    <div>
-      <HomeHeader title={pageTitle} />
-      <div className="px  -12">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid lg:grid-cols-3 sm:grid-cols-2 basic:grid-cols-1 gap-8">
-            {data.map((course: Course) => (
-              <CourseCard item={course} />
-            ))}
-          </div>
-        </div>
+    <MyContainer>
+      <TypographyH1>Courses</TypographyH1>
+      <div className="grid lg:grid-cols-3 xl:grid-cols-3 md:grid-cols-2 sm:grid-cols-1  gap-8">
+        {data.map((course, ind) => (
+          <CourseCard key={ind} item={course as Course} />
+        ))}
       </div>
-    </div>
+    </MyContainer>
   );
 }

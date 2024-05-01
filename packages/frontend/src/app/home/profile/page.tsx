@@ -1,22 +1,17 @@
-import { HomeHeader } from '@/components/header/home/header';
-import { Button } from '@/components/ui/button';
-import { LogoutButton, UserInfoBox } from '@/components/user/user-btn';
-
-import { getSession } from '@/lib';
-import { logout } from '@/server/actions/auth';
-import { Link, LogOut } from 'lucide-react';
-import { redirect } from 'next/dist/server/api-utils';
+import { MyContainer } from "@/components/container";
+import { HomeHeader } from "@/components/header";
+import { TypographyH1 } from "@/components/ui/typography";
+import { UserInfoBox } from "@/components/user/user-btn";
+import { getSession } from "@/lib";
 
 export default async function ProfilePage() {
   const session = await getSession();
   const user = session?.user;
 
   return (
-    <div>
-      <HomeHeader title={'Profile'} />
-      <div className="px-12">
-        <UserInfoBox user={user} />
-      </div>
-    </div>
+    <MyContainer>
+      <TypographyH1>Profile</TypographyH1>
+      <UserInfoBox user={user} />
+    </MyContainer>
   );
 }

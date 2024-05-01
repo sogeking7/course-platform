@@ -5,6 +5,7 @@ import Link from "next/link";
 import { logout } from "@/server/actions/auth";
 import { User } from "../../../types";
 import { cn } from "@/lib/utils";
+import { TypographyLarge } from "../ui/typography";
 
 export const UserButton = async () => {
   const session = await getSession();
@@ -14,18 +15,13 @@ export const UserButton = async () => {
     return (
       <Button
         size={"reset"}
-        className={cn(
-          "py-3 px-5 rounded-xl",
-          "bg-blue-100",
-          "hover:bg-blue-500 hover:text-slate-50",
-          "text-slate-800",
-        )}
+        className={cn("py-3 px-5")}
         variant={"ghost"}
         asChild
       >
         <Link href="/home/profile">
           Жеке профиль
-          <CircleUserRound className="ml-2 h-6 w-6" />
+          <CircleUserRound strokeWidth={1.75} className="ml-2 h-6 w-6" />
         </Link>
       </Button>
     );
@@ -41,7 +37,7 @@ export const LogoutButton = () => {
         await logout();
       }}
     >
-      <Button type="submit" variant={"secondary"}>
+      <Button type="submit">
         <div className="flex gap-2 items-center">
           <LogOut className="h-4 w-4" />
           Шығу
@@ -69,8 +65,8 @@ export const UserInfoBox = async ({ user }: { user: User | null }) => {
     return <div>You must be logged in.</div>;
   }
   return (
-    <div className="rounded-xl bg-gray-100 p-4">
-      {user.email}
+    <div className="rounded-2xl bg-gray-100 p-5 space-y-3">
+      <TypographyLarge>{user.email}</TypographyLarge>
       <LogoutButton />
     </div>
   );

@@ -1,10 +1,10 @@
-import { HomeHeader } from '@/components/header/home/header';
+import { MyContainer } from "@/components/container";
+import { TypographyH1 } from "@/components/ui/typography";
 
 export default function MyCoursesPage() {
   return (
-    <div>
-      <HomeHeader title={'My Courses'} />
-      <div className="p-12"></div>
-    </div>
+    <MyContainer>
+      <TypographyH1>My Courses</TypographyH1>
+    </MyContainer>
   );
 }

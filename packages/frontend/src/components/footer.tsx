@@ -1,17 +1,17 @@
-import { Instagram, MapPin } from 'lucide-react';
-import { Logo } from './logo';
+import { Instagram, MapPin } from "lucide-react";
+import { Logo } from "./logo";
 
 const links = [
   {
-    title: 'г.Алматы , ул Кошкарбаев 62',
+    title: "г.Алматы , ул Кошкарбаев 62",
     icon: <MapPin size={20} />,
   },
   {
-    title: 'example.study',
+    title: "example.study",
     icon: <Instagram size={20} />,
   },
   {
-    title: 'Example study',
+    title: "Example study",
     icon: null,
   },
 ];
