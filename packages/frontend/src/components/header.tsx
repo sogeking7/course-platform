@@ -6,7 +6,7 @@ export const HomeHeader = () => {
   return (
     <header className="px-6 py-3 w-full border-b">
       <div className="flex items-center w-full justify-between">
-        <div className="flex gap-4 items-center">
+        <div className="flex gap-6 items-center">
           <div className="max-xl:hidden">
             <SideBarTrigger />
           </div>

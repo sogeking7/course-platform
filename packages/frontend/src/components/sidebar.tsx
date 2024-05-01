@@ -61,7 +61,7 @@ export const SideBarTrigger = () => {
   );
 };
 
-export const SideBar = ({ isSheet = false }: any) => {
+export const SideBar = ({ isSheet = false, noText = false }: any) => {
   const pathname = usePathname();
 
   return (
@@ -69,7 +69,12 @@ export const SideBar = ({ isSheet = false }: any) => {
       <ul className="space-y-1">
         {sidebar_links.map((item) => (
           <li className="w-full" key={item.title}>
-            <SideBarButton isSheet pathname={pathname} item={item} />
+            <SideBarButton
+              noText={noText}
+              isSheet
+              pathname={pathname}
+              item={item}
+            />
           </li>
         ))}
       </ul>
@@ -80,7 +85,9 @@ export const SideBar = ({ isSheet = false }: any) => {
 export const SideBarSkeleton = () => {
   const { isSideBarOpen } = useSidebar();
   if (isSideBarOpen) {
-    return null;
+    return (
+      <aside className="min-w-[91px] max-xl:hidden min-h-screen max-h-full"></aside>
+    );
   }
   return (
     <aside className="min-w-[360px] max-xl:hidden min-h-screen max-h-full"></aside>
@@ -90,7 +97,11 @@ export const SideBarSkeleton = () => {
 export const SideBarResizable = () => {
   const { isSideBarOpen } = useSidebar();
   if (isSideBarOpen) {
-    return null;
+    return (
+      <aside className="max-xl:hidden min-w-[91px] pt-[73px] fixed border-r min-h-screen max-h-full ">
+        <SideBar noText />
+      </aside>
+    );
   }
   return (
     <aside className="max-xl:hidden min-w-[360px] pt-[73px] fixed border-r min-h-screen max-h-full ">
@@ -100,7 +111,7 @@ export const SideBarResizable = () => {
 };
 
 const SideBarButton = (props: any) => {
-  const { item, pathname, isSheet } = props;
+  const { item, pathname, isSheet, noText } = props;
   const { setIsMySheetOpen } = useSidebar();
   return (
     <Button
@@ -113,7 +124,7 @@ const SideBarButton = (props: any) => {
       className={cn(
         "w-full justify-start",
         "text-slate-900",
-        "py-5 pr-5 pl-7 rounded-none gap-4 border-transparent  border-l-4",
+        "py-5 pr-7 pl-8 rounded-none gap-4 border-transparent  border-l-4",
         pathname === item.href
           ? "bg-slate-200 border-slate-900"
           : "hover:bg-slate-100 hover:border-slate-100",
@@ -124,7 +135,7 @@ const SideBarButton = (props: any) => {
     >
       <Link href={item.href}>
         {item.icon}
-        {item.title}
+        {noText ? null : item.title}
       </Link>
     </Button>
   );
