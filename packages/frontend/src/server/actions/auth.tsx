@@ -1,10 +1,10 @@
-'use server';
+"use server";
 
-import { encrypt } from '@/lib';
-import { loginSchema } from '@/lib/formSchema';
-import { redirect } from 'next/navigation';
-import { cookies } from 'next/headers';
-import { z } from 'zod';
+import { encrypt } from "@/lib";
+import { loginSchema } from "@/lib/formSchema";
+import { redirect, useRouter } from "next/navigation";
+import { cookies } from "next/headers";
+import { z } from "zod";
 
 export const login = async (values: z.infer<typeof loginSchema>) => {
   const user = { ...values };
@@ -15,11 +15,11 @@ export const login = async (values: z.infer<typeof loginSchema>) => {
   await new Promise((resolve) => setTimeout(resolve, 4000));
 
   // Save the session in a cookie.
-  cookies().set('session', session, { expires, httpOnly: true });
-
-  redirect('/home/my-courses');
+  cookies().set("session", session, { expires, httpOnly: true });
+  redirect("/");
 };
 
 export const logout = async () => {
-  cookies().set('session', '', { expires: new Date(0) });
+  cookies().set("session", "", { expires: new Date(0) });
+  redirect("/");
 };
