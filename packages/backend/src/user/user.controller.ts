@@ -1,46 +1,70 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, HttpException, HttpStatus } from '@nestjs/common';
-import { User } from './entities/user/user'
+import { Controller, Get, Post, Body, Put, Param, Delete, HttpException, HttpStatus } from '@nestjs/common';
+import { Prisma, User } from '@prisma/client';
 import { UserService } from './user.service';
+import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiParam } from '@nestjs/swagger';
 
-@Controller('users')
+@ApiTags('User')
+@Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get()
-  findAll(): Promise<User[]> {
-    return this.userService.findAll();
-  }
-
+  @ApiOperation({ summary: 'Find a user by ID' })
+  @ApiResponse({ status: 200, type: Promise<User | null> })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
+  @ApiParam({ name: 'id', description: 'ID of the user' })
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<User> {
-    return this.userService.findOne(+id);
+  async findOneById(@Param('id') id: string): Promise<User | null> {
+    try {
+      const userId = parseInt(id, 10);
+      return await this.userService.findOneById(userId);
+    } catch (error) {
+      throw new HttpException(`Error finding user: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
+  @ApiOperation({ summary: 'Find a user by email' })
+  @ApiResponse({ status: 200, type: Promise<User | null> })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
+  @ApiParam({ name: 'email', description: 'Email of the user' })
+  @Get(':email')
+  async findOneByEmail(@Param('email') email: string): Promise<User | null> {
+    try {
+      return await this.userService.findOneByEmail(email);
+    } catch (error) {
+      throw new HttpException(`Error finding user: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @ApiOperation({ summary: 'Create a new user' })
+  @ApiResponse({ status: 201, type: Promise<User>, description: 'The created user' })
+  @ApiBody({ type: Prisma.User.prototype.create.Input })
   @Post()
-  async create(@Body() user: User): Promise<User> {
-    const existingUser = await this.userService.findByEmail(user.email);
-    if (existingUser) {
-      throw new HttpException('User with this email already exists', HttpStatus.BAD_REQUEST);
-    }
-    return this.userService.create(user);
+  async create(@Body() data: Prisma.User.prototype.create.Input): Promise<User> {
+    return await this.userService.create(data);
   }
 
+  @ApiOperation({ summary: 'Update a user' })
+  @ApiResponse({ status: 200, type: Promise<User>, description: 'The updated user' })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
+  @ApiParam({ name: 'id', description: 'ID of the user' })
+  @ApiBody({ type: Prisma.User.prototype.update.Input })
   @Put(':id')
-  update(@Param('id') id: string, @Body() user: User): Promise<User> {
-    return this.userService.update(+id, user);
+  async update(
+    @Param('id') id: string,
+    @Body() data: Prisma.User.prototype.update.Input,
+  ): Promise<User> {
+    return await this.userService.update({
+      where: { id: Number(id) },
+      data,
+    });
   }
 
+  @ApiOperation({ summary: 'Delete a user' })
+  @ApiResponse({ status: 200, type: Promise<User>, description: 'The deleted user' })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
+  @ApiParam({ name: 'id', description: 'ID of the user' })
   @Delete(':id')
-  delete(@Param('id') id: string): Promise<void> {
-    return this.userService.delete(+id);
-  }
-
-  @Post('login')
-  async login(@Body() loginData: { email: string, password: string }): Promise<User> {
-    const user = await this.userService.validateUser(loginData.email, loginData.password);
-    if (!user) {
-      throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
-    }
-    return user;
+  async remove(@Param('id') id: string): Promise<User> {
+    return await this.userService.remove({ id: Number(id) });
   }
 }
