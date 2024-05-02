@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 import { Course } from "../../../types";
+import Link from "next/link";
 
 export const CourseCard = ({ item }: { item: Course }) => {
   return (
@@ -20,6 +21,7 @@ export const CourseCard = ({ item }: { item: Course }) => {
 const OpenButton = () => {
   return (
     <Button
+      asChild
       className={cn(
         "px-4 py-2",
         // "rounded-xl",
@@ -28,7 +30,7 @@ const OpenButton = () => {
       variant={"outline"}
       size={"reset"}
     >
-      Open
+      <Link href="/home/learning/1">Open</Link>
     </Button>
   );
 };

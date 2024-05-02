@@ -65,7 +65,7 @@ export const UserInfoBox = async ({ user }: { user: User | null }) => {
     return <div>You must be logged in.</div>;
   }
   return (
-    <div className="rounded-sm bg-gray-100 p-5 space-y-3">
+    <div className="rounded-sm bg-neutral-100 p-5 space-y-3">
       <TypographyLarge>{user.email}</TypographyLarge>
       <LogoutButton />
     </div>

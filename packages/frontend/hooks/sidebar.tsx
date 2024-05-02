@@ -8,7 +8,7 @@ type Store = {
 };
 
 export const useSidebar = create<Store>()((set) => ({
-  isSideBarOpen: false,
+  isSideBarOpen: true,
   isMySheetOpen: false,
   setIsMySheetOpen: (newValue) => set({ isMySheetOpen: newValue }),
   setIsSideBarOpen: (newValue) => set({ isSideBarOpen: newValue }),
