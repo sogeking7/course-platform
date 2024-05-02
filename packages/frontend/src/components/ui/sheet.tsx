@@ -66,8 +66,8 @@ const SheetContent = React.forwardRef<
       {...props}
     >
       {children}
-      <SheetPrimitive.Close className="absolute left-6 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 disabled:pointer-events-none data-[state=open]:bg-secondary">
-        <Button size={"icon"} variant={"ghost"}>
+      <SheetPrimitive.Close className="absolute left-4 top-1 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 disabled:pointer-events-none data-[state=open]:bg-secondary">
+        <Button size={"reset"} variant={"ghost"} className="p-3">
           <X />
         </Button>
         {/* <span className="sr-only">Close</span> */}

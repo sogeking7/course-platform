@@ -9,6 +9,7 @@ import { MenuIcon, X } from "lucide-react";
 import { useSidebar } from "../../hooks/sidebar";
 import { LogoHome } from "./logo";
 import { Sheet, SheetHeader, SheetContent } from "@/components/ui/sheet";
+import { useEffect } from "react";
 
 export const MySheetTrigger = () => {
   const { isMySheetOpen, setIsMySheetOpen } = useSidebar();
@@ -17,7 +18,7 @@ export const MySheetTrigger = () => {
       onClick={() => setIsMySheetOpen(!isMySheetOpen)}
       size={"reset"}
       variant={"ghost"}
-      className="p-3 opacity-70 hover:opacity-100"
+      className="opacity-70 p-3 hover:opacity-100"
     >
       {isMySheetOpen ? <X /> : <MenuIcon />}
     </Button>
@@ -36,7 +37,7 @@ export const MySheet = (props: any) => {
     >
       <SheetContent className="w-[360px]" side={"left"}>
         <SheetHeader>
-          <div className="w-full py-3 flex justify-center border-b">
+          <div className="w-full py-1 flex justify-center border-b shadow-sm">
             <LogoHome />
           </div>
         </SheetHeader>
@@ -47,14 +48,18 @@ export const MySheet = (props: any) => {
 };
 
 export const SideBarTrigger = () => {
+  const pathname = usePathname();
   const { isSideBarOpen, setIsSideBarOpen } = useSidebar();
 
+  if (pathname.includes("/learning")) {
+    return <MySheetTrigger />;
+  }
   return (
     <Button
       onClick={() => setIsSideBarOpen(!isSideBarOpen)}
       size={"reset"}
       variant={"ghost"}
-      className="p-3 opacity-70 hover:opacity-100"
+      className="opacity-70 p-3 hover:opacity-100"
     >
       {isSideBarOpen ? <X /> : <MenuIcon />}
     </Button>
@@ -90,28 +95,33 @@ export const SideBar = ({
 };
 
 export const SideBarSkeleton = () => {
+  const pathname = usePathname();
   const { isSideBarOpen } = useSidebar();
-  if (isSideBarOpen) {
+
+  if (!isSideBarOpen || pathname.includes("/learning")) {
     return (
-      <aside className="min-w-[91px] max-xl:hidden min-h-screen max-h-full"></aside>
+      <aside className="min-w-[77px] max-xl:hidden min-h-screen max-h-full"></aside>
     );
   }
   return (
-    <aside className="min-w-[360px] max-xl:hidden min-h-screen max-h-full"></aside>
+    <aside className="min-w-[300px] max-xl:hidden min-h-screen max-h-full"></aside>
   );
 };
 
 export const SideBarResizable = (props: any) => {
+  const pathname = usePathname();
   const { isSideBarOpen } = useSidebar();
-  if (isSideBarOpen) {
+
+  if (!isSideBarOpen || pathname.includes("/learning")) {
     return (
-      <aside className="max-xl:hidden min-w-[91px] pt-[73px] fixed border-r min-h-screen max-h-full ">
+      <aside className="max-xl:hidden pt-[57px] fixed border-r min-h-screen max-h-full ">
         <SideBar isLoggedIn={props.isLoggedIn} noText />
       </aside>
     );
   }
+
   return (
-    <aside className="max-xl:hidden min-w-[360px] pt-[73px] fixed border-r min-h-screen max-h-full ">
+    <aside className="max-xl:hidden min-w-[300px] pt-[57px] fixed border-r min-h-screen max-h-full ">
       <SideBar isLoggedIn={props.isLoggedIn} />
     </aside>
   );
@@ -129,20 +139,21 @@ const SideBarButton = (props: any) => {
         }
       }}
       className={cn(
-        "w-full justify-start",
-        "text-slate-900",
-        "py-5 pr-7 pl-8 rounded-none gap-4 border-transparent  border-l-4",
+        "w-full justify-start font-normal",
+        "py-4 pr-6 pl-6 rounded-none gap-4 border-transparent  border-l-4",
         pathname === item.href
-          ? "bg-slate-200 border-slate-900"
-          : "hover:bg-slate-100 hover:border-slate-100",
+          ? "bg-neutral-200 border-neutral-700 hover:bg-neutral-100 "
+          : "hover:border-neutral-100 hover:bg-neutral-100",
       )}
       variant={"sidebar"}
       size={"reset"}
       asChild
     >
       <Link href={item.href}>
-        {item.icon}
-        {noText ? null : item.title}
+        <i className="text-neutral-700">{item.icon}</i>
+        {noText ? null : (
+          <label className="text-neutral-900">{item.title}</label>
+        )}
       </Link>
     </Button>
   );
