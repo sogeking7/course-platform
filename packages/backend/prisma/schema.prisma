@@ -13,5 +13,11 @@ model User {
   lastName             String
   email                String    @unique
   password             String
-  profilePictureLink   String
+  profilePictureLink   String?
+  role                 UserRole  @default(USER)
+}
+
+enum UserRole {
+  ADMIN
+  USER
 }
