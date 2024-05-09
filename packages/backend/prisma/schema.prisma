@@ -20,7 +20,7 @@ model User {
 model Image {
   id   Int     @id @default(autoincrement())
   name String
-  url  String?
+  url  String
 }
 
 enum UserRole {
