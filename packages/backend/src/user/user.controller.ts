@@ -9,8 +9,9 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { Prisma, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import { UserService } from './user.service';
+import { UserCreateDto } from './dto/user.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 
 @ApiTags('User')
@@ -35,22 +36,6 @@ export class UserController {
     }
   }
 
-  @ApiOperation({ summary: 'Find a user by email' })
-  @ApiResponse({ status: 200, type: Promise<User | null> })
-  @ApiResponse({ status: 500, description: 'Internal Server Error' })
-  @ApiParam({ name: 'email', description: 'Email of the user' })
-  @Get(':email')
-  async findOneByEmail(@Param('email') email: string): Promise<User | null> {
-    try {
-      return await this.userService.findOneByEmail(email);
-    } catch (error) {
-      throw new HttpException(
-        `Error finding user: ${error.message}`,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-  }
-
   @ApiOperation({ summary: 'Create a new user' })
   @ApiResponse({
     status: 201,
@@ -58,7 +43,7 @@ export class UserController {
     description: 'The created user',
   })
   @Post()
-  async create(@Body() data: Prisma.UserCreateInput): Promise<User> {
+  async create(@Body() data: UserCreateDto): Promise<User> {
     return await this.userService.create(data);
   }
 
@@ -73,7 +58,7 @@ export class UserController {
   @Put(':id')
   async update(
     @Param('id') id: string,
-    @Body() data: Prisma.UserUpdateInput,
+    @Body() data: UserCreateDto,
   ): Promise<User> {
     return await this.userService.update({
       where: { id: Number(id) },

@@ -19,19 +19,6 @@ export class UserService {
     }
   }
 
-  async findOneByEmail(email: string): Promise<User | null> {
-    try {
-      return await this.prisma.user.findUnique({
-        where: { email },
-      });
-    } catch (error) {
-      throw new HttpException(
-        `Error finding user: ${error.message}`,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-  }
-
   async create(data: Prisma.UserCreateInput): Promise<User> {
     return await this.prisma.user.create({
       data,
