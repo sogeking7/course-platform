@@ -6,10 +6,10 @@ import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { sidebar_links } from "../../public/shared";
 import { MenuIcon, X } from "lucide-react";
-import { useSidebar } from "../../hooks/sidebar";
-import { LogoHome } from "./logo";
+import { useSidebar } from "@/lib/hooks/zustand/sidebar";
 import { Sheet, SheetHeader, SheetContent } from "@/components/ui/sheet";
-import { useEffect } from "react";
+import { LogoHome } from "./logo";
+import { useSession } from "next-auth/react";
 
 export const MySheetTrigger = () => {
   const { isMySheetOpen, setIsMySheetOpen } = useSidebar();
@@ -25,7 +25,7 @@ export const MySheetTrigger = () => {
   );
 };
 
-export const MySheet = (props: any) => {
+export const MySheet = () => {
   const { isMySheetOpen, setIsMySheetOpen } = useSidebar();
 
   return (
@@ -41,7 +41,7 @@ export const MySheet = (props: any) => {
             <LogoHome />
           </div>
         </SheetHeader>
-        <SideBar isLoggedIn={props.isLoggedIn} isSheet />
+        <SideBar />
       </SheetContent>
     </Sheet>
   );
@@ -67,11 +67,10 @@ export const SideBarTrigger = () => {
 };
 
 export const SideBar = ({
-  isSheet = false,
   noText = false,
-  isLoggedIn,
 }: any) => {
-  const pathname = usePathname();
+  const { data: session } = useSession();
+  const isLoggedIn = session !== null;
 
   return (
     <nav className="my-1">
@@ -83,7 +82,6 @@ export const SideBar = ({
               <SideBarButton
                 noText={noText}
                 isSheet
-                pathname={pathname}
                 item={item}
               />
             </li>
@@ -115,20 +113,21 @@ export const SideBarResizable = (props: any) => {
   if (!isSideBarOpen || pathname.includes("/learning")) {
     return (
       <aside className="max-xl:hidden pt-[57px] fixed border-r min-h-screen max-h-full ">
-        <SideBar isLoggedIn={props.isLoggedIn} noText />
+        <SideBar noText />
       </aside>
     );
   }
 
   return (
     <aside className="max-xl:hidden min-w-[300px] pt-[57px] fixed border-r min-h-screen max-h-full ">
-      <SideBar isLoggedIn={props.isLoggedIn} />
+      <SideBar />
     </aside>
   );
 };
 
 const SideBarButton = (props: any) => {
-  const { item, pathname, isSheet, noText } = props;
+  const pathname = usePathname();
+  const { item, isSheet, noText } = props;
   const { setIsMySheetOpen } = useSidebar();
   return (
     <Button

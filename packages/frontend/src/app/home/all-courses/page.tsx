@@ -1,5 +1,5 @@
 import { CourseCard } from "@/components/course/course-card";
-import { Course } from "../../../../types";
+import { Course } from "../../../types";
 import { MyContainer } from "@/components/container";
 import { TypographyH1 } from "@/components/ui/typography";
 
