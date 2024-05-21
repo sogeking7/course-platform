@@ -14,7 +14,7 @@ export const HomeHeader = (props: any) => {
             <MySheetTrigger />
           </div>
           <LogoHome />
-          <MySheet isLoggedIn={props.isLoggedIn} />
+          <MySheet />
         </div>
         <div className="gap-5 flex items-center">
           <UserButton />

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
-import { Course } from "../../../types";
+import { Course } from "../../types";
 import Link from "next/link";
 
 export const CourseCard = ({ item }: { item: Course }) => {

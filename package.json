@@ -5,6 +5,7 @@
   "description": "",
   "scripts": {
     "start": "lerna run --stream --parallel --scope=@*/{frontend,backend} dev",
+    "start:app": "lerna run --stream --parallel --scope=@*/{frontend,backend} start",
     "start:frontend": "lerna run --stream --scope=@*/frontend dev",
     "start:backend": "lerna run --stream --scope=@*/backend dev",
     "lint": "lerna run --no-bail --stream --parallel --scope=@*/{frontend,backend} lint",

@@ -1,12 +1,10 @@
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import LoginForm from "@/components/login/login-form";
-import { TypographyH1 } from "@/components/ui/typography";
 import { LogoHome } from "@/components/logo";
 import { MyContainer } from "@/components/container";
 

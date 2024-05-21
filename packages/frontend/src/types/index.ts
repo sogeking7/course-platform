@@ -1,11 +1,15 @@
+export type Auth = {
+  email: string,
+  password: string
+}
+
 export type User = {
   id: number,
-  firstname: string,
-  lastname: string,
+  firstName: string,
+  lastName: string,
   email: string,
-  password: string,
-  profile_image_url?: string
-} 
+  profile_image_url?: string,
+}
 
 export type Module = {
   id: number,

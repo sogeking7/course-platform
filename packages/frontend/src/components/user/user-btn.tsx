@@ -1,14 +1,14 @@
-import { getSession } from "@/lib";
+'use client';
+
 import { CircleUserRound, LogIn, LogOut } from "lucide-react";
 import { Button } from "../ui/button";
 import Link from "next/link";
-import { logout } from "@/server/actions/auth";
-import { User } from "../../../types";
 import { cn } from "@/lib/utils";
-import { TypographyLarge } from "../ui/typography";
+import { TypographyLarge, TypographyP } from "../ui/typography";
+import { signIn, signOut, useSession } from "next-auth/react";
 
-export const UserButton = async () => {
-  const session = await getSession();
+export const UserButton = () => {
+  const { data: session } = useSession();
   const user = session?.user;
 
   if (user) {
@@ -26,48 +26,45 @@ export const UserButton = async () => {
       </Button>
     );
   }
-  return <LoginButton />;
+  return <SignInButton />;
 };
 
-export const LogoutButton = () => {
+export const SignOutButton = () => {
   return (
-    <form
-      action={async () => {
-        "use server";
-        await logout();
-      }}
-    >
-      <Button type="submit">
-        <div className="flex gap-2 items-center">
-          <LogOut className="h-4 w-4" />
-          Шығу
-        </div>
-      </Button>
-    </form>
+    <Button variant={"default"} onClick={() => signOut()}>
+      <LogOut className="mr-2 h-4 w-4" />
+      Шығу
+    </Button>
   );
 };
 
-const LoginButton = () => {
+export const SignInButton = () => {
   return (
-    <>
-      <Button variant={"ghost"} asChild>
-        <Link href="/login">
-          <LogIn className="mr-2 h-4 w-4" />
-          Кіру
-        </Link>
-      </Button>
-    </>
+    <Button variant={"ghost"} onClick={() => signIn()}>
+      <LogIn className="mr-2 h-4 w-4" />
+      Кіру
+    </Button>
   );
 };
 
-export const UserInfoBox = async ({ user }: { user: User | null }) => {
+export const UserInfoBox = () => {
+  const { data: session } = useSession();
+  const user = session?.user;
+
   if (!user) {
     return <div>You must be logged in.</div>;
   }
   return (
     <div className="rounded-sm bg-neutral-100 p-5 space-y-3">
-      <TypographyLarge>{user.email}</TypographyLarge>
-      <LogoutButton />
+      <TypographyP>
+        {user.firstName}
+      </TypographyP>
+      <TypographyP>
+        {user.lastName}
+      </TypographyP>
+      <TypographyLarge>
+        {user.email}</TypographyLarge>
+      <SignOutButton />
     </div>
   );
 };
