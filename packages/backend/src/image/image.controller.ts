@@ -12,13 +12,14 @@ import {
 import { Image } from '@prisma/client';
 import { ImageService } from './image.service';
 import { ImageCreateDto } from './dto/image.dto';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
 
 @ApiTags('Image')
 @Controller('image')
 export class ImageController {
   constructor(private readonly imageService: ImageService) {}
 
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Find a image by ID' })
   @ApiResponse({ status: 200, type: Promise<Image | null> })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
@@ -36,6 +37,7 @@ export class ImageController {
     }
   }
 
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new image' })
   @ApiResponse({
     status: 201,
@@ -47,6 +49,7 @@ export class ImageController {
     return await this.imageService.create(data);
   }
 
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a image' })
   @ApiResponse({
     status: 200,
@@ -66,6 +69,7 @@ export class ImageController {
     });
   }
 
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a image' })
   @ApiResponse({
     status: 200,
