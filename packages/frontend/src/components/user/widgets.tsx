@@ -108,11 +108,14 @@ export const UserInfoBox = () => {
   }
   return (
     <div className="rounded-sm border-neutral-200 bg-white border p-5 space-y-3">
-      <TypographyH3>Profile information</TypographyH3>
+      {/* <TypographyH3>Profile information</TypographyH3>
       <TypographyP>Aты: {user.firstName}</TypographyP>
       <TypographyP>Тегі: {user.lastName}</TypographyP>
       <TypographyP>Роль: {user.role}</TypographyP>
-      <TypographyP>Почта: {user.email}</TypographyP>
+      <TypographyP>Почта: {user.email}</TypographyP> */}
+      <form>
+        
+      </form>
     </div>
   );
 };
