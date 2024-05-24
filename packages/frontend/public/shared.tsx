@@ -1,32 +1,37 @@
-import { BookOpen, Home, LibraryBig } from "lucide-react";
+import { BookOpen, Home, LayoutDashboard, LibraryBig } from "lucide-react";
 
-export const sidebar_links = [
+export const default_links = [
   {
     title: "Басты бет",
     href: "/",
-    disabled: false,
     icon: <Home size={22} />,
-    auth: false,
   },
   {
     title: "Барлық курстар",
     href: "/home/all-courses",
-    disabled: false,
     icon: <LibraryBig size={22} />,
-    auth: true,
   },
+];
+
+export const sidebar_links = [
   {
     title: "Менің курстарым",
     href: "/home/my-courses",
-    disabled: false,
     icon: <BookOpen size={22} />,
-    auth: true,
   },
   // {
   //   title: "Байқау тесті",
   //   href: "#",
   //   disabled: true,
   // },
+];
+
+export const admin_links = [
+  {
+    title: "Админ панель",
+    href: "/admin",
+    icon: <LayoutDashboard size={22} />,
+  },
 ];
 
 export const courseContent = [

@@ -14,7 +14,7 @@ export default function HomeLayout({
       </div>
       <main className="w-full overflow-y-auto flex">
         <SideBarSkeleton />
-        <div className="w-full pt-[57px]">{children}</div>
+        <div className="w-full pt-[57px] bg-[#F5F5F5]">{children}</div>
       </main>
     </div>
   );

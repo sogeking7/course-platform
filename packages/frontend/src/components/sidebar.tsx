@@ -4,9 +4,10 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
-import { sidebar_links } from "../../public/shared";
+import { admin_links, default_links, sidebar_links } from "../../public/shared";
+
 import { MenuIcon, X } from "lucide-react";
-import { useSidebar } from "@/lib/hooks/zustand/sidebar";
+import { useSidebar } from "@/store/sidebar";
 import { Sheet, SheetHeader, SheetContent } from "@/components/ui/sheet";
 import { LogoHome } from "./logo";
 import { useSession } from "next-auth/react";
@@ -86,20 +87,39 @@ export const SideBarTrigger = () => {
 
 export const SideBar = ({ noText = false }: any) => {
   const { data: session } = useSession();
-  const isLoggedIn = session !== null;
+  const user = session?.user;
+  const role = user?.role;
 
   return (
     <nav className="my-1">
-      <ul className="space-y-[2px]">
-        {sidebar_links.map((item) => {
-          if (!isLoggedIn && item.auth) return null;
-          return (
+      <ul className="space-y-1">
+        {default_links.map((item) => (
+          <li className="w-full" key={item.title}>
+            <SideBarButton noText={noText} isSheet item={item} />
+          </li>
+        ))}
+      </ul>
+      {role === "USER" && (
+        <ul className="space-y-1">
+          {sidebar_links.map((item) => (
             <li className="w-full" key={item.title}>
               <SideBarButton noText={noText} isSheet item={item} />
             </li>
-          );
-        })}
-      </ul>
+          ))}
+        </ul>
+      )}
+      {role === "ADMIN" && (
+        <>
+          <hr className="my-2" />
+          <ul className="space-y-1">
+            {admin_links.map((item) => (
+              <li className="w-full" key={item.title}>
+                <SideBarButton noText={noText} isSheet item={item} />
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
     </nav>
   );
 };
@@ -160,8 +180,8 @@ const SideBarButton = (props: any) => {
               "w-full justify-start font-normal",
               "py-4 pr-6 pl-6 rounded-none gap-3.5 border-transparent  border-l-[4px]",
               pathname === item.href
-                ? "bg-neutral-200 border-neutral-700 hover:bg-neutral-100 "
-                : "hover:border-neutral-100 hover:bg-neutral-100",
+                ? "bg-neutral-200 border-neutral-700 hover:bg-neutral-200/80 "
+                : "hover:border-neutral-200 hover:bg-neutral-200/50",
             )}
             variant={"sidebar"}
             size={"reset"}

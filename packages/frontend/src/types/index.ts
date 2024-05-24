@@ -8,7 +8,22 @@ export type User = {
   firstName: string,
   lastName: string,
   email: string,
-  profile_image_url?: string,
+  profilePictureLink?: string,
+  role: UserRole
+}
+
+export enum UserRole {
+  ADMIN = 'ADMIN',
+  USER = 'USER',
+}
+
+export type CreateUserDto = {
+  firstName: string,
+  lastName: string,
+  email: string,
+  password: string,
+  profilePictureLink?: string,
+  role: UserRole
 }
 
 export type Module = {

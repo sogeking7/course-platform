@@ -4,7 +4,7 @@ import { CircleUserRound, LogIn, LogOut } from "lucide-react";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { TypographyLarge, TypographyP } from "../ui/typography";
+import { TypographyH3, TypographyLarge, TypographyP } from "../ui/typography";
 import { signIn, signOut, useSession } from "next-auth/react";
 import {
   DropdownMenu,
@@ -18,6 +18,7 @@ import {
 export const UserButton = () => {
   const { data: session } = useSession();
   const user = session?.user;
+  const role = user?.role;
 
   const fullname = user?.firstName + " " + user?.lastName;
 
@@ -42,22 +43,26 @@ export const UserButton = () => {
             {fullname}
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <Link href={"/home/my-courses"}>
-            <DropdownMenuItem className="bg-transparent hover:!bg-neutral-100 hover:!text-neutral-700">
-              Менің курстарым
-            </DropdownMenuItem>
-          </Link>
-          <DropdownMenuSeparator />
+          {role === "USER" && (
+            <>
+              <Link href={"/home/my-courses"}>
+                <DropdownMenuItem className="bg-transparent hover:!bg-neutral-100 hover:!text-neutral-700">
+                  Менің курстарым
+                </DropdownMenuItem>
+              </Link>
+              <DropdownMenuSeparator />
+            </>
+          )}
           <Link href={"/home/profile/settings"}>
             <DropdownMenuItem className="bg-transparent hover:!bg-neutral-100 hover:!text-neutral-700">
-              Settings
+              Баптаулар
             </DropdownMenuItem>
           </Link>
           <DropdownMenuItem
             onClick={() => signOut()}
             className="bg-transparent hover:!bg-neutral-100 hover:!text-neutral-700"
           >
-            Sign out
+            Шығу
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -102,11 +107,12 @@ export const UserInfoBox = () => {
     return <div>You must be logged in.</div>;
   }
   return (
-    <div className="rounded-sm bg-neutral-100 p-5 space-y-3">
-      <TypographyP>{user.firstName}</TypographyP>
-      <TypographyP>{user.lastName}</TypographyP>
-      <TypographyLarge>{user.email}</TypographyLarge>
-      <SignOutButton />
+    <div className="rounded-sm border-neutral-200 bg-white border p-5 space-y-3">
+      <TypographyH3>Profile information</TypographyH3>
+      <TypographyP>Aты: {user.firstName}</TypographyP>
+      <TypographyP>Тегі: {user.lastName}</TypographyP>
+      <TypographyP>Роль: {user.role}</TypographyP>
+      <TypographyP>Почта: {user.email}</TypographyP>
     </div>
   );
 };
