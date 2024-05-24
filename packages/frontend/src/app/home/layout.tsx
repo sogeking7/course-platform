@@ -1,3 +1,5 @@
+import { MyContainer } from "@/components/container";
+import { Footer } from "@/components/footer";
 import { HomeHeader } from "@/components/header";
 import { SideBarResizable, SideBarSkeleton } from "@/components/sidebar";
 
@@ -14,7 +16,10 @@ export default function HomeLayout({
       </div>
       <main className="w-full overflow-y-auto flex">
         <SideBarSkeleton />
-        <div className="w-full pt-[57px] bg-[#F5F5F5]">{children}</div>
+        <div className="relative pb-[calc(226px+48px)] sm:pb-[calc(138px+48px)] w-full pt-[57px] bg-[#F5F5F5]">
+          <MyContainer>{children}</MyContainer>
+          <Footer />
+        </div>
       </main>
     </div>
   );

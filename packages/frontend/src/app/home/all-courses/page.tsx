@@ -1,6 +1,5 @@
 import { CourseCard } from "@/components/course/course-card";
 import { Course } from "../../../types";
-import { MyContainer } from "@/components/container";
 import { TypographyH1 } from "@/components/ui/typography";
 
 const pageTitle = "Курстар";
@@ -26,13 +25,13 @@ const data = [
 
 export default function AllCoursesPage() {
   return (
-    <MyContainer>
+    <div>
       <TypographyH1>Курстар</TypographyH1>
       <div className="grid lg:grid-cols-3 xl:grid-cols-3 md:grid-cols-2 sm:grid-cols-1  gap-8">
         {data.map((course, ind) => (
           <CourseCard key={ind} item={course as Course} />
         ))}
       </div>
-    </MyContainer>
+    </div>
   );
 }

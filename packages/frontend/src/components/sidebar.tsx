@@ -130,7 +130,7 @@ export const SideBarSkeleton = () => {
 
   if (!isSideBarOpen || pathname.includes("/learning")) {
     return (
-      <aside className="min-w-[77px] max-xl:hidden min-h-screen max-h-full"></aside>
+      <aside className="min-w-[75px] max-xl:hidden min-h-screen max-h-full"></aside>
     );
   }
   return (

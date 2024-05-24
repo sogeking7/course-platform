@@ -6,9 +6,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { MyContainer } from "@/components/container";
-import { TypographyH1 } from "@/components/ui/typography"; // Assuming mock data is in the same directory
-import { ListCollapse } from "lucide-react";
 import { courseContent } from "../../../public/shared";
 
 export const AccordionContents = () => {

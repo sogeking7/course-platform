@@ -6,11 +6,10 @@ import {
 } from "@/components/ui/card";
 import LoginForm from "@/components/login/login-form";
 import { LogoHome } from "@/components/logo";
-import { MyContainer } from "@/components/container";
 
 export default async function LoginPage() {
   return (
-    <MyContainer>
+    <div>
       <main className="w-full flex items-center">
         <div className=" w-full flex flex-col items-center justify-center">
           <div className="mb-4">
@@ -26,6 +25,6 @@ export default async function LoginPage() {
           </Card>
         </div>
       </main>
-    </MyContainer>
+    </div>
   );
 }
