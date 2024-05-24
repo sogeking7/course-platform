@@ -25,9 +25,7 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Providers session={session}>
-            {children}
-          </Providers>
+          <Providers session={session}>{children}</Providers>
         </ThemeProvider>
       </body>
     </html>

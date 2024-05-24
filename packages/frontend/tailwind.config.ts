@@ -19,7 +19,7 @@ const config = {
     },
     extend: {
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        sans: ["Noto Sans", "sans-serif"],
       },
       colors: {
         my_cyan: '#048998',

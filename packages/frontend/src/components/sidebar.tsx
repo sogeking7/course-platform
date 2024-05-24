@@ -10,6 +10,12 @@ import { useSidebar } from "@/lib/hooks/zustand/sidebar";
 import { Sheet, SheetHeader, SheetContent } from "@/components/ui/sheet";
 import { LogoHome } from "./logo";
 import { useSession } from "next-auth/react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const MySheetTrigger = () => {
   const { isMySheetOpen, setIsMySheetOpen } = useSidebar();
@@ -18,9 +24,15 @@ export const MySheetTrigger = () => {
       onClick={() => setIsMySheetOpen(!isMySheetOpen)}
       size={"reset"}
       variant={"ghost"}
-      className="opacity-70 p-3 hover:opacity-100"
+      className="text-neutral-700 w-[67px] h-[47px] flex items-center justify-center hover:opacity-100"
     >
-      {isMySheetOpen ? <X /> : <MenuIcon />}
+      {isMySheetOpen ? (
+        <div className="w-6 h-6 border-neutral-700  rounded-full border flex items-center justify-center">
+          <X size={18} />
+        </div>
+      ) : (
+        <MenuIcon />
+      )}
     </Button>
   );
 };
@@ -37,7 +49,7 @@ export const MySheet = () => {
     >
       <SheetContent className="w-[360px]" side={"left"}>
         <SheetHeader>
-          <div className="w-full py-1 flex justify-center border-b shadow-sm">
+          <div className="w-full py-1 border-b px-20 border-neutral-300 shadow-sm">
             <LogoHome />
           </div>
         </SheetHeader>
@@ -59,31 +71,31 @@ export const SideBarTrigger = () => {
       onClick={() => setIsSideBarOpen(!isSideBarOpen)}
       size={"reset"}
       variant={"ghost"}
-      className="opacity-70 p-3 hover:opacity-100"
+      className=" text-neutral-700 w-[67px] h-[47px] flex items-center justify-center hover:opacity-100"
     >
-      {isSideBarOpen ? <X /> : <MenuIcon />}
+      {isSideBarOpen ? (
+        <div className="w-6 h-6 border-neutral-700  rounded-full border flex items-center justify-center">
+          <X size={18} />
+        </div>
+      ) : (
+        <MenuIcon size={20} />
+      )}
     </Button>
   );
 };
 
-export const SideBar = ({
-  noText = false,
-}: any) => {
+export const SideBar = ({ noText = false }: any) => {
   const { data: session } = useSession();
   const isLoggedIn = session !== null;
 
   return (
     <nav className="my-1">
-      <ul className="space-y-1">
+      <ul className="space-y-[2px]">
         {sidebar_links.map((item) => {
           if (!isLoggedIn && item.auth) return null;
           return (
             <li className="w-full" key={item.title}>
-              <SideBarButton
-                noText={noText}
-                isSheet
-                item={item}
-              />
+              <SideBarButton noText={noText} isSheet item={item} />
             </li>
           );
         })}
@@ -112,14 +124,14 @@ export const SideBarResizable = (props: any) => {
 
   if (!isSideBarOpen || pathname.includes("/learning")) {
     return (
-      <aside className="max-xl:hidden pt-[57px] fixed border-r min-h-screen max-h-full ">
+      <aside className="max-xl:hidden pt-[54px] fixed border-r border-neutral-300 min-h-screen max-h-full ">
         <SideBar noText />
       </aside>
     );
   }
 
   return (
-    <aside className="max-xl:hidden min-w-[300px] pt-[57px] fixed border-r min-h-screen max-h-full ">
+    <aside className="max-xl:hidden min-w-[300px] pt-[54px] fixed border-r border-neutral-300 min-h-screen max-h-full ">
       <SideBar />
     </aside>
   );
@@ -130,30 +142,49 @@ const SideBarButton = (props: any) => {
   const { item, isSheet, noText } = props;
   const { setIsMySheetOpen } = useSidebar();
   return (
-    <Button
-      disabled={item.disabled}
-      onClick={() => {
-        if (isSheet) {
-          setIsMySheetOpen(false);
-        }
-      }}
-      className={cn(
-        "w-full justify-start font-normal",
-        "py-4 pr-6 pl-6 rounded-none gap-4 border-transparent  border-l-4",
-        pathname === item.href
-          ? "bg-neutral-200 border-neutral-700 hover:bg-neutral-100 "
-          : "hover:border-neutral-100 hover:bg-neutral-100",
-      )}
-      variant={"sidebar"}
-      size={"reset"}
-      asChild
+    <TooltipProvider
+      disableHoverableContent={true}
+      delayDuration={0}
+      skipDelayDuration={500}
     >
-      <Link href={item.href}>
-        <i className="text-neutral-700">{item.icon}</i>
-        {noText ? null : (
-          <label className="text-neutral-900">{item.title}</label>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            disabled={item.disabled}
+            onClick={() => {
+              if (isSheet) {
+                setIsMySheetOpen(false);
+              }
+            }}
+            className={cn(
+              "w-full justify-start font-normal",
+              "py-4 pr-6 pl-6 rounded-none gap-3.5 border-transparent  border-l-[4px]",
+              pathname === item.href
+                ? "bg-neutral-200 border-neutral-700 hover:bg-neutral-100 "
+                : "hover:border-neutral-100 hover:bg-neutral-100",
+            )}
+            variant={"sidebar"}
+            size={"reset"}
+            asChild
+          >
+            <Link href={item.href}>
+              <i className="text-neutral-700">{item.icon}</i>
+              {noText ? null : (
+                <label className="text-neutral-800 leading-tight">
+                  {item.title}
+                </label>
+              )}
+            </Link>
+          </Button>
+        </TooltipTrigger>
+        {noText ? (
+          <TooltipContent side="right">
+            <p>{item.title}</p>
+          </TooltipContent>
+        ) : (
+          noText
         )}
-      </Link>
-    </Button>
+      </Tooltip>
+    </TooltipProvider>
   );
 };

@@ -4,9 +4,9 @@ import { MySheet, MySheetTrigger, SideBarTrigger } from "./sidebar";
 
 export const HomeHeader = (props: any) => {
   return (
-    <header className="pl-4 pr-6 py-1 w-full border-b  shadow-sm bg-white">
+    <header className="pl-1 pr-6 py-[3px] w-full border-b border-neutral-300  shadow-sm bg-white">
       <div className="flex items-center w-full justify-between">
-        <div className="flex gap-6 items-center">
+        <div className="flex gap-2 items-center">
           <div className="max-xl:hidden">
             <SideBarTrigger />
           </div>
