@@ -1,6 +1,7 @@
 import { CourseCard } from "@/components/course/course-card";
 import { Course } from "../../../types";
 import { TypographyH1 } from "@/components/ui/typography";
+import { LayoutLoader } from "@/components/loader";
 
 const pageTitle = "Курстар";
 
@@ -24,6 +25,9 @@ const data = [
 ];
 
 export default function AllCoursesPage() {
+  // if (true) {
+  //   return <LayoutLoader />;
+  // }
   return (
     <div>
       <TypographyH1>Курстар</TypographyH1>

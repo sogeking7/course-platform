@@ -100,7 +100,7 @@ export const SideBar = ({ noText = false }: any) => {
         ))}
       </ul>
       {role === "USER" && (
-        <ul className="space-y-1">
+        <ul className="space-y-1 mt-1">
           {sidebar_links.map((item) => (
             <li className="w-full" key={item.title}>
               <SideBarButton noText={noText} isSheet item={item} />
