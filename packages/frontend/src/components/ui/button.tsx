@@ -9,7 +9,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-neutral-900 text-white hover:bg-neutral-900/90",
+        default: "bg-primary text-white hover:bg-primary/90",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
@@ -22,7 +22,7 @@ const buttonVariants = cva(
         sidebar: "",
       },
       size: {
-        default: "min-h-10 px-4 py-3",
+        default: "min-h-10 px-4 py-2.5",
         sm: "h-9 rounded-md px-3",
         lg: "h-11 rounded-md px-8",
         icon: "h-10 w-10",

@@ -3,12 +3,16 @@ import { create } from "zustand";
 
 type Store = {
   findUserById: (id: number) => Promise<any>;
+  update: (id: number, data: any) => Promise<any>;
+  create: (data: any) => Promise<any>;
 };
 
-export const useSidebar = create<Store>()((set) => {
+export const useUserStore = create<Store>()((set) => {
   const url = "/user";
 
   return {
     findUserById: async (id) => (await axios.get(`${url}/${id}`)).data,
+    update: async (id, data) => (await axios.put(`${url}/${id}`, data)).data,
+    create: async (data) => (await axios.post(`${url}`, data)).data,
   };
 });

@@ -18,6 +18,7 @@ async function bootstrap() {
     console.error('Error setting up Swagger', error);
   }
 
+  app.enableCors();
   await app.listen(3001);
 }
 
