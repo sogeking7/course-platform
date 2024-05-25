@@ -7,6 +7,15 @@ import { CourseCreateDto } from './dto/course.dto';
 export class CourseService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async getAll(): Promise<any[]> {
+    return await this.prisma.course.findMany({
+      select: {
+        name: true,
+        description: true,
+      },
+    });
+  }
+
   async findOneById(id: number): Promise<Course | null> {
     try {
       return await this.prisma.course.findUnique({

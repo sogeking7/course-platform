@@ -20,6 +20,19 @@ export class CourseController {
   constructor(private readonly courseService: CourseService) {}
 
   @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get all courses' })
+  @ApiResponse({
+    status: 200,
+    type: Promise<Course[]>,
+    description: 'The all courses',
+  })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
+  @Get()
+  async getAll(): Promise<Course[]> {
+    return await this.courseService.getAll();
+  }
+
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Find a course by ID' })
   @ApiResponse({ status: 200, type: Promise<Course | null> })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })

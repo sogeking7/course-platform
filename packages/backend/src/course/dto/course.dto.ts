@@ -18,7 +18,8 @@ export class CourseCreateDto {
   profilePictureLink?: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  // @IsNotEmpty()
+  @IsOptional()
   @IsInt()
   examId: number;
 }
