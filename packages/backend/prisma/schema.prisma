@@ -17,20 +17,24 @@ model User {
   role               UserRole @default(USER)
 }
 
-model Image {
-  id   Int     @id @default(autoincrement())
-  name String
-  url  String
-}
-
 enum UserRole {
   ADMIN
   USER
 }
 
-model Video {
+model Exam {
   id          Int     @id @default(autoincrement())
   name        String
   description String
-  url         String
+  questions   Json[]
+  Course      Course?
+}
+
+model Course {
+  id                 Int     @id @default(autoincrement())
+  name               String
+  description        String
+  profilePictureLink String?
+  exam               Exam    @relation(fields: [examId], references: [id])
+  examId             Int     @unique
 }
