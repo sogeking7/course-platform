@@ -9,7 +9,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-white hover:bg-primary/90",
+        default: "bg-[#1f2d5a] text-white hover:bg-[#35426a]",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
@@ -17,13 +17,13 @@ const buttonVariants = cva(
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost:
-          "hover:bg-neutral-100 border border-transparent hover:border-neutral-500 hover:text-accent-foreground",
+          "hover:bg-neutral-200 border border-transparent hover:border-neutral-500 hover:text-accent-foreground",
         link: "text-neutral-500 underline-offset-4 hover:underline",
         sidebar: "",
       },
       size: {
-        default: "min-h-10 px-4 py-2.5",
-        sm: "h-9 rounded-md px-3",
+        default: "min-h-10 px-6 py-2.5",
+        sm: "h-9 rounded-sm px-3",
         lg: "h-11 rounded-md px-8",
         icon: "h-10 w-10",
         reset: "",

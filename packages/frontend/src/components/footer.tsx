@@ -1,5 +1,5 @@
-import { Instagram, MapPin, Phone } from "lucide-react";
-import { Logo, LogoHome } from "./logo";
+import { Instagram, Phone } from "lucide-react";
+import { Logo } from "./logo";
 
 const links = [
   // {

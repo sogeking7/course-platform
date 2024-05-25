@@ -12,6 +12,12 @@ import { useEffect } from "react";
 import { Loader2 } from "lucide-react";
 import { z } from "zod";
 
+const placeholders = {
+  firstName: "Аты",
+  lastName: "Тегі",
+  email: "Почта",
+};
+
 export const UserEditForm = () => {
   const { data: session } = useSession();
   const user = session?.user;
@@ -64,13 +70,7 @@ export const UserEditForm = () => {
         {(["firstName", "lastName", "email"] as const).map((field) => (
           <div key={field}>
             <Input
-              placeholder={
-                field === "firstName"
-                  ? "Аты"
-                  : field === "lastName"
-                    ? "Тегі"
-                    : "Почта"
-              }
+              placeholder={placeholders[field]}
               {...register(field)}
             />
             {errors[field] && (

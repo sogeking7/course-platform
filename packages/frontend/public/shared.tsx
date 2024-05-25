@@ -1,4 +1,11 @@
-import { BookOpen, Home, LayoutDashboard, LibraryBig } from "lucide-react";
+import {
+  BookOpen,
+  Home,
+  LayoutDashboard,
+  LibraryBig,
+  Users,
+  UsersRound,
+} from "lucide-react";
 
 export const default_links = [
   {
@@ -31,6 +38,11 @@ export const admin_links = [
     title: "Админ панель",
     href: "/admin",
     icon: <LayoutDashboard size={22} />,
+  },
+  {
+    title: "Қолданушылар",
+    href: "/admin/users",
+    icon: <UsersRound size={22} />,
   },
 ];
 

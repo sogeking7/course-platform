@@ -9,7 +9,7 @@ import { admin_links, default_links, sidebar_links } from "../../public/shared";
 import { MenuIcon, X } from "lucide-react";
 import { useSidebar } from "@/store/sidebar";
 import { Sheet, SheetHeader, SheetContent } from "@/components/ui/sheet";
-import { LogoHome } from "./logo";
+import { Logo } from "./logo";
 import { useSession } from "next-auth/react";
 import {
   Tooltip,
@@ -49,10 +49,8 @@ export const MySheet = () => {
       }}
     >
       <SheetContent className="w-[360px]" side={"left"}>
-        <SheetHeader>
-          <div className="w-full py-1 border-b px-20 border-neutral-300 shadow-sm">
-            <LogoHome />
-          </div>
+        <SheetHeader className="py-3 px-20 !h-[54px] border-b border-neutral-300 shadow-sm">
+          <Logo />
         </SheetHeader>
         <SideBar />
       </SheetContent>
@@ -79,7 +77,7 @@ export const SideBarTrigger = () => {
           <X size={18} />
         </div>
       ) : (
-        <MenuIcon size={20} />
+        <MenuIcon size={22} className="text-neutral-700" />
       )}
     </Button>
   );
@@ -91,7 +89,7 @@ export const SideBar = ({ noText = false }: any) => {
   const role = user?.role;
 
   return (
-    <nav className="my-1">
+    <nav className="my-1 relative">
       <ul className="space-y-1">
         {default_links.map((item) => (
           <li className="w-full" key={item.title}>
@@ -180,8 +178,8 @@ const SideBarButton = (props: any) => {
               "w-full justify-start font-normal",
               "py-4 pr-6 pl-6 rounded-none gap-3.5 border-transparent  border-l-[4px]",
               pathname === item.href
-                ? "bg-neutral-200 border-neutral-700 hover:bg-neutral-200/80 "
-                : "hover:border-neutral-200 hover:bg-neutral-200/50",
+                ? "bg-neutral-200 border-[#1F2D5A] hover:bg-neutral-200/80 "
+                : "hover:border-neutral-200/50 hover:bg-neutral-200/50",
             )}
             variant={"sidebar"}
             size={"reset"}
@@ -197,13 +195,13 @@ const SideBarButton = (props: any) => {
             </Link>
           </Button>
         </TooltipTrigger>
-        {noText ? (
+        {/* {noText ? ( */}
           <TooltipContent side="right">
             <p>{item.title}</p>
           </TooltipContent>
-        ) : (
+        {/* ) : (
           noText
-        )}
+        )} */}
       </Tooltip>
     </TooltipProvider>
   );

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   Form,
@@ -7,31 +7,31 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { loginSchema } from '@/lib/formSchema';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
-import { signIn } from 'next-auth/react';
+} from "@/components/ui/form";
+import { loginSchema } from "@/lib/formSchema";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
+import { signIn } from "next-auth/react";
 
 export default function LoginForm() {
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
     },
   });
 
   const onSubmit = async (data: z.infer<typeof loginSchema>) => {
-    await signIn('credentials', {
+    await signIn("credentials", {
       email: data.email,
       password: data.password,
       redirect: true,
-      callbackUrl: '/',
+      callbackUrl: "/",
     });
   };
 

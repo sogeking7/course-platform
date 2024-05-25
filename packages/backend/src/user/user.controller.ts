@@ -20,6 +20,19 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get all users' })
+  @ApiResponse({
+    status: 200,
+    type: Promise<User[]>,
+    description: 'The all users',
+  })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
+  @Get()
+  async getAll(): Promise<User[]> {
+    return await this.userService.getAll();
+  }
+
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Find a user by ID' })
   @ApiResponse({ status: 200, type: Promise<User | null> })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })

@@ -55,3 +55,30 @@ export const editUserSchema = z.object({
   lastName: z.string().trim().min(1, { message: "Required" }),
   email: z.string().trim().email(),
 });
+
+export const createUserSchema = z
+  .object({
+    firstName: z.string().trim().min(1, { message: "Required" }),
+    lastName: z.string().trim().min(1, { message: "Required" }),
+    email: z.string().trim().email(),
+    password: z
+      .string()
+      .trim()
+      .min(6, { message: "Password must be at least 6 characters long" })
+      .regex(/(?=.*[0-9])(?=.*[a-zA-Z])/, {
+        message: "Password must contain at least one letter and one number",
+      }),
+    repeatPassword: z
+      .string()
+      .trim()
+      .min(6, { message: "Password must be at least 6 characters long" }),
+  })
+  .refine((data) => data.password === data.repeatPassword, {
+    message: "Passwords don't match",
+    path: ["repeatPassword"], // path indicates where the error message should be placed
+  });
+
+export type Error = {
+  statusCode: number;
+  message: string;
+};

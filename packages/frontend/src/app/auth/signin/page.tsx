@@ -1,30 +1,24 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import LoginForm from "@/components/login/login-form";
-import { LogoHome } from "@/components/logo";
+import Link from "next/link";
+import Image from "next/image";
 
-export default async function LoginPage() {
+export default function LoginPage() {
   return (
-    <div>
-      <main className="w-full flex items-center">
-        <div className=" w-full flex flex-col items-center justify-center">
-          <div className="mb-4">
-            <LogoHome />
-          </div>
-          <Card className="w-full sm:w-[400px] xl:w-[500px]">
-            <CardHeader>
-              <CardTitle className="text-center">Кіру</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <LoginForm />
-            </CardContent>
-          </Card>
-        </div>
-      </main>
+    <div className="w-full flex justify-center items-center pt-[25vh]">
+      <div className="flex flex-col min-w-[320px] items-center gap-6">
+        <Link href="/" className="">
+          <Image alt="Logo" src="/shoqan-edu.svg" width={200} height={90} />
+        </Link>
+        <Card className="w-full sm:w-[400px] xl:w-[500px]">
+          <CardHeader>
+            <CardTitle className="text-center">Кіру</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <LoginForm />
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

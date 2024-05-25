@@ -10,7 +10,7 @@ import { courseContent } from "../../../public/shared";
 
 export const AccordionContents = () => {
   return (
-    <Accordion type="multiple" className="w-full">
+    <Accordion type="multiple" className="w-full relative ">
       {courseContent.map((module) => (
         <AccordionItem key={module.id} value={`module-${module.id}`}>
           <AccordionTrigger className="p-5 text-left text-sm font-bold">

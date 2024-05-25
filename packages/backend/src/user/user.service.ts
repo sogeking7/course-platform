@@ -6,6 +6,17 @@ import { PrismaService } from '../prisma/prisma.service';
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async getAll(): Promise<User[]> {
+    return await this.prisma.user.findMany({
+      // select: {
+      //   firstName: true,
+      //   lastName: true,
+      //   email: true,
+      //   role: true,
+      // },
+    });
+  }
+
   async findOneById(id: number): Promise<User | null> {
     try {
       return await this.prisma.user.findUnique({
