@@ -14,9 +14,9 @@ import { CourseService } from './course.service';
 import { CourseCreateDto } from './dto/course.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
 
-@ApiTags('course')
+@ApiTags('Course')
 @Controller('course')
-export class courseController {
+export class CourseController {
   constructor(private readonly courseService: CourseService) {}
 
   @ApiBearerAuth()
