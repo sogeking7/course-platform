@@ -29,7 +29,9 @@ export class AuthService {
   }
 
   async register(user: any) {
-    const existingUser = await this.prisma.user.findUnique({ where: { email: user.email } });
+    const existingUser = await this.prisma.user.findUnique({
+      where: { email: user.email },
+    });
     if (existingUser) {
       throw new BadRequestException('Email already in use');
     }

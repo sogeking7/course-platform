@@ -12,13 +12,14 @@ import {
 import { Video } from '@prisma/client';
 import { VideoService } from './video.service';
 import { VideoCreateDto } from './dto/video.dto';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
 
 @ApiTags('Video')
 @Controller('video')
 export class VideoController {
   constructor(private readonly videoService: VideoService) {}
 
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Find a video by ID' })
   @ApiResponse({ status: 200, type: Promise<Video | null> })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
@@ -36,6 +37,7 @@ export class VideoController {
     }
   }
 
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new video' })
   @ApiResponse({
     status: 201,
@@ -47,6 +49,7 @@ export class VideoController {
     return await this.videoService.create(data);
   }
 
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a video' })
   @ApiResponse({
     status: 200,
@@ -66,6 +69,7 @@ export class VideoController {
     });
   }
 
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a video' })
   @ApiResponse({
     status: 200,

@@ -12,13 +12,14 @@ import {
 import { User } from '@prisma/client';
 import { UserService } from './user.service';
 import { UserCreateDto } from './dto/user.dto';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
 
 @ApiTags('User')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Find a user by ID' })
   @ApiResponse({ status: 200, type: Promise<User | null> })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
@@ -36,6 +37,7 @@ export class UserController {
     }
   }
 
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new user' })
   @ApiResponse({
     status: 201,
@@ -47,6 +49,7 @@ export class UserController {
     return await this.userService.create(data);
   }
 
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a user' })
   @ApiResponse({
     status: 200,
@@ -66,6 +69,7 @@ export class UserController {
     });
   }
 
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a user' })
   @ApiResponse({
     status: 200,
