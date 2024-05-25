@@ -12,12 +12,15 @@ export class AuthService {
 
   async validateUser(email: string, password: string): Promise<any> {
     const user = await this.prisma.user.findUnique({ where: { email } });
-    if (user && bcrypt.compareSync(password, user.password)) {
+    if (!user) return null;
+
+    if (bcrypt.compareSync(password, user.password)) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...result } = user;
       return result;
+    } else {
+      return 'wrong-password';
     }
-    return null;
   }
 
   async login(user: any) {

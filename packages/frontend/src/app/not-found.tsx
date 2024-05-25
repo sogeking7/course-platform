@@ -6,7 +6,7 @@ import NotFoundImage from "@/../public/not-found.svg";
 
 export default function NotFound() {
   return (
-    <div className="w-full flex justify-center items-center pt-[20vh]">
+    <div className="w-full flex h-screen justify-center pt-[20vh] bg-[#F5F5F5]">
       <header className="absolute  top-0  h-[55px]  flex w-full items-center border-b border-neutral-300  shadow-sm bg-white">
         <div className="max-w-6xl w-full mx-auto px-6 flex justify-start items-center">
           <Logo />

@@ -58,9 +58,9 @@ export const editUserSchema = z.object({
 
 export const createUserSchema = z
   .object({
-    firstName: z.string().trim().min(1, { message: "Required" }),
-    lastName: z.string().trim().min(1, { message: "Required" }),
-    email: z.string().trim().email(),
+    firstName: z.string().trim().min(1, { message: "Қажет" }),
+    lastName: z.string().trim().min(1, { message: "Қажет" }),
+    email: z.string().trim().email("Электрондық почта дұрыс емес"),
     password: z
       .string()
       .trim()
@@ -82,3 +82,14 @@ export type Error = {
   statusCode: number;
   message: string;
 };
+
+export const loginSchema = z.object({
+  email: z.string().trim().email("Электрондық почта дұрыс емес"),
+  password: z
+    .string()
+    .trim()
+    .min(6, { message: "Password must be at least 6 characters long" })
+    .regex(/(?=.*[0-9])(?=.*[a-zA-Z])/, {
+      message: "Password must contain at least one letter and one number",
+    }),
+});

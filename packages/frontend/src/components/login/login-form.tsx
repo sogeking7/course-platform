@@ -8,7 +8,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { loginSchema } from "@/lib/formSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -16,23 +15,43 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { signIn } from "next-auth/react";
+import { loginSchema } from "@/types";
+import { useAuthStore } from "@/store/auth";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
   });
 
   const onSubmit = async (data: z.infer<typeof loginSchema>) => {
-    await signIn("credentials", {
+    const auth = await signIn("credentials", {
       email: data.email,
       password: data.password,
-      redirect: true,
+      redirect: false,
       callbackUrl: "/",
     });
+
+    if (auth?.error) {
+      const errorStatus = auth.error;
+      console.log(errorStatus);
+      switch (errorStatus) {
+        case "404":
+          form.setError("root.serverError", {
+            message: "Қолданушы табылмады",
+          });
+          break;
+        case "401":
+          form.setError("root.serverError", {
+            message: "Қате құпия сөз",
+          });
+          break;
+      }
+    } else {
+      router.push("/");
+    }
   };
 
   return (
@@ -44,7 +63,7 @@ export default function LoginForm() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>Почта</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -57,7 +76,7 @@ export default function LoginForm() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>Құпия сөз</FormLabel>
                 <FormControl>
                   <Input {...field} type="password" />
                 </FormControl>
@@ -66,6 +85,11 @@ export default function LoginForm() {
             )}
           />
         </div>
+        {form.formState.errors.root?.serverError && (
+          <p className="text-xs text-destructive">
+            {form.formState.errors.root?.serverError.message}
+          </p>
+        )}
         <Button
           disabled={form.formState.isSubmitting}
           type="submit"

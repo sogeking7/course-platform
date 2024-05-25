@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export default function LoginPage() {
   return (
-    <div className="w-full flex justify-center items-center pt-[25vh]">
+    <div className="w-full h-screen flex justify-center  pt-[25vh] bg-[#F5F5F5]">
       <div className="flex flex-col min-w-[320px] items-center gap-6">
         <Link href="/" className="">
           <Image alt="Logo" src="/shoqan-edu.svg" width={200} height={90} />
