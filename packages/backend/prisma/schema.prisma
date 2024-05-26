@@ -24,11 +24,11 @@ enum UserRole {
 }
 
 model Exam {
-  id          Int     @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   name        String
   description String
-  questions   Json[]
-  Course      Course?
+  questions   String
+  Lecture     Lecture?
 }
 
 model Course {
@@ -37,9 +37,27 @@ model Course {
   description        String
   content            String
   profilePictureLink String?
-  exam               Exam?              @relation(fields: [examId], references: [id])
-  examId             Int?               @unique
+  Section            Section[]
   users              CourseEnrollment[]
+}
+
+model Section {
+  id       Int      @id @default(autoincrement())
+  name     String
+  course   Course   @relation(fields: [courseId], references: [id])
+  courseId Int
+  Lecture  Lecture?
+}
+
+model Lecture {
+  id        Int     @id @default(autoincrement())
+  name      String
+  content   String
+  videoUrl  String
+  section   Section @relation(fields: [sectionId], references: [id])
+  sectionId Int     @unique
+  exam      Exam?   @relation(fields: [examId], references: [id])
+  examId    Int?    @unique
 }
 
 model CourseEnrollment {
