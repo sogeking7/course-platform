@@ -1,7 +1,11 @@
+"use client";
+
 import { CourseCard } from "@/components/course/course-card";
 import { Course } from "../../../types";
 import { TypographyH1 } from "@/components/ui/typography";
 import { LayoutLoader } from "@/components/loader";
+import { useQuery } from "@tanstack/react-query";
+import { useCourseStore } from "@/store/course";
 
 const pageTitle = "Курстар";
 
@@ -28,12 +32,22 @@ export default function AllCoursesPage() {
   // if (true) {
   //   return <LayoutLoader />;
   // }
+  const courseStore = useCourseStore();
+  const { data, isLoading } = useQuery({
+    queryKey: ["courses"],
+    queryFn: () => courseStore.getAll(),
+  });
+
+  if (isLoading) {
+    return <LayoutLoader />;
+  }
+
   return (
     <div>
       <TypographyH1>Курстар</TypographyH1>
       <div className="grid lg:grid-cols-3 xl:grid-cols-3 md:grid-cols-2 sm:grid-cols-1  gap-8">
-        {data.map((course, ind) => (
-          <CourseCard key={ind} item={course as Course} />
+        {data.map((course: Course) => (
+          <CourseCard key={course.id} item={course as Course} />
         ))}
       </div>
     </div>

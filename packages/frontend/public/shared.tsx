@@ -44,6 +44,11 @@ export const admin_links = [
     href: "/admin/users",
     icon: <UsersRound size={22} />,
   },
+  {
+    title: "Курстар",
+    href: "/admin/courses",
+    icon: <LibraryBig size={22} />,
+  },
 ];
 
 export const courseContent = [

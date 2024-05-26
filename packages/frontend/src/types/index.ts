@@ -40,7 +40,7 @@ export type Course = {
   id: number;
   name: string;
   description: string;
-  profile_image: string;
+  content: string;
 };
 
 export type Topic = {
@@ -49,6 +49,16 @@ export type Topic = {
   description: string;
   text_material: string;
 };
+
+export const inviteStudentToCourseSchema = z.object({
+  email: z.string().trim().email(),
+});
+
+export const createCourseSchema = z.object({
+  name: z.string().trim().min(1, { message: "Required" }),
+  description: z.string().trim().min(1, { message: "Required" }),
+  content: z.string().trim().min(1, { message: "Required" }),
+});
 
 export const editUserSchema = z.object({
   firstName: z.string().trim().min(1, { message: "Required" }),

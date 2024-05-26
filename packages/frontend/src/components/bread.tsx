@@ -8,16 +8,20 @@ import {
   BreadcrumbSeparator,
 } from "./ui/breadcrumb";
 
-export const Bread = () => {
+export const Bread = ({ breadcrumbs }) => {
   return (
-    <Breadcrumb>
+    <Breadcrumb className="mb-4">
       <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link href="/">Home</Link>
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-        {/* ... */}
+        {breadcrumbs.map((breadcrumb, index) => (
+          <BreadcrumbItem key={index}>
+            <BreadcrumbLink asChild>
+              <Link href={breadcrumb.path}>{breadcrumb.name}</Link>
+            </BreadcrumbLink>
+            {index < breadcrumbs.length - 1 && (
+              <BreadcrumbSeparator>/</BreadcrumbSeparator>
+            )}
+          </BreadcrumbItem>
+        ))}
       </BreadcrumbList>
     </Breadcrumb>
   );

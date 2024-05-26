@@ -11,8 +11,14 @@ import {
 } from '@nestjs/common';
 import { Course } from '@prisma/client';
 import { CourseService } from './course.service';
-import { CourseCreateDto } from './dto/course.dto';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
+import { CourseCreateDto, CourseInviteDto } from './dto/course.dto';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 
 @ApiTags('Course')
 @Controller('course')
@@ -94,5 +100,22 @@ export class CourseController {
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<Course> {
     return await this.courseService.remove({ id: Number(id) });
+  }
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Invite a user to a course' })
+  @ApiResponse({ status: 201, description: 'User invited to course' })
+  @ApiResponse({ status: 400, description: 'Invalid input' })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
+  @Post('invite')
+  async inviteUserToCourse(@Body() data: CourseInviteDto): Promise<void> {
+    try {
+      await this.courseService.inviteUserToCourse(data);
+    } catch (error) {
+      throw new HttpException(
+        `${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }
