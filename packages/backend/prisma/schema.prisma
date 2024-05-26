@@ -23,33 +23,36 @@ enum UserRole {
 }
 
 model Exam {
-  id          Int     @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   name        String
   description String
   questions   String
+  Lecture     Lecture?
 }
 
 model Course {
-  id                 Int     @id @default(autoincrement())
+  id                 Int       @id @default(autoincrement())
   name               String
   description        String
   profilePictureLink String?
+  Section            Section[]
 }
 
 model Section {
-  id          Int    @id @default(autoincrement())
-  name        String
-  course      Course @relation(fields: [courseId], references: [id])
-  courseId    Int
+  id       Int      @id @default(autoincrement())
+  name     String
+  course   Course   @relation(fields: [courseId], references: [id])
+  courseId Int
+  Lecture  Lecture?
 }
 
 model Lecture {
-  id           Int     @id @default(autoincrement())
-  name         String
-  content      String
-  videoUrl     String
-  section      Section @relation(fields: [sectionId], references: [id])
-  sectionId    Int     @unique
-  exam         Exam?   @relation(fields: [examId], references: [id])
-  examId       Int?    @unique
+  id        Int     @id @default(autoincrement())
+  name      String
+  content   String
+  videoUrl  String
+  section   Section @relation(fields: [sectionId], references: [id])
+  sectionId Int     @unique
+  exam      Exam?   @relation(fields: [examId], references: [id])
+  examId    Int?    @unique
 }
