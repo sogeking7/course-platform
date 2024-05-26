@@ -32,38 +32,39 @@ const config = {
             //   marginBottom: "0",
             // },
             h1: {
-              fontSize: theme("fontSize.4xl")[0],
+              fontSize: theme("fontSize.3xl")[0],
               fontWeight: theme("fontWeight.extrabold"),
             },
             h2: {
-              fontSize: theme("fontSize.3xl")[0],
+              fontSize: theme("fontSize.2xl")[0],
               fontWeight: theme("fontWeight.bold"),
+              marginTop: 0,
             },
             h3: {
-              fontSize: theme("fontSize.2xl")[0],
-            },
-            h4: {
               fontSize: theme("fontSize.xl")[0],
             },
-            h5: {
+            h4: {
               fontSize: theme("fontSize.lg")[0],
+            },
+            h5: {
+              fontSize: theme("fontSize.base")[0],
             },
             h6: {
               fontSize: theme("fontSize.base")[0],
             },
-            "h1, h2, h3, h4, h5, h6": {
-              fontWeight: theme("fontWeight.semibold"),
-              color: theme("colors.blueGray.900"),
-            },
-            "h1, h2": {
-              letterSpacing: "-0.025em",
-            },
-            "h2, h3": {
-              "scroll-margin-block": `${(70 + 40) / 16}rem`,
-            },
-            "h3, h4, h5, h6": {
-              fontWeight: theme("fontWeight.semibold"),
-            },
+            // "h1, h2, h3, h4, h5, h6": {
+            //   fontWeight: theme("fontWeight.semibold"),
+            //   color: theme("colors.blueGray.900"),
+            // },
+            // "h1, h2": {
+            //   letterSpacing: "-0.025em",
+            // },
+            // "h2, h3": {
+            //   "scroll-margin-block": `${(70 + 40) / 16}rem`,
+            // },
+            // "h3, h4, h5, h6": {
+            //   fontWeight: theme("fontWeight.semibold"),
+            // },
             // p: {
             //   fontSize: theme("fontSize.xl")[0],
             //   lineHeight: theme("lineHeight.9"),

@@ -4,6 +4,7 @@ import HomeLayout from "@/app/home/layout";
 import { MyContainer } from "@/components/container";
 import { AccordionContents } from "@/components/course/accordion-contents";
 import { LayoutLoader } from "@/components/loader";
+import { Button } from "@/components/ui/button";
 import { useCourseStore } from "@/store/course";
 import { useQuery } from "@tanstack/react-query";
 import { ListCollapse } from "lucide-react";
@@ -21,11 +22,7 @@ export default function CoursePage({ params }: { params: { id: string } }) {
   });
 
   if (isLoading) {
-    return (
-      <HomeLayout>
-        <LayoutLoader />
-      </HomeLayout>
-    );
+    return <LayoutLoader />;
   }
 
   return (
@@ -39,13 +36,28 @@ export default function CoursePage({ params }: { params: { id: string } }) {
           <AccordionContents />
         </div>
       </div>
-      <MyContainer>
-        <article className="prose !max-w-full mt-4 w-full">
-          <ReactMarkdown className="w-full" rehypePlugins={[rehypeRaw]}>
-            {data.description}
-          </ReactMarkdown>
-        </article>
-      </MyContainer>
+      <div className="w-full">
+        <div className="h-[300px] w-full bg-white">
+          <MyContainer>
+            <div className="w-full flex h-[250px] gap-6">
+              <div className="w-[450px] h-[250px] bg-neutral-100 rounded-sm"></div>
+              <div>
+                <h1 className="text-3xl font-bold">{data.name}</h1>
+                <Button className="w-[300px] mt-6"> 
+                  Бастау
+                </Button>
+              </div>
+            </div>
+          </MyContainer>
+        </div>
+        <MyContainer>
+          <article className="prose !max-w-full mt-4 w-full">
+            <ReactMarkdown className="w-full" rehypePlugins={[rehypeRaw]}>
+              {data.description}
+            </ReactMarkdown>
+          </article>
+        </MyContainer>
+      </div>
     </div>
   );
 }
