@@ -76,7 +76,7 @@ export const AdminCourseCreateForm = ({
   };
 
   return (
-    <div className="p-5 bg-white border rounded-sm">
+    <div className="p-5 bg-white border rounded-sm shadow-md">
       {mode === "edit" && (
         <div className="mb-4 flex gap-4 justify-end">
           <Link href={`/admin/courses/${data.id}/curriculum`}>

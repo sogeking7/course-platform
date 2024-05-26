@@ -6,6 +6,7 @@ import { LayoutLoader } from "@/components/loader";
 import { TypographyH1 } from "@/components/ui/typography";
 import { useCourseStore } from "@/store/course";
 import { useQuery } from "@tanstack/react-query";
+import CourseCurriculumManager from "./manager";
 
 export default function AdminCoursesCurriculum({
   params,
@@ -37,7 +38,9 @@ export default function AdminCoursesCurriculum({
         <GoBackButton />
         <TypographyH1>Курс бағдарламасы</TypographyH1>
       </div>
-      <div></div>
+      <div className="border shadow-md rounded-sm py-12 px-12 bg-white">
+        <CourseCurriculumManager />
+      </div>
     </>
   );
 }

@@ -9,7 +9,7 @@ export default async function AdminUsersCreatePage() {
         <GoBackButton />
         <TypographyH1>Жаңа курс</TypographyH1>
       </div>
-      <AdminCourseCreateForm mode="create"/>
+      <AdminCourseCreateForm mode="create" />
     </>
   );
 }
