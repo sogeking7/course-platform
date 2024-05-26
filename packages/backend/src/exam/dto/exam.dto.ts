@@ -14,8 +14,8 @@ export class ExamCreateDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsArray()
-  questions: any[];
+  @IsString()
+  questions: string;
 
   @ApiProperty()
   courseId?: number;
