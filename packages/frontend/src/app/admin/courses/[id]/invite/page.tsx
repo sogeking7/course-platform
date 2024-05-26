@@ -8,6 +8,7 @@ import { TypographyH1, TypographyH3 } from "@/components/ui/typography";
 import { AdminUsersDataTable } from "@/app/admin/users/data-table";
 import { columns } from "@/app/admin/users/columns";
 import { GoBackButton } from "@/components/go-back-button";
+import { Bread } from "@/components/bread";
 
 export default function AdminCourseInviteStudentPage({
   params,
@@ -31,15 +32,22 @@ export default function AdminCourseInviteStudentPage({
     return { ...y };
   });
 
+  const breadcrumbs = [
+    { name: "Курстар", path: "/admin/courses" },
+    { name: data.name, path: "/admin/courses/" + id },
+    { name: "Оқушы қосу", path: "/admin/courses/" + id + "/invite" },
+  ];
+
   return (
     <>
+      <Bread breadcrumbs={breadcrumbs} />
       <div className="flex">
         <GoBackButton />
         <TypographyH1>Оқушы қосу</TypographyH1>
       </div>
       <div className="p-5 border bg-white rounded-sm">
-        <label>Курс аты:</label>
-        <TypographyH3>{data.name}</TypographyH3>
+        {/* <label>Курс аты:</label>
+        <TypographyH3>{data.name}</TypographyH3> */}
         <div className=" flex-col flex gap-6">
           <AdminUsersDataTable columns={columns} data={users_list} />
           <AdminCoursesInviteStudentsForm courseId={data.id} />

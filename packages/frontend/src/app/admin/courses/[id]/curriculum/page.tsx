@@ -1,19 +1,19 @@
 "use client";
 
-import { GoBackButton } from "@/components/go-back-button";
-import { TypographyH1 } from "@/components/ui/typography";
-import { AdminCourseCreateForm } from "../create/form";
-import { useQuery } from "@tanstack/react-query";
-import { useCourseStore } from "@/store/course";
-import { LayoutLoader } from "@/components/loader";
 import { Bread } from "@/components/bread";
+import { GoBackButton } from "@/components/go-back-button";
+import { LayoutLoader } from "@/components/loader";
+import { TypographyH1 } from "@/components/ui/typography";
+import { useCourseStore } from "@/store/course";
+import { useQuery } from "@tanstack/react-query";
 
-export default function AdminCourseEditPage({
+export default function AdminCoursesCurriculum({
   params,
 }: {
   params: { id: string };
 }) {
   const id = Number(params.id);
+
   const courseStore = useCourseStore();
 
   const { data, isSuccess, isLoading } = useQuery({
@@ -28,16 +28,16 @@ export default function AdminCourseEditPage({
   const breadcrumbs = [
     { name: "Курстар", path: "/admin/courses" },
     { name: data.name, path: "/admin/courses/" + id },
+    { name: "Курс бағдарламасы", path: "/admin/courses/" + id + "/curriculum" },
   ];
-
   return (
     <>
       <Bread breadcrumbs={breadcrumbs} />
-      <div className="flex items-start">
+      <div className="flex">
         <GoBackButton />
-        <TypographyH1>Курсты өңдеу </TypographyH1>
+        <TypographyH1>Курс бағдарламасы</TypographyH1>
       </div>
-      <AdminCourseCreateForm mode={"edit"} data={data} />
+      <div></div>
     </>
   );
 }

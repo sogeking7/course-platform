@@ -19,6 +19,13 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
+import {
+  CircleFadingPlus,
+  MoreHorizontal,
+  Pencil,
+  UserRoundPlus,
+} from "lucide-react";
+import Link from "next/link";
 
 export const AdminCourseCreateForm = ({
   data = null,
@@ -69,12 +76,31 @@ export const AdminCourseCreateForm = ({
   };
 
   return (
-    <>
+    <div className="p-5 bg-white border rounded-sm">
+      {mode === "edit" && (
+        <div className="mb-4 flex gap-4 justify-end">
+          <Link href={`/admin/courses/${data.id}/curriculum`}>
+            <Button variant={"outline"}>
+              <CircleFadingPlus className="mr-2" size={18} />
+              Курс бағдарламасы
+            </Button>
+          </Link>
+          <Link href={`/admin/courses/${data.id}/invite`}>
+            <Button variant={"outline"}>
+              <UserRoundPlus className="mr-2" size={18} />
+              Оқушы қосу
+            </Button>
+          </Link>
+          {/* <Link href={`/admin/courses/${data.id}`}>
+              <Button variant={"outline"}>
+                <Pencil className="mr-2" size={18} />
+                Өңдеу
+              </Button>
+            </Link> */}
+        </div>
+      )}
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="p-5 bg-white border rounded-sm space-y-5 "
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className=" space-y-5 ">
           <div className="space-y-3 ">
             <FormField
               control={form.control}
@@ -134,6 +160,6 @@ export const AdminCourseCreateForm = ({
           </div>
         </form>
       </Form>
-    </>
+    </div>
   );
 };
