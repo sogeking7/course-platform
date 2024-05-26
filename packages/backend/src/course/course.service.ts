@@ -9,10 +9,8 @@ export class CourseService {
 
   async getAll(): Promise<any[]> {
     return await this.prisma.course.findMany({
-      select: {
-        name: true,
-        description: true,
-      },
+      // include: {
+      // }
     });
   }
 
@@ -34,11 +32,12 @@ export class CourseService {
       name: data.name,
       description: data.description,
       profilePictureLink: data.profilePictureLink,
-      exam: {
-        connect: {
-          id: data.examId,
-        },
-      },
+      // Why we should connect to exam while creating course? :0, we can add it later!
+      // exam: {
+      //   connect: {
+      //     id: data.examId,
+      //   },
+      // },
     };
 
     return await this.prisma.course.create({

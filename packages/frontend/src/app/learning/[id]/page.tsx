@@ -1,15 +1,32 @@
+"use client";
+
 import HomeLayout from "@/app/home/layout";
 import { MyContainer } from "@/components/container";
 import { AccordionContents } from "@/components/course/accordion-contents";
 import { LayoutLoader } from "@/components/loader";
+import { useCourseStore } from "@/store/course";
+import { useQuery } from "@tanstack/react-query";
 import { ListCollapse } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 
-export default function CoursePage() {
-  // if (true) {
-  //   return <HomeLayout>
-  //     <LayoutLoader />
-  //   </HomeLayout>;
-  // }
+export default function CoursePage({ params }) {
+  const id = Number(params.id);
+
+  const courseStore = useCourseStore();
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["course", { id }],
+    queryFn: () => courseStore.findCourseById(id),
+  });
+
+  if (isLoading) {
+    return (
+      <HomeLayout>
+        <LayoutLoader />
+      </HomeLayout>
+    );
+  }
 
   return (
     <HomeLayout withContainer={false} withFooter={false}>
@@ -24,10 +41,11 @@ export default function CoursePage() {
           </div>
         </div>
         <MyContainer>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam fugiat
-          ea et officiis sunt repellendus vitae illum hic repellat voluptates,
-          velit excepturi esse corporis ad accusantium voluptatum ipsam,
-          asperiores illo?
+          <article className="prose !max-w-full mt-4 w-full">
+            <ReactMarkdown className="w-full" rehypePlugins={[rehypeRaw]}>
+              {data.description}
+            </ReactMarkdown>
+          </article>
         </MyContainer>
       </div>
     </HomeLayout>

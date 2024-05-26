@@ -1,6 +1,6 @@
 import { TypographyH1 } from "@/components/ui/typography";
 import { GoBackButton } from "@/components/go-back-button";
-import { AdminUsersCreateForm } from "./form";
+import { AdminCourseCreateForm } from "./form";
 
 export default async function AdminUsersCreatePage() {
   return (
@@ -9,7 +9,7 @@ export default async function AdminUsersCreatePage() {
         <GoBackButton />
         <TypographyH1>Жаңа курс</TypographyH1>
       </div>
-      <AdminUsersCreateForm />
+      <AdminCourseCreateForm />
     </>
   );
 }

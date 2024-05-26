@@ -35,6 +35,6 @@ model Course {
   name               String
   description        String
   profilePictureLink String?
-  exam               Exam    @relation(fields: [examId], references: [id])
-  examId             Int     @unique
+  exam               Exam?   @relation(fields: [examId], references: [id])
+  examId             Int?     @unique
 }

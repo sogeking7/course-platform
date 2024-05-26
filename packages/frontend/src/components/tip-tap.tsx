@@ -17,7 +17,7 @@ export const Tiptap = ({ editorState, setEditorState }: Props) => {
     content: editorState,
     editorProps: {
       attributes: {
-        class: "prose p-5 ",
+        class: "prose p-5 !max-w-full",
       },
     },
 
@@ -33,16 +33,20 @@ export const Tiptap = ({ editorState, setEditorState }: Props) => {
   };
 
   if (!editor) {
-    return <div className="p-5 bg-white border rounded-sm">Жүктелуде...</div>;
+    return (
+      <div className="p-5 !w-full  bg-white border rounded-sm">
+        Жүктелуде...
+      </div>
+    );
   }
 
   return (
-    <div className="p-5 bg-white border rounded-sm">
+    <>
       <div className="flex justify-between mb-2">
         {editor && <ToolBar editor={editor} />}
-        <Button onClick={saveNote}>Save</Button>
+        {/* <Button onClick={saveNote}>Save</Button> */}
       </div>
       <EditorContent className="border rounded-sm" editor={editor} />
-    </div>
+    </>
   );
 };
