@@ -13,6 +13,11 @@ export class CourseCreateDto {
   description: string;
 
   @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  content: string;
+
+  @ApiProperty()
   @IsOptional()
   @IsString()
   profilePictureLink?: string;

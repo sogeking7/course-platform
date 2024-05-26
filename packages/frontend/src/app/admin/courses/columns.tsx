@@ -2,7 +2,7 @@
 
 import { Course } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, Pencil, UserRoundPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -32,8 +32,18 @@ export const columns: ColumnDef<Course>[] = [
           <DropdownMenuContent align="end">
             {/* <DropdownMenuLabel>Actions</DropdownMenuLabel> */}
             <DropdownMenuItem asChild>
-              <Link href={`/admin/courses/${course.id}`}>Өңдеу</Link>
+              <Link href={`/admin/courses/${course.id}/invite`}>
+                <UserRoundPlus className="mr-1" size={18} />
+                Оқушы қосу
+              </Link>
             </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href={`/admin/courses/${course.id}`}>
+                <Pencil className="mr-1" size={18} />
+                Өңдеу
+              </Link>
+            </DropdownMenuItem>
+
             {/* <DropdownMenuSeparator />
             <DropdownMenuItem>View customer</DropdownMenuItem>
             <DropdownMenuItem>View payment details</DropdownMenuItem> */}

@@ -38,6 +38,7 @@ export class CourseService {
     const courseData: Prisma.CourseCreateInput = {
       name: data.name,
       description: data.description,
+      content: data.content,
       profilePictureLink: data.profilePictureLink,
       // Why we should connect to exam while creating course? :0, we can add it later!
       // exam: {

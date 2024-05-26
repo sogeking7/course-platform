@@ -20,5 +20,9 @@ export const columns: ColumnDef<User>[] = [
   {
     accessorKey: "role",
     header: "Роль",
+    cell: ({ getValue }) => {
+      const role = getValue<string>();
+      return role === "USER" ? "Оқушы" : "Админ"
+    }
   },
 ]

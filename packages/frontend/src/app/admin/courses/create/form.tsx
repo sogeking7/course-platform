@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Error, createCourseSchema } from "@/types";
 import { Loader2 } from "lucide-react";
@@ -20,11 +20,6 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 
-const placeholders = {
-  name: "Аты",
-  description: "Cипаттамасы",
-};
-
 export const AdminCourseCreateForm = ({
   data = null,
   mode = "create",
@@ -42,6 +37,7 @@ export const AdminCourseCreateForm = ({
     defaultValues: {
       name: data?.name || "",
       description: data?.description || "",
+      content: data?.content || "",
     },
   });
 
@@ -73,56 +69,71 @@ export const AdminCourseCreateForm = ({
   };
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-5 p-5 bg-white border rounded-sm"
-      >
-        <div className="space-y-3 ">
-          {(["name"] as const).map((field) => (
-            <div key={field} className="w-full">
-              <Input
-                placeholder={placeholders[field]}
-                {...form.register(field)}
-              />
-              {form.formState.errors[field] && (
-                <span className="text-xs text-destructive">
-                  {form.formState.errors[field]?.message}
-                </span>
-              )}
-            </div>
-          ))}
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Cипаттамасы</FormLabel>
-                <FormControl>
-                  <Tiptap
-                    editorState={field.value}
-                    setEditorState={field.onChange}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-        </div>
-        {form.formState.errors.root?.serverError && (
-          <p className="text-xs text-destructive">
-            {form.formState.errors.root?.serverError.message}
-          </p>
-        )}
-        <Button
-          disabled={!form.formState.isDirty || mutation.isSuccess}
-          type="submit"
+    <>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="p-5 bg-white border rounded-sm space-y-5 "
         >
-          {mutation.isPending && (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          <div className="space-y-3 ">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Аты</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Cипаттамасы</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="content"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Контент</FormLabel>
+                  <FormControl>
+                    <Tiptap
+                      editorState={field.value}
+                      setEditorState={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </div>
+          {form.formState.errors.root?.serverError && (
+            <p className="text-xs text-destructive">
+              {form.formState.errors.root?.serverError.message}
+            </p>
           )}
-          {mode === "edit" ? "Өзгерту" : "Қосу"}
-        </Button>
-      </form>
-    </Form>
+          <div className="flex w-full justify-end">
+            <Button
+              disabled={!form.formState.isDirty || mutation.isSuccess}
+              type="submit"
+            >
+              {mutation.isPending && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              {mode === "edit" ? "Өзгерту" : "Қосу"}
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </>
   );
 };
