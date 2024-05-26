@@ -7,8 +7,12 @@ import { useQuery } from "@tanstack/react-query";
 import { useCourseStore } from "@/store/course";
 import { LayoutLoader } from "@/components/loader";
 
-export default function AdminCourseEditPage({ params }) {
-  const { id } = params;
+export default function AdminCourseEditPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const id = Number(params.id);
   const courseStore = useCourseStore();
 
   const { data, isSuccess, isLoading } = useQuery({

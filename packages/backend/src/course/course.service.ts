@@ -1,7 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { Prisma, Course } from '@prisma/client';
+import { Prisma, Course, CourseEnrollment } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { CourseCreateDto } from './dto/course.dto';
+import { CourseCreateDto, CourseInviteDto } from './dto/course.dto';
 
 @Injectable()
 export class CourseService {
@@ -18,6 +18,13 @@ export class CourseService {
     try {
       return await this.prisma.course.findUnique({
         where: { id },
+        include: {
+          users: {
+            select: {
+              user: true,
+            },
+          },
+        },
       });
     } catch (error) {
       throw new HttpException(
@@ -60,5 +67,46 @@ export class CourseService {
     return await this.prisma.course.delete({
       where,
     });
+  }
+
+  async inviteUserToCourse(data: CourseInviteDto): Promise<CourseEnrollment> {
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: { email: data.email },
+      });
+
+      if (!user) {
+        throw new HttpException('Почта табылмады', HttpStatus.BAD_REQUEST);
+      }
+
+      const existingEnrollment = await this.prisma.courseEnrollment.findUnique({
+        where: {
+          userId_courseId: {
+            userId: user.id,
+            courseId: data.courseId,
+          },
+        },
+      });
+
+      if (existingEnrollment) {
+        throw new HttpException(
+          'Пайдаланушы бұл курсқа әлдеқашан тіркелген',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      // Create the enrollment if it doesn't exist
+      return await this.prisma.courseEnrollment.create({
+        data: {
+          userId: user.id,
+          courseId: data.courseId,
+        },
+      });
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }

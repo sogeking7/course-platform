@@ -46,7 +46,7 @@ export default function AllCoursesPage() {
     <div>
       <TypographyH1>Курстар</TypographyH1>
       <div className="grid lg:grid-cols-3 xl:grid-cols-3 md:grid-cols-2 sm:grid-cols-1  gap-8">
-        {data.map((course) => (
+        {data.map((course: Course) => (
           <CourseCard key={course.id} item={course as Course} />
         ))}
       </div>

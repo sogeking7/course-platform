@@ -18,7 +18,7 @@ const config = {
       },
     },
     extend: {
-      typography: (theme) => ({
+      typography: (theme: (arg0: string) => any[]) => ({
         DEFAULT: {
           css: {
             // maxWidth: "none",

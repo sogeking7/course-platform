@@ -1,9 +1,7 @@
-import { MyContainer } from "@/components/container";
-import { Footer } from "@/components/footer";
 import { HomeHeader } from "@/components/header";
 import { SideBarResizable, SideBarSkeleton } from "@/components/sidebar";
 
-export default function HomeLayout({
+export default function LearningLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -16,10 +14,7 @@ export default function HomeLayout({
       </div>
       <main className="w-full overflow-y-auto flex">
         <SideBarSkeleton />
-        <div className="relative pb-[calc(226px+48px)] sm:pb-[calc(138px+48px)] w-full pt-[55px] bg-[#F5F5F5]">
-          <MyContainer>{children}</MyContainer>
-          <Footer />
-        </div>
+        <div className="relative w-full pt-[55px] bg-[#F5F5F5]">{children}</div>
       </main>
     </div>
   );

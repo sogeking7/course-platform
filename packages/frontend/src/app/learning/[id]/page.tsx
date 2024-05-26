@@ -10,7 +10,7 @@ import { ListCollapse } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
-export default function CoursePage({ params }) {
+export default function CoursePage({ params }: { params: { id: string } }) {
   const id = Number(params.id);
 
   const courseStore = useCourseStore();
@@ -29,25 +29,23 @@ export default function CoursePage({ params }) {
   }
 
   return (
-    <HomeLayout withContainer={false} withFooter={false}>
-      <div className="flex h-full">
-        <div className="max-w-[350px] min-w-[350px] pb-10 h-[calc(100vh-55px)] bg-neutral-800 text-slate-50 overflow-scroll ">
-          <button className="p-5 text-left bg-neutral-800 z-10 flex font-bold items-center fixed w-[350px] border-b border-b-zinc-700">
-            <ListCollapse className="mr-4" />
-            Contents
-          </button>
-          <div className="pt-[69px] min-h-[calc(100% - 69px)] z-[5]">
-            <AccordionContents />
-          </div>
+    <div className="flex h-full">
+      <div className="max-w-[350px] min-w-[350px] pb-10 h-[calc(100vh-55px)] bg-neutral-800 text-slate-50 overflow-scroll ">
+        <button className="p-5 text-left bg-neutral-800 z-10 flex font-bold items-center fixed w-[350px] border-b border-b-zinc-700">
+          <ListCollapse className="mr-4" />
+          Contents
+        </button>
+        <div className="pt-[69px] min-h-[calc(100% - 69px)] z-[5]">
+          <AccordionContents />
         </div>
-        <MyContainer>
-          <article className="prose !max-w-full mt-4 w-full">
-            <ReactMarkdown className="w-full" rehypePlugins={[rehypeRaw]}>
-              {data.description}
-            </ReactMarkdown>
-          </article>
-        </MyContainer>
       </div>
-    </HomeLayout>
+      <MyContainer>
+        <article className="prose !max-w-full mt-4 w-full">
+          <ReactMarkdown className="w-full" rehypePlugins={[rehypeRaw]}>
+            {data.description}
+          </ReactMarkdown>
+        </article>
+      </MyContainer>
+    </div>
   );
 }
