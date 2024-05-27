@@ -1,6 +1,7 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, BadRequestException } from '@nestjs/common';
 import { Prisma, Exam } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { ExamCreateDto, ExamUpdateDto } from './dto/exam.dto';
 
 @Injectable()
 export class ExamService {
@@ -19,20 +20,46 @@ export class ExamService {
     }
   }
 
-  async create(data: Prisma.ExamCreateInput): Promise<Exam> {
+  async create(data: ExamCreateDto): Promise<Exam> {
     return await this.prisma.exam.create({
-      data,
+      data: {
+        name: data.name,
+        description: data.description,
+        questions: data.questions,
+        ...(data.lectureId && {
+          lecture: {
+            connect: {
+              id: data.lectureId,
+            },
+          },
+        }),
+      }
     });
   }
 
-  async update(params: {
-    where: Prisma.ExamWhereUniqueInput;
-    data: Prisma.ExamUpdateInput;
-  }): Promise<Exam> {
-    const { where, data } = params;
+  async update(id: number, data: ExamUpdateDto): Promise<Exam> {
+    const conflictingExam = await this.prisma.exam.findUnique({
+      where: { lectureId: data.lectureId },
+    });
+
+    if (conflictingExam && conflictingExam.id !== id) {
+      throw new BadRequestException('Another exam with the provided lecture ID already exists.');
+    }
+    
     return await this.prisma.exam.update({
-      data,
-      where,
+      where: {id},
+      data: {
+        name: data.name,
+        description: data.description,
+        questions: data.questions,
+        ...(data.lectureId && {
+          lecture: {
+            connect: {
+              id: data.lectureId,
+            },
+          },
+        }),
+      }, 
     });
   }
 
