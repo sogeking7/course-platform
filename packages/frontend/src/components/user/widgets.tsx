@@ -42,7 +42,7 @@ export default function UserButton () {
           asChild
         >
           <Link href="/home/profile">
-            <label className="font-normal">Жеке профиль</label>
+            <label>Жеке профиль</label>
             <CircleUserRound strokeWidth={1.75} size={22} className="ml-2" />
           </Link>
         </Button>

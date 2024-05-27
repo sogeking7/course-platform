@@ -175,7 +175,7 @@ const SideBarButton = (props: any) => {
               }
             }}
             className={cn(
-              "w-full justify-start font-normal",
+              "w-full justify-start font-normal text-base",
               "py-4 pr-6 pl-6 rounded-none gap-3.5 border-transparent  border-l-[4px]",
               pathname === item.href
                 ? "bg-neutral-200 border-[#1F2D5A] hover:bg-neutral-200/80 "
