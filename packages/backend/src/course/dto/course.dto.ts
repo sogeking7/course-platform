@@ -21,12 +21,6 @@ export class CourseCreateDto {
   @IsOptional()
   @IsString()
   profilePictureLink?: string;
-
-  // @ApiProperty()
-  // // @IsNotEmpty()
-  // @IsOptional()
-  // @IsInt()
-  // examId: number;
 }
 
 export class CourseInviteDto {
