@@ -1,6 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { Prisma, Lecture } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { LectureCreateDto } from './dto/lecture.dto';
 
 @Injectable()
 export class LectureService {
@@ -19,9 +20,25 @@ export class LectureService {
     }
   }
 
-  async create(data: Prisma.LectureCreateInput): Promise<Lecture> {
+  async create(data: LectureCreateDto): Promise<Lecture> {
     return await this.prisma.lecture.create({
-      data,
+      data: {
+        name: data.name,
+        content: data.content,
+        videoUrl: data.videoUrl,
+        section: {
+          connect: {
+            id: data.sectionId,
+          },
+        },
+        ...(data.examId && {
+          exam: {
+            connect: {
+              id: data.examId,
+            },
+          },
+        }),
+      },
     });
   }
 
