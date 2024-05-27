@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { Exam } from '@prisma/client';
 import { ExamService } from './exam.service';
-import { ExamCreateDto } from './dto/exam.dto';
+import { ExamCreateDto, ExamUpdateDto } from './dto/exam.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
 
 @ApiTags('Exam')
@@ -60,13 +60,10 @@ export class ExamController {
   @ApiParam({ name: 'id', description: 'ID of the exam' })
   @Put(':id')
   async update(
-    @Param('id') id: string,
-    @Body() data: ExamCreateDto,
+    @Param('id') id: number,
+    @Body() data: ExamUpdateDto,
   ): Promise<Exam> {
-    return await this.examService.update({
-      where: { id: Number(id) },
-      data,
-    });
+    return await this.examService.update(id, data);
   }
 
   @ApiBearerAuth()
@@ -79,7 +76,7 @@ export class ExamController {
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   @ApiParam({ name: 'id', description: 'ID of the exam' })
   @Delete(':id')
-  async remove(@Param('id') id: string): Promise<Exam> {
+  async remove(@Param('id') id: number): Promise<Exam> {
     return await this.examService.remove({ id: Number(id) });
   }
 }
