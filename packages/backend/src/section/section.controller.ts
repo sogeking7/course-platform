@@ -1,0 +1,85 @@
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Put,
+  Param,
+  Delete,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
+import { Section } from '@prisma/client';
+import { SectionService } from './section.service';
+import { SectionCreateDto } from './dto/section.dto';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
+
+@ApiTags('section')
+@Controller('section')
+export class sectionController {
+  constructor(private readonly sectionService: SectionService) {}
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Find a section by ID' })
+  @ApiResponse({ status: 200, type: Promise<Section | null> })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
+  @ApiParam({ name: 'id', description: 'ID of the section' })
+  @Get(':id')
+  async findOneById(@Param('id') id: string): Promise<Section | null> {
+    try {
+      const sectionId = parseInt(id, 10);
+      return await this.sectionService.findOneById(sectionId);
+    } catch (error) {
+      throw new HttpException(
+        `Error finding section: ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Create a new section' })
+  @ApiResponse({
+    status: 201,
+    type: Promise<Section>,
+    description: 'The created section',
+  })
+  @Post()
+  async create(@Body() data: SectionCreateDto): Promise<Section> {
+    return await this.sectionService.create(data);
+  }
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update a section' })
+  @ApiResponse({
+    status: 200,
+    type: Promise<Section>,
+    description: 'The updated section',
+  })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
+  @ApiParam({ name: 'id', description: 'ID of the section' })
+  @Put(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() data: SectionCreateDto,
+  ): Promise<Section> {
+    return await this.sectionService.update({
+      where: { id: Number(id) },
+      data,
+    });
+  }
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Delete a section' })
+  @ApiResponse({
+    status: 200,
+    type: Promise<Section>,
+    description: 'The deleted section',
+  })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
+  @ApiParam({ name: 'id', description: 'ID of the section' })
+  @Delete(':id')
+  async remove(@Param('id') id: string): Promise<Section> {
+    return await this.sectionService.remove({ id: Number(id) });
+  }
+}
