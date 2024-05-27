@@ -2,17 +2,33 @@
 
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import Placeholder from "@tiptap/extension-placeholder";
 import { ToolBar } from "./toolbar";
 // import { useDebounce } from "@/hooks/useDebounce";
 
 type Props = {
   editorState: string;
+  placeholder: string;
   setEditorState: (richText: string) => void;
 };
-export const Tiptap = ({ editorState, setEditorState }: Props) => {
+export const Tiptap = ({ editorState, setEditorState, placeholder }: Props) => {
   const editor = useEditor({
     autofocus: false,
-    extensions: [StarterKit],
+    extensions: [
+      StarterKit,
+      Placeholder.configure({
+        // Use a placeholder:
+        placeholder: `${placeholder}…`,
+        // Use different placeholders depending on the node type:
+        // placeholder: ({ node }) => {
+        //   if (node.type.name === 'heading') {
+        //     return 'What’s the title?'
+        //   }
+
+        //   return 'Can you add some further context?'
+        // },
+      }),
+    ],
     content: editorState,
     editorProps: {
       attributes: {
@@ -29,7 +45,7 @@ export const Tiptap = ({ editorState, setEditorState }: Props) => {
 
   if (!editor) {
     return (
-      <div className="p-5 !w-full bg-white border border-neutral-400 rounded-sm">
+      <div className="p-5 !w-full bg-white border border-neutral-300 rounded-sm">
         Жүктелуде...
       </div>
     );
@@ -37,11 +53,12 @@ export const Tiptap = ({ editorState, setEditorState }: Props) => {
 
   return (
     <div>
-      <div className="flex justify-between p-1 border-neutral-400 border rounded-t-sm">
+      <div className="flex justify-between p-1 border-neutral-300 border rounded-t-sm">
         {editor && <ToolBar editor={editor} />}
       </div>
       <EditorContent
-        className="border-x border-b border-neutral-400 rounded-b-sm"
+        placeholder={placeholder}
+        className="border-x border-b border-neutral-300 rounded-b-sm"
         editor={editor}
       />
     </div>

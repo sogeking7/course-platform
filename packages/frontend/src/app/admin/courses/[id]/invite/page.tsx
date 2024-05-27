@@ -45,7 +45,7 @@ export default function AdminCourseInviteStudentPage({
         <GoBackButton />
         <TypographyH1>Оқушы қосу</TypographyH1>
       </div>
-      <div className="p-5 border bg-white rounded-sm">
+      <div className="p-5 border bg-white rounded-sm shadow-md">
         {/* <label>Курс аты:</label>
         <TypographyH3>{data.name}</TypographyH3> */}
         <div className=" flex-col flex gap-6">

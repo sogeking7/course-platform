@@ -38,7 +38,7 @@ export const AdminCourseCurriculumLectureForm = ({
   };
 
   return (
-    <div className="border bg-white border-neutral-400 rounded-sm p-4">
+    <div className="border bg-white border-neutral-300 rounded-sm p-4">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4 flex gap-4 items-center">
           <label className="block  font-bold min-w-max">New Lecture:</label>

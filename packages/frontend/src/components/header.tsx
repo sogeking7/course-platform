@@ -1,5 +1,5 @@
 import { Logo } from "./logo";
-import { UserButton } from "./user/widgets";
+import UserButton from "./user/widgets";
 import { MySheet, MySheetTrigger, SideBarTrigger } from "./sidebar";
 
 export const HomeHeader = (props: any) => {

@@ -109,7 +109,7 @@ export const AdminCourseCreateForm = ({
                 <FormItem>
                   <FormLabel>Аты</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input placeholder="Аты" {...field} />
                   </FormControl>
                 </FormItem>
               )}
@@ -121,7 +121,7 @@ export const AdminCourseCreateForm = ({
                 <FormItem>
                   <FormLabel>Cипаттамасы</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input placeholder="Cипаттамасы" {...field} />
                   </FormControl>
                 </FormItem>
               )}
@@ -134,6 +134,7 @@ export const AdminCourseCreateForm = ({
                   <FormLabel>Контент</FormLabel>
                   <FormControl>
                     <Tiptap
+                      placeholder={"Контент"}
                       editorState={field.value}
                       setEditorState={field.onChange}
                     />

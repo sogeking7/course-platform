@@ -12,11 +12,15 @@ export const AccordionContents = () => {
   return (
     <Accordion type="multiple" className="w-full relative ">
       {courseContent.map((module) => (
-        <AccordionItem key={module.id} value={`module-${module.id}`}>
+        <AccordionItem
+          className="border-b border-b-zinc-700"
+          key={module.id}
+          value={`module-${module.id}`}
+        >
           <AccordionTrigger className="p-5 text-left text-sm font-bold">
             {module.title}
           </AccordionTrigger>
-          <AccordionContent className="text-sm font-normal">
+          <AccordionContent className="border-t border-t-zinc-700 text-sm font-normal">
             <ul>
               {module.topics.map((topic) => (
                 <li

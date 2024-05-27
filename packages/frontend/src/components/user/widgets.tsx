@@ -16,7 +16,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { useUserStore } from "@/store/user";
 
-export const UserButton = () => {
+export default function UserButton () {
   const { data: session } = useSession();
   const user = session?.user;
 
@@ -67,7 +67,7 @@ export const UserButton = () => {
             <DropdownMenuSeparator />
           </>
         )}
-        <Link href={"/home/profile/settings"}>
+        <Link href={"/home/profile"}>
           <DropdownMenuItem className="bg-transparent hover:!bg-neutral-100 hover:!text-neutral-700">
             Баптаулар
           </DropdownMenuItem>
