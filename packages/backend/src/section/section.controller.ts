@@ -11,12 +11,12 @@ import {
 } from '@nestjs/common';
 import { Section } from '@prisma/client';
 import { SectionService } from './section.service';
-import { SectionCreateDto } from './dto/section.dto';
+import { SectionCreateDto, SectionUpdateDto } from './dto/section.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
 
-@ApiTags('section')
+@ApiTags('Section')
 @Controller('section')
-export class sectionController {
+export class SectionController {
   constructor(private readonly sectionService: SectionService) {}
 
   @ApiBearerAuth()
@@ -60,13 +60,10 @@ export class sectionController {
   @ApiParam({ name: 'id', description: 'ID of the section' })
   @Put(':id')
   async update(
-    @Param('id') id: string,
-    @Body() data: SectionCreateDto,
+    @Param('id') id: number,
+    @Body() data: SectionUpdateDto,
   ): Promise<Section> {
-    return await this.sectionService.update({
-      where: { id: Number(id) },
-      data,
-    });
+    return await this.sectionService.update(id, data);
   }
 
   @ApiBearerAuth()

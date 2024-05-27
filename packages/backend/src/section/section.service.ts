@@ -1,6 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { Prisma, Section } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { SectionCreateDto, SectionUpdateDto } from './dto/section.dto';
 
 @Injectable()
 export class SectionService {
@@ -19,20 +20,24 @@ export class SectionService {
     }
   }
 
-  async create(data: Prisma.SectionCreateInput): Promise<Section> {
+  async create(data: SectionCreateDto): Promise<Section> {
     return await this.prisma.section.create({
-      data,
+      data: {
+        name: data.name,
+        course: {
+          connect: { id: data.courseId },
+        },
+      },
     });
   }
 
-  async update(params: {
-    where: Prisma.SectionWhereUniqueInput;
-    data: Prisma.SectionUpdateInput;
-  }): Promise<Section> {
-    const { where, data } = params;
+  async update(id: number, data: SectionUpdateDto): Promise<Section> {
     return await this.prisma.section.update({
-      data,
-      where,
+      where: { id },
+      data: {
+        name: data.name,
+        course: data.courseId ? { connect: { id: data.courseId } } : undefined,
+      },
     });
   }
 

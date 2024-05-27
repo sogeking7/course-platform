@@ -7,8 +7,20 @@ export class SectionCreateDto {
   @IsString()
   name: string;
 
-  @ApiProperty({ example: 1 })
+  @ApiProperty()
   @IsNotEmpty()
   @IsInt()
   courseId: number;
+}
+
+export class SectionUpdateDto {
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsInt()
+  courseId?: number;
 }
