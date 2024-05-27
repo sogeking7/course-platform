@@ -28,8 +28,8 @@ model Exam {
   name        String
   description String
   questions   String
-  lecture     Lecture?  @relation(fields: [lectureId], references: [id])
-  lectureId   Int?      @unique
+  lecture     Lecture  @relation(fields: [lectureId], references: [id])
+  lectureId   Int      @unique
 }
 
 model Course {
