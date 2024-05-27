@@ -28,7 +28,8 @@ model Exam {
   name        String
   description String
   questions   String
-  Lecture     Lecture?
+  lecture     Lecture?  @relation(fields: [lectureId], references: [id])
+  lectureId   Int?      @unique
 }
 
 model Course {
@@ -37,27 +38,26 @@ model Course {
   description        String
   content            String
   profilePictureLink String?
-  Section            Section[]
+  sections           Section[]
   users              CourseEnrollment[]
 }
 
 model Section {
-  id       Int      @id @default(autoincrement())
+  id       Int       @id @default(autoincrement())
   name     String
-  course   Course   @relation(fields: [courseId], references: [id])
+  course   Course    @relation(fields: [courseId], references: [id])
   courseId Int
-  Lecture  Lecture?
+  lectures Lecture[]
 }
 
 model Lecture {
-  id        Int     @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   name      String
   content   String
   videoUrl  String
-  section   Section @relation(fields: [sectionId], references: [id])
-  sectionId Int     @unique
-  exam      Exam?   @relation(fields: [examId], references: [id])
-  examId    Int?    @unique
+  section   Section   @relation(fields: [sectionId], references: [id])
+  sectionId Int
+  exam      Exam?
 }
 
 model CourseEnrollment {
