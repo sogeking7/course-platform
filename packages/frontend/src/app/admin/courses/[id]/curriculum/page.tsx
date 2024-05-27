@@ -6,7 +6,7 @@ import { LayoutLoader } from "@/components/loader";
 import { TypographyH1 } from "@/components/ui/typography";
 import { useCourseStore } from "@/store/course";
 import { useQuery } from "@tanstack/react-query";
-import CourseCurriculumManager from "./manager";
+import { CourseSectionManager } from "./section/manager";
 
 export default function AdminCoursesCurriculum({
   params,
@@ -22,7 +22,7 @@ export default function AdminCoursesCurriculum({
     queryFn: () => courseStore.findCourseById(id),
   });
 
-  if (isLoading) {
+  if (isLoading || !data) {
     return <LayoutLoader />;
   }
 
@@ -31,6 +31,24 @@ export default function AdminCoursesCurriculum({
     { name: data.name, path: "/admin/courses/" + id },
     { name: "Курс бағдарламасы", path: "/admin/courses/" + id + "/curriculum" },
   ];
+
+  const test = {
+    sections: [
+      {
+        id: 1,
+        name: "Section 1",
+        description: "Section 1 Description",
+        lectures: [
+          {
+            id: 1,
+            name: "Lecture 1",
+            content: "Lecture 1 Content",
+          },
+        ],
+      },
+    ],
+  };
+
   return (
     <>
       <Bread breadcrumbs={breadcrumbs} />
@@ -39,7 +57,7 @@ export default function AdminCoursesCurriculum({
         <TypographyH1>Курс бағдарламасы</TypographyH1>
       </div>
       <div className="border shadow-md rounded-sm py-12 px-12 bg-white">
-        <CourseCurriculumManager />
+        <CourseSectionManager courseId={data.id} sections={test.sections} />
       </div>
     </>
   );

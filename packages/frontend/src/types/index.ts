@@ -1,17 +1,10 @@
 import { z } from "zod";
 
-export type Auth = {
-  email: string;
-  password: string;
-};
-
-export type User = {
+export type User = z.infer<typeof createUserSchema> & {
   id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
+  password?: string;
   profilePictureLink?: string;
-  role: UserRole;
+  role?: UserRole;
 };
 
 export enum UserRole {
@@ -36,11 +29,37 @@ export type Module = {
   profile_image: string;
 };
 
-export type Course = {
+type CourseEnrollment = {
+  course?: Course;
+  courseId?: number;
+  user?: User;
+  userId?: number;
+};
+
+export type Course = z.infer<typeof createCourseSchema> & {
   id: number;
-  name: string;
-  description: string;
-  content: string;
+  sections: Section[];
+  users?: CourseEnrollment[];
+};
+
+export type Section = z.infer<typeof createSectionSchema> & {
+  id: number;
+  course?: Course;
+  courseId?: number;
+  lectures: Lecture[];
+};
+
+export type Lecture = z.infer<typeof createLectureSchema> & {
+  id: number;
+  section?: Section;
+  sectionId?: number;
+  exam?: Exam;
+  examId?: number;
+};
+
+export type Exam = z.infer<typeof createExamSchema> & {
+  id: number;
+  lecture: Lecture;
 };
 
 export type Topic = {
@@ -52,6 +71,54 @@ export type Topic = {
 
 export const inviteStudentToCourseSchema = z.object({
   email: z.string().trim().email(),
+});
+
+export const createSectionSchema = z.object({
+  name: z.string().trim().min(1, { message: "Required" }),
+  description: z.string().trim().min(1, { message: "Required" }),
+});
+
+export const createLectureSchema = z.object({
+  name: z.string().trim().min(1, { message: "Required" }),
+  content: z.string().trim().min(1, { message: "Required" }),
+});
+
+const questionSchema = z.object({
+  name: z.string().trim().min(1, { message: "Question name is required" }),
+  answers: z
+    .array(
+      z.object({
+        name: z.string().trim().min(1, { message: "Answer name is required" }),
+        isCorrect: z.boolean(),
+      }),
+    )
+    .min(1, { message: "At least one answer is required" }),
+});
+
+export const createExamSchema = z.object({
+  name: z.string().trim().min(1, { message: "Required" }),
+  description: z.string().trim().min(1, { message: "Required" }),
+  questions: z
+    .string()
+    .trim()
+    .min(1, { message: "Required" })
+    .transform((val) => {
+      try {
+        return JSON.parse(val);
+      } catch (e) {
+        throw new Error("Invalid JSON format for questions");
+      }
+    })
+    .refine((val) => Array.isArray(val), {
+      message: "Questions should be an array",
+    })
+    .refine(
+      (val) =>
+        val.every(
+          (question: any) => questionSchema.safeParse(question).success,
+        ),
+      { message: "Invalid question format" },
+    ),
 });
 
 export const createCourseSchema = z.object({
