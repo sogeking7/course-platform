@@ -110,8 +110,8 @@ export class UserController {
   }
 
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Upload Course Photo' })
-  @ApiResponse({ status: 201, description: 'Course photo uploaded' })
+  @ApiOperation({ summary: 'Upload User Photo' })
+  @ApiResponse({ status: 201, description: 'User photo uploaded' })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     schema: {
@@ -125,7 +125,7 @@ export class UserController {
     },
   })
   @Post(':id/upload-photo')
-  @UseInterceptors(fileIntercepting('public/media/course'))
+  @UseInterceptors(fileIntercepting('public/media/user'))
   async uploadPhoto(
     @Param('id', new ParseIntPipe()) id: number,
     @UploadedFiles() files: any,
@@ -138,9 +138,9 @@ export class UserController {
   }
 
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Delete Course Photo' })
-  @ApiResponse({ status: 200, description: 'Course photo deleted' })
-  @ApiParam({ name: 'id', description: 'ID of the course' })
+  @ApiOperation({ summary: 'Delete User Photo' })
+  @ApiResponse({ status: 200, description: 'User photo deleted' })
+  @ApiParam({ name: 'id', description: 'ID of the user' })
   @Delete(':id/delete-photo')
   async deletePhoto(@Param('id', new ParseIntPipe()) id: number) {
     return this.userService.deletePhoto(id);

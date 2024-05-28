@@ -71,7 +71,7 @@ export class UserService {
     });
     const parts = course.profilePictureLink.split('/');
     const filename = parts[parts.length - 1];
-    const filePath = join(process.cwd(), 'public/media/course', filename);
+    const filePath = join(process.cwd(), 'public/media/user', filename);
     await unlink(filePath);
     return await this.prisma.course.update({
       where: { id },
