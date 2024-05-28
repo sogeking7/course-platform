@@ -6,29 +6,41 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { courseContent } from "../../../public/shared";
+import { Section } from "@/types";
+import Link from "next/link";
 
-export const AccordionContents = () => {
+export const AccordionContents = ({
+  sections,
+  courseId,
+}: {
+  courseId: number;
+  sections: Section[];
+}) => {
   return (
     <Accordion type="multiple" className="w-full relative ">
-      {courseContent.map((module) => (
+      {sections.map((section, index) => (
         <AccordionItem
           className="border-b border-b-zinc-700"
-          key={module.id}
-          value={`module-${module.id}`}
+          key={section.id}
+          value={`section-${section.id}`}
         >
           <AccordionTrigger className="p-5 text-left text-sm font-bold">
-            {module.title}
+            {section.name}
           </AccordionTrigger>
           <AccordionContent className="border-t border-t-zinc-700 text-sm font-normal">
             <ul>
-              {module.topics.map((topic) => (
+              {section.lectures.map((lecture, jndex) => (
                 <li
                   className="pt-3 pb-5 hover:underline flex cursor-pointer"
-                  key={topic.id}
+                  key={lecture.id}
                 >
                   <div className="min-w-3 h-3 rounded-full border mr-3 relative top-[5px]"></div>
-                  <label className="cursor-pointer">{topic.title}</label>
+                  <Link
+                    href={`/learning/${courseId}/lecture/${lecture.id}`}
+                    className="cursor-pointer"
+                  >
+                    {lecture.name}
+                  </Link>
                 </li>
               ))}
             </ul>

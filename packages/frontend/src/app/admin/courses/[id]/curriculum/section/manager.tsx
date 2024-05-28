@@ -17,6 +17,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useSectionStore } from "@/store/section";
 
 type Props = {
   courseId: number;
@@ -24,16 +26,26 @@ type Props = {
 };
 
 export const CourseSectionManager = (props: Props) => {
-  const [sections, setSections] = useState<Section[]>(
-    () => props.sections || [],
-  );
+  const queryClient = useQueryClient();
+  const sectionStore = useSectionStore();
+
   const [mode, setMode] = useState<"edit" | "default" | "new">("default");
 
   const handleDelete = () => {};
 
+  const mutationDelete = useMutation({
+    mutationFn: (id: number) => sectionStore.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["course", { id: props.courseId }],
+      });
+      setMode("default");
+    },
+  });
+
   return (
     <div className="space-y-6 list-none">
-      {sections.map((section, index) => {
+      {props.sections.map((section, index) => {
         return (
           <li
             key={section.id}
@@ -82,8 +94,14 @@ export const CourseSectionManager = (props: Props) => {
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogCancel>Болдырмау</AlertDialogCancel>
-                        <AlertDialogAction>Жалғастыру</AlertDialogAction>
+                        <AlertDialogCancel onClick={() => setMode("default")}>
+                          Болдырмау
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => mutationDelete.mutate(section.id)}
+                        >
+                          Жалғастыру
+                        </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
@@ -92,10 +110,16 @@ export const CourseSectionManager = (props: Props) => {
             )}
             {mode === "edit" && (
               <>
-                <Form data={section} mode={mode} setOpen={setMode} />
+                <Form
+                  data={section}
+                  courseId={props.courseId}
+                  mode={mode}
+                  setOpen={setMode}
+                />
               </>
             )}
             <LectureManager
+              courseId={props.courseId}
               sectionId={section.id}
               lectures={section.lectures}
             />
@@ -104,7 +128,7 @@ export const CourseSectionManager = (props: Props) => {
       })}
       {mode === "new" && (
         <div className="border bg-white border-neutral-300 rounded-sm p-4">
-          <Form mode={mode} setOpen={setMode} />
+          <Form courseId={props.courseId} mode={mode} setOpen={setMode} />
         </div>
       )}
       {mode !== "new" && (

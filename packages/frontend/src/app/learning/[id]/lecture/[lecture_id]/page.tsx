@@ -3,24 +3,36 @@
 import { MyContainer } from "@/components/container";
 import { AccordionContents } from "@/components/course/accordion-contents";
 import { LayoutLoader } from "@/components/loader";
-import { Button } from "@/components/ui/button";
+import { TypographyH1 } from "@/components/ui/typography";
 import { useCourseStore } from "@/store/course";
+import { useLectureStore } from "@/store/lecture";
 import { useQuery } from "@tanstack/react-query";
 import { ListCollapse } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
-export default function CoursePage({ params }: { params: { id: string } }) {
-  const id = Number(params.id);
+export default function LecturePage({
+  params,
+}: {
+  params: { lecture_id: string; id: string };
+}) {
+  const course_id = Number(params.id);
+  const lecture_id = Number(params.lecture_id);
 
+  const lectureStore = useLectureStore();
   const courseStore = useCourseStore();
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["course", { id }],
-    queryFn: () => courseStore.findCourseById(id),
+  const { data: lecture, isLoading: lectureIsLoading } = useQuery({
+    queryKey: ["lecture", { id: lecture_id }],
+    queryFn: () => lectureStore.getById(lecture_id),
   });
 
-  if (isLoading || !data) {
+  const { data: course, isLoading: courseIsLoading } = useQuery({
+    queryKey: ["course", { id: course_id }],
+    queryFn: () => courseStore.findCourseById(course_id),
+  });
+
+  if (lectureIsLoading || courseIsLoading || !lecture || !course) {
     return <LayoutLoader />;
   }
 
@@ -32,25 +44,15 @@ export default function CoursePage({ params }: { params: { id: string } }) {
           Contents
         </button>
         <div className="pt-[69px] min-h-[calc(100% - 69px)] z-[5]">
-          <AccordionContents courseId={data?.id!} sections={data?.sections!} />
+          <AccordionContents courseId={course.id} sections={course.sections} />
         </div>
       </div>
       <div className="w-full">
-        <div className="h-[300px] w-full bg-white">
-          <MyContainer>
-            <div className="w-full flex h-[250px] gap-6">
-              <div className="w-[450px] h-[250px] bg-neutral-100 rounded-sm"></div>
-              <div>
-                <h1 className="text-3xl font-bold">{data.name}</h1>
-                <Button className="w-[300px] mt-6">Бастау</Button>
-              </div>
-            </div>
-          </MyContainer>
-        </div>
         <MyContainer>
+          <TypographyH1>{lecture.name}</TypographyH1>
           <article className="prose !max-w-full mt-4 w-full">
             <ReactMarkdown className="w-full" rehypePlugins={[rehypeRaw]}>
-              {data.description}
+              {lecture.content}
             </ReactMarkdown>
           </article>
         </MyContainer>

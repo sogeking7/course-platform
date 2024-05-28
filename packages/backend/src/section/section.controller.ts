@@ -76,7 +76,7 @@ export class SectionController {
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   @ApiParam({ name: 'id', description: 'ID of the section' })
   @Delete(':id')
-  async remove(@Param('id') id: string): Promise<Section> {
+  async remove(@Param('id') id: number): Promise<Section> {
     return await this.sectionService.remove({ id: Number(id) });
   }
 }

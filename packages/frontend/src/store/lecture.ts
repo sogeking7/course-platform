@@ -1,12 +1,13 @@
 import axios from "@/lib/axios";
+import { Lecture } from "@/types";
 import { create } from "zustand";
 
 type Store = {
-  delete: (id: number) => Promise<any>;
-  update: (id: number, data: any) => Promise<any>;
-  create: (sectionId: number, data: any) => Promise<any>;
-  getAll: () => Promise<any>;
-  getById: (id: number) => Promise<any>;
+  delete: (id: number) => Promise<Lecture>;
+  update: (id: number, data: any) => Promise<Lecture>;
+  create: (data: any) => Promise<Lecture>;
+  getAll: () => Promise<Lecture[]>;
+  getById: (id: number) => Promise<Lecture>;
 };
 
 export const useLectureStore = create<Store>()((set) => {
@@ -15,8 +16,7 @@ export const useLectureStore = create<Store>()((set) => {
   return {
     delete: async (id) => (await axios.delete(`${url}/${id}`)).data,
     update: async (id, data) => (await axios.put(`${url}/${id}`, data)).data,
-    create: async (sectionId, data) =>
-      (await axios.post(`${url}`, { sectionId, ...data })).data,
+    create: async (data) => (await axios.post(`${url}`, data)).data,
     getAll: async () => (await axios.get(`${url}`)).data,
     getById: async (id) => (await axios.get(`${url}/${id}`)).data,
   };

@@ -57,7 +57,7 @@ export default function AdminCoursesCurriculum({
         <TypographyH1>Курс бағдарламасы</TypographyH1>
       </div>
       <div className="border shadow-md rounded-sm py-12 px-12 bg-white">
-        <CourseSectionManager courseId={data.id} sections={test.sections} />
+        <CourseSectionManager courseId={data.id} sections={data.sections} />
       </div>
     </>
   );

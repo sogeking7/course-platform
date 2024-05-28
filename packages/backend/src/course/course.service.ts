@@ -16,7 +16,8 @@ export class CourseService {
 
   async findOneById(id: number): Promise<Course | null> {
     try {
-      return await this.prisma.course.findUnique({
+      // Fetch the course with sections and their lectures
+      const course = await this.prisma.course.findUnique({
         where: { id },
         include: {
           users: {
@@ -24,8 +25,28 @@ export class CourseService {
               user: true,
             },
           },
+          sections: {
+            include: {
+              lectures: true,
+            },
+          },
         },
       });
+
+      // If the course is not found, return null
+      if (!course) {
+        return null;
+      }
+
+      // Sort the sections by id
+      course.sections.sort((a, b) => a.id - b.id);
+
+      // Sort the lectures within each section by id
+      course.sections.forEach((section) => {
+        section.lectures.sort((a, b) => a.id - b.id);
+      });
+
+      return course;
     } catch (error) {
       throw new HttpException(
         `Error finding course: ${error.message}`,

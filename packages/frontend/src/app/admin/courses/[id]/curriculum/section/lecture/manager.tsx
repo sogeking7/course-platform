@@ -11,23 +11,30 @@ import { Button } from "@/components/ui/button";
 import { File, Plus } from "lucide-react";
 
 type Props = {
+  courseId: number;
   sectionId: number;
   lectures: Lecture[];
 };
 
 export const LectureManager = (props: Props) => {
-  const [lectures, setLectures] = useState(() => props.lectures || []);
   const [mode, setMode] = useState<"edit" | "default" | "new">("default");
+  const [values, setValues] = useState<string[]>([]);
+
+  const closeAccordionItem = (itemId: string) => {
+    setValues((prevValues) => prevValues.filter((value) => value !== itemId));
+  };
 
   return (
     <div className="mt-6 space-y-3 list-none">
       <Accordion
+        value={values}
+        onValueChange={setValues}
         type="multiple"
         className="gap-3 flex-col flex"
         /* @ts-ignore */
         collapsible={true}
       >
-        {lectures.map((lecture, index) => (
+        {props.lectures.map((lecture, index) => (
           <AccordionItem key={lecture.id} value={`item-${lecture.id}`}>
             <AccordionTrigger className="w-full bg-white px-3 py-4 border border-neutral-300">
               <label className=" flex gap-2 items-center min-w-max">
@@ -39,12 +46,26 @@ export const LectureManager = (props: Props) => {
               </label>
             </AccordionTrigger>
             <AccordionContent className="py-4 border-neutral-300 border-t-none bg-white border-x border-b">
-              <Form data={lecture} mode={"edit"} setOpen={setMode} />
+              <Form
+                onEditSave={() => closeAccordionItem(`item-${lecture.id}`)}
+                sectionId={props.sectionId}
+                courseId={props.courseId}
+                data={lecture}
+                mode={"edit"}
+                setOpen={setMode}
+              />
             </AccordionContent>
           </AccordionItem>
         ))}
       </Accordion>
-      {mode === "new" && <Form mode={"new"} setOpen={setMode} />}
+      {mode === "new" && (
+        <Form
+          sectionId={props.sectionId}
+          courseId={props.courseId}
+          mode={"new"}
+          setOpen={setMode}
+        />
+      )}
       {mode !== "new" && (
         <Button
           className="w-max"

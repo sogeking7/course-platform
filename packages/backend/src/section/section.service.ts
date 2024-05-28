@@ -33,7 +33,7 @@ export class SectionService {
 
   async update(id: number, data: SectionUpdateDto): Promise<Section> {
     return await this.prisma.section.update({
-      where: { id },
+      where: { id: Number(id) },
       data: {
         name: data.name,
         course: data.courseId ? { connect: { id: data.courseId } } : undefined,

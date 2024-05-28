@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Lecture, createLectureSchema } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -25,14 +25,29 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useLectureStore } from "@/store/lecture";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type Props = {
+  sectionId: number;
+  courseId: number;
   data?: Lecture;
+  onEditSave?: () => void;
   mode: "edit" | "default" | "new";
   setOpen: Dispatch<SetStateAction<"edit" | "default" | "new">>;
 };
 
-export default function LectureForm({ data, mode, setOpen }: Props) {
+export default function LectureForm({
+  courseId,
+  sectionId,
+  data,
+  mode,
+  onEditSave,
+  setOpen,
+}: Props) {
+  const queryClient = useQueryClient();
+  const lectureStore = useLectureStore();
+
   const form = useForm<z.infer<typeof createLectureSchema>>({
     resolver: zodResolver(createLectureSchema),
     defaultValues: {
@@ -41,8 +56,49 @@ export default function LectureForm({ data, mode, setOpen }: Props) {
     },
   });
 
+  const mutation = useMutation({
+    mutationFn: (newData: any) => {
+      // return / new Promise(resolve => setTimeout(resolve, 3000));
+      if (mode === "edit") {
+        return lectureStore.update(data?.id!, newData);
+      }
+      return lectureStore.create({
+        sectionId,
+        ...newData,
+        videoUrl: "null",
+        examId: 0,
+      });
+    },
+    onSuccess: () => {
+      // if (mode === "edit")
+      queryClient.invalidateQueries({
+        queryKey: ["course", { id: courseId }],
+      });
+      if (mode === "new") {
+        form.reset({
+          name: "",
+          content: "",
+        });
+        setOpen("default");
+      } else {
+        onEditSave!();
+      }
+      form.reset(form.getValues());
+    },
+  });
+
+  const mutationDelete = useMutation({
+    mutationFn: () => lectureStore.delete(data?.id!),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["course", { id: courseId }],
+      });
+      setOpen("default");
+    },
+  });
+
   const onSubmit = (data: z.infer<typeof createLectureSchema>) => {
-    form.reset();
+    mutation.mutate(data);
   };
 
   return (
@@ -105,7 +161,7 @@ export default function LectureForm({ data, mode, setOpen }: Props) {
                       size={18}
                       className="inline-block mr-2 text-destructive"
                     />
-                    Өшіру: {data.name}
+                    Өшіру: {data?.name!}
                     {/* Сіз мүлдем сенімдісіз бе? */}
                   </AlertDialogTitle>
                   <AlertDialogDescription>
@@ -115,13 +171,22 @@ export default function LectureForm({ data, mode, setOpen }: Props) {
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Болдырмау</AlertDialogCancel>
-                  <AlertDialogAction>Жалғастыру</AlertDialogAction>
+                  <AlertDialogCancel onClick={() => setOpen("default")}>
+                    Болдырмау
+                  </AlertDialogCancel>
+                  <AlertDialogAction onClick={() => mutationDelete.mutate()}>
+                    Жалғастыру
+                  </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
           )}
-          <Button type="submit">{mode === "new" ? "Косу" : "Сақтау"}</Button>
+          <Button
+            disabled={!form.formState.isDirty || !form.formState.isValid}
+            type="submit"
+          >
+            {mode === "new" ? "Косу" : "Сақтау"}
+          </Button>
         </div>
       </form>
     </Form>

@@ -75,7 +75,7 @@ export const inviteStudentToCourseSchema = z.object({
 
 export const createSectionSchema = z.object({
   name: z.string().trim().min(1, { message: "Required" }),
-  description: z.string().trim().min(1, { message: "Required" }),
+  // description: z.string().trim().min(1, { message: "Required" }),
 });
 
 export const createLectureSchema = z.object({
