@@ -125,4 +125,14 @@ export class CourseService {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  async uploadPhoto(id: number, files: any) {
+    const profilePictureLink = `${process.env.HOST_URL}${files[0].path.slice(7)}`;
+    return await this.prisma.course.update({
+      where: { id },
+      data: {
+        profilePictureLink,
+      },
+    });
+  }
 }
