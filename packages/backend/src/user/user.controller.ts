@@ -8,11 +8,24 @@ import {
   Delete,
   HttpException,
   HttpStatus,
+  UploadedFiles,
+  ParseIntPipe,
+  UseInterceptors,
+  NotFoundException,
 } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { UserService } from './user.service';
 import { UserCreateDto } from './dto/user.dto';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiBody,
+} from '@nestjs/swagger';
+import { fileIntercepting } from 'utils';
 
 @ApiTags('User')
 @Controller('user')
@@ -94,5 +107,42 @@ export class UserController {
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<User> {
     return await this.userService.remove({ id: Number(id) });
+  }
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Upload User Photo' })
+  @ApiResponse({ status: 201, description: 'User photo uploaded' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @Post(':id/upload-photo')
+  @UseInterceptors(fileIntercepting('public/media/user'))
+  async uploadPhoto(
+    @Param('id', new ParseIntPipe()) id: number,
+    @UploadedFiles() files: any,
+  ) {
+    if (files) {
+      return this.userService.uploadPhoto(id, files);
+    } else {
+      throw new NotFoundException('File Not Found');
+    }
+  }
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Delete User Photo' })
+  @ApiResponse({ status: 200, description: 'User photo deleted' })
+  @ApiParam({ name: 'id', description: 'ID of the user' })
+  @Delete(':id/delete-photo')
+  async deletePhoto(@Param('id', new ParseIntPipe()) id: number) {
+    return this.userService.deletePhoto(id);
   }
 }
