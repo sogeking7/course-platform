@@ -57,7 +57,7 @@ export class UserService {
 
   async uploadPhoto(id: number, files: any) {
     const profilePictureLink = `${process.env.HOST_URL}${files[0].path.slice(7)}`;
-    return await this.prisma.course.update({
+    return await this.prisma.user.update({
       where: { id },
       data: {
         profilePictureLink,
@@ -66,10 +66,10 @@ export class UserService {
   }
 
   async deletePhoto(id: number) {
-    const course = await this.prisma.course.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { id },
     });
-    const parts = course.profilePictureLink.split('/');
+    const parts = user.profilePictureLink.split('/');
     const filename = parts[parts.length - 1];
     const filePath = join(process.cwd(), 'public/media/user', filename);
     await unlink(filePath);
