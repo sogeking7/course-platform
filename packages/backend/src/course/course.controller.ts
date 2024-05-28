@@ -26,7 +26,6 @@ import {
   ApiBody,
 } from '@nestjs/swagger';
 import { fileIntercepting } from 'utils';
-import { NotFoundError } from 'rxjs';
 
 @ApiTags('Course')
 @Controller('course')

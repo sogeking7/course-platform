@@ -1,6 +1,8 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { Prisma, User } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { unlink } from 'fs/promises';
+import { join } from 'path';
 
 @Injectable()
 export class UserService {
@@ -50,6 +52,32 @@ export class UserService {
   async remove(where: Prisma.UserWhereUniqueInput): Promise<User> {
     return await this.prisma.user.delete({
       where,
+    });
+  }
+
+  async uploadPhoto(id: number, files: any) {
+    const profilePictureLink = `${process.env.HOST_URL}${files[0].path.slice(7)}`;
+    return await this.prisma.course.update({
+      where: { id },
+      data: {
+        profilePictureLink,
+      },
+    });
+  }
+
+  async deletePhoto(id: number) {
+    const course = await this.prisma.course.findUnique({
+      where: { id },
+    });
+    const parts = course.profilePictureLink.split('/');
+    const filename = parts[parts.length - 1];
+    const filePath = join(process.cwd(), 'public/media/course', filename);
+    await unlink(filePath);
+    return await this.prisma.course.update({
+      where: { id },
+      data: {
+        profilePictureLink: null,
+      },
     });
   }
 }
