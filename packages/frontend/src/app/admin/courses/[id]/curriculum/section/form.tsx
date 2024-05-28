@@ -14,15 +14,23 @@ import {
 import { Section, createSectionSchema } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSectionStore } from "@/store/section";
+import { Loader2 } from "lucide-react";
 
 type Props = {
   data?: Section;
+  setEdits?: Dispatch<SetStateAction<number[]>>;
   courseId: number;
   mode: "edit" | "new";
   setOpen: Dispatch<SetStateAction<"edit" | "default" | "new">>;
 };
 
-export default function SectionForm({ setOpen, courseId, data, mode }: Props) {
+export default function SectionForm({
+  setOpen,
+  setEdits,
+  courseId,
+  data,
+  mode,
+}: Props) {
   const queryClient = useQueryClient();
   const sectionStore = useSectionStore();
 
@@ -49,6 +57,8 @@ export default function SectionForm({ setOpen, courseId, data, mode }: Props) {
 
       if (mode === "new") {
         form.reset();
+      } else {
+        setEdits!((x) => x.filter((y) => y !== data?.id!));
       }
 
       form.reset(form.getValues());
@@ -96,14 +106,14 @@ export default function SectionForm({ setOpen, courseId, data, mode }: Props) {
           <Button
             type="button"
             variant="ghost"
-            onClick={() => setOpen("default")}
+            onClick={() => setEdits!((x) => x.filter((y) => y !== data?.id!))}
           >
             Cancel
           </Button>
-          <Button
-            disabled={!form.formState.isDirty || !form.formState.isValid}
-            type="submit"
-          >
+          <Button disabled={!form.formState.isDirty} type="submit">
+            {mutation.isPending && (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            )}
             {mode === "new" ? "Косу" : "Сақтау"}
           </Button>
         </div>

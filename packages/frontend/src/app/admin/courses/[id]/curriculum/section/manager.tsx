@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Form from "./form";
 import { Button } from "@/components/ui/button";
-import { Pencil, Plus, Trash } from "lucide-react";
+import { Loader2, Pencil, Plus, Trash } from "lucide-react";
 import { LectureManager } from "./lecture/manager";
 import { Section } from "@/types";
 import {
@@ -30,6 +30,7 @@ export const CourseSectionManager = (props: Props) => {
   const sectionStore = useSectionStore();
 
   const [mode, setMode] = useState<"edit" | "default" | "new">("default");
+  const [edits, setEdits] = useState<int[]>([]);
 
   const handleDelete = () => {};
 
@@ -51,7 +52,7 @@ export const CourseSectionManager = (props: Props) => {
             key={section.id}
             className="p-5 bg-neutral-100 rounded-sm border border-neutral-300"
           >
-            {mode !== "edit" && (
+            {!edits.find(x => section.id === x) && (
               <div className="flex w-full justify-between items-center">
                 <label className="block font-bold min-w-max">
                   Section {index + 1}:
@@ -63,7 +64,7 @@ export const CourseSectionManager = (props: Props) => {
                   <Button
                     variant={"ghost"}
                     size={"sm"}
-                    onClick={() => setMode("edit")}
+                    onClick={() => setEdits(x => [...x, section.id])}
                   >
                     <Pencil size={16} className="mr-2" /> Өзгерту
                   </Button>
@@ -100,6 +101,9 @@ export const CourseSectionManager = (props: Props) => {
                         <AlertDialogAction
                           onClick={() => mutationDelete.mutate(section.id)}
                         >
+                          {mutationDelete.isPending && (
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          )}
                           Жалғастыру
                         </AlertDialogAction>
                       </AlertDialogFooter>
@@ -108,13 +112,14 @@ export const CourseSectionManager = (props: Props) => {
                 </div>
               </div>
             )}
-            {mode === "edit" && (
+            {edits.find(x => section.id === x) && (
               <>
                 <Form
                   data={section}
                   courseId={props.courseId}
-                  mode={mode}
+                  mode={"edit"}
                   setOpen={setMode}
+                  setEdits={setEdits}
                 />
               </>
             )}
@@ -138,7 +143,7 @@ export const CourseSectionManager = (props: Props) => {
           onClick={() => setMode("new")}
         >
           <Plus size={18} className="mr-2" />
-          Section
+          Модуль
         </Button>
       )}
     </div>

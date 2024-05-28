@@ -13,7 +13,7 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Tiptap } from "@/components/tip-tap";
-import { Trash } from "lucide-react";
+import { Loader2, Trash } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -175,16 +175,19 @@ export default function LectureForm({
                     Болдырмау
                   </AlertDialogCancel>
                   <AlertDialogAction onClick={() => mutationDelete.mutate()}>
+                    {mutationDelete.isPending && (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    )}
                     Жалғастыру
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
           )}
-          <Button
-            disabled={!form.formState.isDirty || !form.formState.isValid}
-            type="submit"
-          >
+          <Button disabled={!form.formState.isDirty} type="submit">
+            {mutation.isPending && (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            )}
             {mode === "new" ? "Косу" : "Сақтау"}
           </Button>
         </div>

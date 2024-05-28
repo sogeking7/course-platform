@@ -3,11 +3,12 @@
 import { MyContainer } from "@/components/container";
 import { AccordionContents } from "@/components/course/accordion-contents";
 import { LayoutLoader } from "@/components/loader";
+import { Button } from "@/components/ui/button";
 import { TypographyH1 } from "@/components/ui/typography";
 import { useCourseStore } from "@/store/course";
 import { useLectureStore } from "@/store/lecture";
 import { useQuery } from "@tanstack/react-query";
-import { ListCollapse } from "lucide-react";
+import { ChevronLeft, ChevronRight, ListCollapse } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
@@ -44,7 +45,11 @@ export default function LecturePage({
           Contents
         </button>
         <div className="pt-[69px] min-h-[calc(100% - 69px)] z-[5]">
-          <AccordionContents courseId={course.id} sections={course.sections} />
+          <AccordionContents
+            defaultValue={[`section-${lecture.sectionId}`]}
+            courseId={course.id}
+            sections={course.sections}
+          />
         </div>
       </div>
       <div className="w-full">
@@ -55,6 +60,16 @@ export default function LecturePage({
               {lecture.content}
             </ReactMarkdown>
           </article>
+          <div className="mt-16 flex justify-between">
+            <Button variant={'ghost'} className="flex items-center">
+              <ChevronLeft className="inline-block mr-2" size={18} />
+              Алдыңғы тақырып
+            </Button>
+            <Button variant={'ghost'} className="flex items-center">
+              Келесі тақырып
+              <ChevronRight className="ml-2 inline-block" size={18} />
+            </Button>
+          </div>
         </MyContainer>
       </div>
     </div>

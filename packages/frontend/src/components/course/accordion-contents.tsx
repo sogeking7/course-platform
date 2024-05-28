@@ -10,14 +10,20 @@ import { Section } from "@/types";
 import Link from "next/link";
 
 export const AccordionContents = ({
+  defaultValue = [],
   sections,
   courseId,
 }: {
+  defaultValue?: string[];
   courseId: number;
   sections: Section[];
 }) => {
   return (
-    <Accordion type="multiple" className="w-full relative ">
+    <Accordion
+      defaultValue={defaultValue}
+      type="multiple"
+      className="w-full relative "
+    >
       {sections.map((section, index) => (
         <AccordionItem
           className="border-b border-b-zinc-700"
@@ -30,18 +36,16 @@ export const AccordionContents = ({
           <AccordionContent className="border-t border-t-zinc-700 text-sm font-normal">
             <ul>
               {section.lectures.map((lecture, jndex) => (
-                <li
-                  className="pt-3 pb-5 hover:underline flex cursor-pointer"
+                <Link
                   key={lecture.id}
+                  href={`/learning/${courseId}/lecture/${lecture.id}`}
+                  className="cursor-pointer"
                 >
-                  <div className="min-w-3 h-3 rounded-full border mr-3 relative top-[5px]"></div>
-                  <Link
-                    href={`/learning/${courseId}/lecture/${lecture.id}`}
-                    className="cursor-pointer"
-                  >
+                  <li className="pt-3 pb-5 hover:underline flex cursor-pointer">
+                    <div className="min-w-3 h-3 rounded-full border mr-3 relative top-[5px]"></div>
                     {lecture.name}
-                  </Link>
-                </li>
+                  </li>
+                </Link>
               ))}
             </ul>
           </AccordionContent>
