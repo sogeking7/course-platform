@@ -8,6 +8,10 @@ import {
   Delete,
   HttpException,
   HttpStatus,
+  UploadedFiles,
+  ParseIntPipe,
+  UseInterceptors,
+  NotFoundException,
 } from '@nestjs/common';
 import { Course } from '@prisma/client';
 import { CourseService } from './course.service';
@@ -18,7 +22,11 @@ import {
   ApiResponse,
   ApiParam,
   ApiBearerAuth,
+  ApiConsumes,
+  ApiBody,
 } from '@nestjs/swagger';
+import { fileIntercepting } from 'utils';
+import { NotFoundError } from 'rxjs';
 
 @ApiTags('Course')
 @Controller('course')
@@ -116,6 +124,34 @@ export class CourseController {
         `${error.message}`,
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
+    }
+  }
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Upload Course Photo' })
+  @ApiResponse({ status: 201, description: 'Course photo uploaded' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @Post(':id/upload-photo')
+  @UseInterceptors(fileIntercepting('public/media/course'))
+  async uploadPhoto(
+    @Param('id', new ParseIntPipe()) id: number,
+    @UploadedFiles() files: any,
+  ) {
+    if (files) {
+      return this.courseService.uploadPhoto(id, files);
+    } else {
+      throw new NotFoundException('File Not Found');
     }
   }
 }
