@@ -154,4 +154,13 @@ export class CourseController {
       throw new NotFoundException('File Not Found');
     }
   }
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Delete Course Photo' })
+  @ApiResponse({ status: 200, description: 'Course photo deleted' })
+  @ApiParam({ name: 'id', description: 'ID of the course' })
+  @Delete(':id/delete-photo')
+  async deletePhoto(@Param('id', new ParseIntPipe()) id: number) {
+    return this.courseService.deletePhoto(id);
+  }
 }

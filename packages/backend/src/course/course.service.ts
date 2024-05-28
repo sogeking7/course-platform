@@ -2,6 +2,8 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { Prisma, Course, CourseEnrollment } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CourseCreateDto, CourseInviteDto } from './dto/course.dto';
+import { unlink } from 'fs/promises';
+import { join } from 'path';
 
 @Injectable()
 export class CourseService {
@@ -132,6 +134,22 @@ export class CourseService {
       where: { id },
       data: {
         profilePictureLink,
+      },
+    });
+  }
+
+  async deletePhoto(id: number) {
+    const course = await this.prisma.course.findUnique({
+      where: { id },
+    });
+    const parts = course.profilePictureLink.split('/');
+    const filename = parts[parts.length - 1];
+    const filePath = join(process.cwd(), 'public/media/course', filename);
+    await unlink(filePath);
+    return await this.prisma.course.update({
+      where: { id },
+      data: {
+        profilePictureLink: null,
       },
     });
   }
