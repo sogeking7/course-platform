@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { Input } from "../../ui/input";
 import { Button } from "../../ui/button";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUserStore } from "@/store/user";
 import { useSession } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -35,7 +35,7 @@ interface cropAndOriginalImage {
 }
 
 export const UserPictureForm = () => {
-  const { data: session } = useSession();
+  const { data: session, update, loading } = useSession();
   const user = session?.user;
   const queryClient = useQueryClient();
   const userStore = useUserStore();
@@ -62,12 +62,6 @@ export const UserPictureForm = () => {
     {} as cropAndOriginalImage,
   );
 
-  const { data: userData, isLoading: isUserLoading } = useQuery({
-    queryKey: ["user", user?.id],
-    queryFn: () => userStore.findUserById(user?.id!),
-    enabled: !!user?.id,
-  });
-
   const {
     register,
     handleSubmit,
@@ -86,8 +80,8 @@ export const UserPictureForm = () => {
   const mutation = useMutation({
     mutationFn: (formData: FormData) =>
       userStore.uploadPhoto(user?.id!, formData),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["user", user?.id] });
+    onSuccess: (newUserData) => {
+      update(newUserData);
       reset(getValues());
     },
   });
@@ -190,7 +184,7 @@ export const UserPictureForm = () => {
     setCrop({ x: 0, y: 0, width: 500, height: 500 });
   };
 
-  if (isUserLoading || !userData) {
+  if (status === "loading") {
     return <div className="p-5 bg-white border rounded-sm">Жүктелуде...</div>;
   }
 
@@ -211,6 +205,7 @@ export const UserPictureForm = () => {
             <DialogDescription>
               <div className="p-5">
                 <div className="relative w-full aspect-square">
+                  {/* @ts-ignore */}
                   <Cropper
                     image={imageSrc}
                     crop={crop}

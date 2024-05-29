@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { Input } from "../../ui/input";
 import { Button } from "../../ui/button";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useUserStore } from "@/store/user";
 import { useSession } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,20 +19,9 @@ const placeholders = {
 };
 
 export const UserEditForm = () => {
-  const { data: session } = useSession();
+  const { data: session, update, status } = useSession();
   const user = session?.user;
-  const queryClient = useQueryClient();
   const userStore = useUserStore();
-
-  const {
-    data: userData,
-    isSuccess,
-    isLoading,
-  } = useQuery({
-    queryKey: ["user", user?.id],
-    queryFn: () => userStore.findUserById(user?.id!),
-    enabled: !!user?.id,
-  });
 
   const {
     register,
@@ -45,22 +34,29 @@ export const UserEditForm = () => {
 
   const mutation = useMutation({
     mutationFn: (newData: any) => userStore.update(user?.id!, newData),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ["user", user?.id] }),
+    onSuccess: (newUserData) => {
+      update(newUserData);
+    },
   });
 
-  useEffect(() => {
-    if (isSuccess && userData) {
-      reset(userData);
-    }
-  }, [isSuccess, userData, reset]);
-
-  const onSubmit = (data: z.infer<typeof editUserSchema>) =>
+  const onSubmit = (data: z.infer<typeof editUserSchema>) => {
     mutation.mutate(data);
+  };
 
-  if (isLoading || !userData || !isSuccess) {
+  useEffect(() => {
+    if (status === "authenticated") {
+      reset(user);
+    }
+  }, [status, reset, user]);
+
+  // if (status === "unauthenticated") {
+
+  // }
+
+  if (status === "loading") {
     return <div className="p-5 bg-white border rounded-sm">Жүктелуде...</div>;
   }
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -69,10 +65,7 @@ export const UserEditForm = () => {
       <div className="space-y-3 max-w-[320px]">
         {(["firstName", "lastName", "email"] as const).map((field) => (
           <div key={field}>
-            <Input
-              placeholder={placeholders[field]}
-              {...register(field)}
-            />
+            <Input placeholder={placeholders[field]} {...register(field)} />
             {errors[field] && (
               <span className="text-xs text-destructive">
                 {errors[field]?.message}

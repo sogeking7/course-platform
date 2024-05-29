@@ -32,17 +32,17 @@ export default function LectureIdPage({
     ? convertToPreviewLink(lecture.videoUrl)
     : null;
 
-  const renderVideo = useMemo(
-    () => (
-      <iframe
-        src={videoUrl}
-        className={cn("w-full h-full absolute top-0 left-0 right-0 bottom-0")}
-        onLoad={() => setVideoLoading(false)}
-        // allow="autoplay"
-      />
-    ),
-    [videoUrl],
-  );
+  // const renderVideo = useMemo(
+  //   () => (
+  //     <iframe
+  //       src={videoUrl}
+  //       className={cn("w-full h-full absolute top-0 left-0 right-0 bottom-0")}
+  //       onLoad={() => setVideoLoading(false)}
+  //       // allow="autoplay"
+  //     />
+  //   ),
+  //   [videoUrl],
+  // );
 
   return (
     <>
@@ -78,7 +78,16 @@ export default function LectureIdPage({
                   </div>
                 )}
                 <div className="relative aspect-video w-full overflow-hidden pt-[calc(56.25%)]">
-                  {renderVideo}
+                  {videoUrl && (
+                    <iframe
+                      src={videoUrl}
+                      className={cn(
+                        "w-full h-full absolute top-0 left-0 right-0 bottom-0",
+                      )}
+                      onLoad={() => setVideoLoading(false)}
+                      // allow="autoplay"
+                    />
+                  )}
                 </div>
               </div>
               <article className="prose !max-w-full mt-4 w-full relative">

@@ -1,4 +1,5 @@
 import axios from "@/lib/axios";
+import { User } from "@/types";
 import { randomUUID, randomBytes } from "crypto";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -67,12 +68,22 @@ const authOptions: NextAuthOptions = {
     },
   },
   callbacks: {
-    async jwt({ token, user }) {
-      return { ...token, ...user };
-    },
     async session({ session, token, user }) {
-      session.user = token as any;
+      session.user = token.user as User
       return session;
+    },
+    async jwt({ token, user, trigger, session }) {
+      if (user) {
+        token.user = user;
+      }
+      // ***************************************************************
+      // added code
+      if (trigger === "update" && session) {
+        token = {...token, user : session}
+        return token;
+      };
+       // **************************************************************
+      return token;
     },
   },
 };

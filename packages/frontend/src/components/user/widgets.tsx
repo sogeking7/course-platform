@@ -13,22 +13,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useQuery } from "@tanstack/react-query";
-import { useUserStore } from "@/store/user";
 
 export default function UserButton() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const user = session?.user;
 
-  const userStore = useUserStore();
-
-  const { data: userData } = useQuery({
-    queryKey: ["user", user?.id],
-    queryFn: () => userStore.findUserById(user?.id!),
-    enabled: !!user?.id,
-  });
-
-  if (!user) {
+  console.log("user", user);
+  console.log("session", session);
+  if (status === "loading" || !user) {
     return <SignInButton />;
   }
 
@@ -48,16 +40,12 @@ export default function UserButton() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent side="top">
-        {userData ? (
-          <DropdownMenuLabel className="text-base leading-tight">
-            <p>{userData?.firstName}</p>
-            <p>{userData?.lastName}</p>
-          </DropdownMenuLabel>
-        ) : (
-          <div className="px-6 py-4 text-sm font-base">Жүктелуде...</div>
-        )}
+        <DropdownMenuLabel className="text-base leading-tight">
+          <p>{user.lastName}</p>
+          <p>{user.firstName}</p>
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {user.role === "USER" && (
+        {user?.role === "USER" && (
           <>
             <Link href={"/home/my-courses"}>
               <DropdownMenuItem className="bg-transparent hover:!bg-neutral-100 hover:!text-neutral-700">
