@@ -5,13 +5,14 @@ import {
   Body,
   Put,
   Param,
+  Patch,
   Delete,
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
 import { Exam } from '@prisma/client';
 import { ExamService } from './exam.service';
-import { ExamCreateDto, ExamUpdateDto } from './dto/exam.dto';
+import { ExamCreateDto, ExamUpdateDto, QuestionCreateDto, QuestionUpdateDto } from './dto/exam.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
 
 @ApiTags('Exam')
@@ -78,5 +79,52 @@ export class ExamController {
   @Delete(':id')
   async remove(@Param('id') id: number): Promise<Exam> {
     return await this.examService.remove({ id: Number(id) });
+  }
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get all questions for a specific exam' })
+  @ApiResponse({ status: 200, description: 'Questions retrieved successfully' })
+  @ApiResponse({ status: 404, description: 'Exam not found' })
+  @ApiParam({ name: 'examId', required: true, description: 'ID of the exam' })
+  @Get(':examId/questions')
+  async getAllQuestions(@Param('examId') examId: number): Promise<any[]> {
+    return this.examService.getAllQuestions(examId);
+  }
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Add a question to a specific exam' })
+  @ApiResponse({ status: 201, description: 'Question added successfully' })
+  @ApiResponse({ status: 404, description: 'Exam not found' })
+  @ApiParam({ name: 'examId', required: true, description: 'ID of the exam' })
+  @Post(':examId/questions')
+  async addQuestion(@Param('examId') examId: number, @Body() data: QuestionCreateDto): Promise<Exam> {
+    return this.examService.addQuestion(examId, data);
+  }
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update a question in a specific exam' })
+  @ApiResponse({ status: 200, description: 'Question updated successfully' })
+  @ApiResponse({ status: 404, description: 'Question or Exam not found' })
+  @ApiParam({ name: 'examId', required: true, description: 'ID of the exam' })
+  @ApiParam({ name: 'questionId', required: true, description: 'ID of the question' })
+  @Patch(':examId/questions/:questionId')
+  async updateQuestion(
+    @Param('examId') examId: number,
+    @Param('questionId') questionId: number,
+    @Body() data: QuestionUpdateDto
+  ): Promise<Exam> {
+    return this.examService.updateQuestion(examId, questionId, data);
+  }
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Delete a question from a specific exam' })
+  @ApiResponse({ status: 200, description: 'Question deleted successfully' })
+  @ApiResponse({ status: 400, description: 'Exam should have at least 1 question' })
+  @ApiResponse({ status: 404, description: 'Question or Exam not found' })
+  @ApiParam({ name: 'examId', required: true, description: 'ID of the exam' })
+  @ApiParam({ name: 'questionId', required: true, description: 'ID of the question' })
+  @Delete(':examId/questions/:questionId')
+  async deleteQuestion(@Param('examId') examId: number, @Param('questionId') questionId: number): Promise<Exam> {
+    return this.examService.deleteQuestion(examId, questionId);
   }
 }

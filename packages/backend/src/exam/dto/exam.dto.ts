@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsString, IsOptional, IsArray, IsBoolean, IsNumber } from 'class-validator';
 
 export class ExamCreateDto {
   @ApiProperty()
@@ -43,4 +43,63 @@ export class ExamUpdateDto {
   @ApiProperty()
   @IsOptional()
   lectureId?: number;
+}
+
+export class QuestionCreateDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  text: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsArray()
+  options: string[];
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsArray()
+  correctAnswer: number[];
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsBoolean()
+  isMultipleChoice: boolean;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  points: number;
+}
+
+export class QuestionUpdateDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  @IsOptional()
+  text: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsArray()
+  @IsOptional()
+  options: string[];
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsArray()
+  @IsOptional()
+  correctAnswer: number[];
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsBoolean()
+  @IsOptional()
+  isMultipleChoice: boolean;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  @IsOptional()
+  points: number;
 }
