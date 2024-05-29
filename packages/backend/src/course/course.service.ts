@@ -4,10 +4,13 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CourseCreateDto, CourseInviteDto } from './dto/course.dto';
 import { unlink } from 'fs/promises';
 import { join } from 'path';
+import * as dotenv from 'dotenv';
 
 @Injectable()
 export class CourseService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {
+    dotenv.config();
+  }
 
   async getAll(): Promise<any[]> {
     return await this.prisma.course.findMany({

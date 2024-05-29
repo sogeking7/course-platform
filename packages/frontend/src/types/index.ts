@@ -170,3 +170,18 @@ export const loginSchema = z.object({
       message: "Құпия сөзде кем дегенде бір әріп және бір сан болуы керек",
     }),
 });
+
+const MAX_UPLOAD_SIZE = 1024 * 1024 * 3; // 3MB
+const ACCEPTED_FILE_TYPES = ["image/png", "image/gif", "image/jpeg"];
+
+export const fileSchema = z.object({
+  file: z
+    .instanceof(FileList)
+    .refine((file) => file?.length == 1, "File is required.")
+    .refine((file) => {
+      return file[0]?.size <= MAX_UPLOAD_SIZE;
+    }, "File size must be less than 3MB")
+    .refine((file) => {
+      return ACCEPTED_FILE_TYPES.includes(file[0]?.type);
+    }, "File must be a PNG"),
+});

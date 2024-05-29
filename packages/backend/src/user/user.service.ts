@@ -3,10 +3,13 @@ import { Prisma, User } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { unlink } from 'fs/promises';
 import { join } from 'path';
+import * as dotenv from 'dotenv';
 
 @Injectable()
-export class UserService {
-  constructor(private readonly prisma: PrismaService) {}
+export class UserService {  host_url: string;
+  constructor(private readonly prisma: PrismaService) {
+    dotenv.config();
+  }
 
   async getAll(): Promise<User[]> {
     return await this.prisma.user.findMany({
