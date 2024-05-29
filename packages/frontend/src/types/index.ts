@@ -81,6 +81,7 @@ export const createSectionSchema = z.object({
 export const createLectureSchema = z.object({
   name: z.string().trim().min(1, { message: "Қажет" }),
   content: z.string().trim().min(1, { message: "Қажет" }),
+  videoUrl: z.string().trim().min(1, { message: "Қажет" }),
 });
 
 const questionSchema = z.object({

@@ -49,6 +49,11 @@ export const admin_links = [
     href: "/admin/courses",
     icon: <LibraryBig size={20} />,
   },
+  // {
+  //   title: "Менің курстарым",
+  //   href: "/home/my-courses",
+  //   icon: <BookOpen size={20} />,
+  // },
 ];
 
 export const courseContent = [

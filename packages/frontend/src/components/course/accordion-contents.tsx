@@ -30,7 +30,7 @@ export const AccordionContents = ({
     : [];
 
   return (
-    <div className="max-w-[350px] min-w-[350px] pb-10 h-[calc(100vh-55px)] bg-[#23292F] text-slate-50 overflow-scroll ">
+    <div className="fixed max-w-[350px] min-w-[350px] pb-10 h-[calc(100vh-55px)] bg-[#23292F] text-slate-50 overflow-scroll ">
       <button className="p-5 text-left bg-[#23292F] z-10 flex font-bold items-center fixed w-[350px] border-b border-b-zinc-700">
         <ListCollapse className="mr-4" />
         Контент

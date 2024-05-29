@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useLectureStore } from "@/store/lecture";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { cn, convertToPreviewLink } from "@/lib/utils";
 
 type Props = {
   sectionId: number;
@@ -53,6 +54,7 @@ export default function LectureForm({
     defaultValues: {
       name: data?.name || "",
       content: data?.content || "",
+      videoUrl: data?.videoUrl || "",
     },
   });
 
@@ -65,7 +67,6 @@ export default function LectureForm({
       return lectureStore.create({
         sectionId,
         ...newData,
-        videoUrl: "null",
         examId: 0,
       });
     },
@@ -101,12 +102,38 @@ export default function LectureForm({
     mutation.mutate(data);
   };
 
+  const videoUrl = convertToPreviewLink(form.getValues("videoUrl"));
+
   return (
     <Form {...form}>
+      {videoUrl && (
+        <div className="p-4 mb-6 relative aspect-video w-full overflow-hidden pt-[calc(56.25%)]">
+          <iframe
+            src={videoUrl}
+            className={cn(
+              "w-full h-full absolute top-0 left-0 right-0 bottom-0",
+            )}
+            // onLoad={() => setVideoLoading(false)}
+            // allow="autoplay"
+          />
+        </div>
+      )}
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="border bg-white border-neutral-300 rounded-sm p-4 space-y-3"
       >
+        <FormField
+          control={form.control}
+          name="videoUrl"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Видеоға сілтеме</FormLabel>
+              <FormControl>
+                <Input placeholder="URL" {...field} />
+              </FormControl>
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="name"
