@@ -30,7 +30,7 @@ export const CourseSectionManager = (props: Props) => {
   const sectionStore = useSectionStore();
 
   const [mode, setMode] = useState<"edit" | "default" | "new">("default");
-  const [edits, setEdits] = useState<int[]>([]);
+  const [edits, setEdits] = useState<number[]>([]);
 
   const handleDelete = () => {};
 

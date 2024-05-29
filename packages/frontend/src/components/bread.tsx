@@ -8,7 +8,14 @@ import {
   BreadcrumbSeparator,
 } from "./ui/breadcrumb";
 
-export const Bread = ({ breadcrumbs }) => {
+export const Bread = ({
+  breadcrumbs,
+}: {
+  breadcrumbs: {
+    name: string;
+    path: string;
+  }[];
+}) => {
   return (
     <Breadcrumb className="mb-4">
       <BreadcrumbList>

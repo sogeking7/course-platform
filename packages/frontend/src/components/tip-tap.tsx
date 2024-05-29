@@ -8,10 +8,10 @@ import { ToolBar } from "./toolbar";
 
 type Props = {
   editorState: string;
-  placeholder: string;
+  placeholder?: string;
   setEditorState: (richText: string) => void;
 };
-export const Tiptap = ({ editorState, setEditorState, placeholder }: Props) => {
+export const Tiptap = ({ editorState, setEditorState, placeholder="Толтырыңыз" }: Props) => {
   const editor = useEditor({
     autofocus: false,
     extensions: [

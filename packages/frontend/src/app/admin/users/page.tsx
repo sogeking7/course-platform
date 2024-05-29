@@ -18,7 +18,7 @@ export default function AdminUsersPage() {
     queryFn: () => userStore.getAll(),
   });
 
-  if (isLoading) {
+  if (isLoading || !data) {
     return <LayoutLoader />;
   }
 

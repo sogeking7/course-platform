@@ -1,7 +1,13 @@
 import { Course } from "../../types";
 import Link from "next/link";
 
-export const CourseCard = ({ item, link = "" }: { item: Course, link?: string }) => {
+export const CourseCard = ({
+  item,
+  link = "",
+}: {
+  item: Course;
+  link?: string;
+}) => {
   return (
     <Link
       href={link ? link : `/course/${item.id}`}

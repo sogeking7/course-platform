@@ -18,7 +18,7 @@ export default function AdminUsersPage() {
     queryFn: () => courseStore.getAll(),
   });
 
-  if (isLoading) {
+  if (isLoading || !data) {
     return <LayoutLoader />;
   }
 

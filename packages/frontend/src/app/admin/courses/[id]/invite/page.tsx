@@ -27,10 +27,10 @@ export default function AdminCourseInviteStudentPage({
     return <LayoutLoader />;
   }
 
-  const users_list = data?.users?.map((x: any) => {
+  const users_list = data.users?.map((x: any) => {
     const y = x.user;
     return { ...y };
-  });
+  }) || [];
 
   const breadcrumbs = [
     { name: "Курстар", path: "/admin/courses" },
