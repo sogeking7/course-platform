@@ -6,6 +6,7 @@ export default function HomePage() {
     <HomeLayout>
       <div>
         <TypographyH1>Басты бет</TypographyH1>
+        <div className="rounded-sm border bg-white p-5">Қош келдініз 👋</div>
       </div>
     </HomeLayout>
   );

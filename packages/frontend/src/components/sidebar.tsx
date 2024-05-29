@@ -29,7 +29,7 @@ export const MySheetTrigger = () => {
     >
       {isMySheetOpen ? (
         <div className="w-6 h-6 border-neutral-700  rounded-full border flex items-center justify-center">
-          <X size={18} />
+          <X size={20} />
         </div>
       ) : (
         <MenuIcon />
@@ -62,7 +62,7 @@ export const SideBarTrigger = () => {
   const pathname = usePathname();
   const { isSideBarOpen, setIsSideBarOpen } = useSidebar();
 
-  if (pathname.includes("/learning")) {
+  if (pathname.includes("/lecture")) {
     return <MySheetTrigger />;
   }
   return (
@@ -74,10 +74,10 @@ export const SideBarTrigger = () => {
     >
       {isSideBarOpen ? (
         <div className="w-6 h-6 border-neutral-700  rounded-full border flex items-center justify-center">
-          <X size={18} />
+          <X size={20} />
         </div>
       ) : (
-        <MenuIcon size={22} className="text-neutral-700" />
+        <MenuIcon size={20} className="text-neutral-700" />
       )}
     </Button>
   );
@@ -126,9 +126,9 @@ export const SideBarSkeleton = () => {
   const pathname = usePathname();
   const { isSideBarOpen } = useSidebar();
 
-  if (!isSideBarOpen || pathname.includes("/learning")) {
+  if (!isSideBarOpen || pathname.includes("/lecture")) {
     return (
-      <aside className="min-w-[75px] max-xl:hidden min-h-screen max-h-full"></aside>
+      <aside className="min-w-[73px] max-xl:hidden min-h-screen max-h-full"></aside>
     );
   }
   return (
@@ -140,7 +140,7 @@ export const SideBarResizable = (props: any) => {
   const pathname = usePathname();
   const { isSideBarOpen } = useSidebar();
 
-  if (!isSideBarOpen || pathname.includes("/learning")) {
+  if (!isSideBarOpen || pathname.includes("/lecture")) {
     return (
       <aside className="max-xl:hidden pt-[54px] fixed border-r border-neutral-300 min-h-screen max-h-full ">
         <SideBar noText />
@@ -196,9 +196,9 @@ const SideBarButton = (props: any) => {
           </Button>
         </TooltipTrigger>
         {/* {noText ? ( */}
-          <TooltipContent side="right">
-            <p>{item.title}</p>
-          </TooltipContent>
+        <TooltipContent side="right">
+          <p>{item.title}</p>
+        </TooltipContent>
         {/* ) : (
           noText
         )} */}

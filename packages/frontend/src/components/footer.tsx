@@ -4,16 +4,16 @@ import { Logo } from "./logo";
 const links = [
   // {
   //   title: "г.Алматы , ул Кошкарбаев 62",
-  //   icon: <MapPin size={18} />,
+  //   icon: <MapPin size={20} />,
   // },
   {
     title: "+7 708 177 5826",
-    icon: <Phone size={18} />,
+    icon: <Phone size={20} />,
   },
   {
     title: "shoqan.kz",
     link: "https://www.instagram.com/shoqan.kz/",
-    icon: <Instagram size={18} />,
+    icon: <Instagram size={20} />,
   },
 ];
 

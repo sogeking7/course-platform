@@ -61,13 +61,13 @@ export default function LecturePage({
             </ReactMarkdown>
           </article>
           <div className="mt-16 flex justify-between">
-            <Button variant={'ghost'} className="flex items-center">
-              <ChevronLeft className="inline-block mr-2" size={18} />
+            <Button variant={"ghost"} className="flex items-center">
+              <ChevronLeft className="inline-block mr-2" size={20} />
               Алдыңғы тақырып
             </Button>
-            <Button variant={'ghost'} className="flex items-center">
+            <Button variant={"ghost"} className="flex items-center">
               Келесі тақырып
-              <ChevronRight className="ml-2 inline-block" size={18} />
+              <ChevronRight className="ml-2 inline-block" size={20} />
             </Button>
           </div>
         </MyContainer>

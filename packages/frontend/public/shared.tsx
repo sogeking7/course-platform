@@ -11,12 +11,12 @@ export const default_links = [
   {
     title: "Басты бет",
     href: "/",
-    icon: <Home size={22} />,
+    icon: <Home size={20} />,
   },
   {
     title: "Барлық курстар",
     href: "/home/all-courses",
-    icon: <LibraryBig size={22} />,
+    icon: <LibraryBig size={20} />,
   },
 ];
 
@@ -24,7 +24,7 @@ export const sidebar_links = [
   {
     title: "Менің курстарым",
     href: "/home/my-courses",
-    icon: <BookOpen size={22} />,
+    icon: <BookOpen size={20} />,
   },
   // {
   //   title: "Байқау тесті",
@@ -37,17 +37,17 @@ export const admin_links = [
   {
     title: "Админ панель",
     href: "/admin",
-    icon: <LayoutDashboard size={22} />,
+    icon: <LayoutDashboard size={20} />,
   },
   {
     title: "Қолданушылар",
     href: "/admin/users",
-    icon: <UsersRound size={22} />,
+    icon: <UsersRound size={20} />,
   },
   {
     title: "Курстар",
     href: "/admin/courses",
-    icon: <LibraryBig size={22} />,
+    icon: <LibraryBig size={20} />,
   },
 ];
 

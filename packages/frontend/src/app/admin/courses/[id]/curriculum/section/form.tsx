@@ -106,9 +106,15 @@ export default function SectionForm({
           <Button
             type="button"
             variant="ghost"
-            onClick={() => setEdits!((x) => x.filter((y) => y !== data?.id!))}
+            onClick={() => {
+              if (mode === "edit") {
+                setEdits!((x) => x.filter((y) => y !== data?.id!));
+              } else {
+                setOpen("default");
+              }
+            }}
           >
-            Cancel
+            Болдырмау
           </Button>
           <Button disabled={!form.formState.isDirty} type="submit">
             {mutation.isPending && (

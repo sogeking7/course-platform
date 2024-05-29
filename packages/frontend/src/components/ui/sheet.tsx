@@ -72,7 +72,7 @@ const SheetContent = React.forwardRef<
           variant={"ghost"}
           className=" text-neutral-700 border-neutral-700 rounded-full w-8 h-8 flex items-center justify-center hover:opacity-100"
         >
-          <X size={18} />
+          <X size={20} />
         </Button>
       </SheetPrimitive.Close>
     </SheetPrimitive.Content>
@@ -84,13 +84,7 @@ const SheetHeader = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
-    className={cn(
-      "flex space-y-2 items-center",
-      className,
-    )}
-    {...props}
-  />
+  <div className={cn("flex space-y-2 items-center", className)} {...props} />
 );
 SheetHeader.displayName = "SheetHeader";
 

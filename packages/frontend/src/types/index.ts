@@ -70,66 +70,66 @@ export type Topic = {
 };
 
 export const inviteStudentToCourseSchema = z.object({
-  email: z.string().trim().email(),
+  email: z.string().trim().email("Электрондық почта дұрыс емес"),
 });
 
 export const createSectionSchema = z.object({
-  name: z.string().trim().min(1, { message: "Required" }),
-  // description: z.string().trim().min(1, { message: "Required" }),
+  name: z.string().trim().min(1, { message: "Қажет" }),
+  // description: z.string().trim().min(1, { message: "Қажет" }),
 });
 
 export const createLectureSchema = z.object({
-  name: z.string().trim().min(1, { message: "Required" }),
-  content: z.string().trim().min(1, { message: "Required" }),
+  name: z.string().trim().min(1, { message: "Қажет" }),
+  content: z.string().trim().min(1, { message: "Қажет" }),
 });
 
 const questionSchema = z.object({
-  name: z.string().trim().min(1, { message: "Question name is required" }),
+  name: z.string().trim().min(1, { message: "Сурақ қажет" }),
   answers: z
     .array(
       z.object({
-        name: z.string().trim().min(1, { message: "Answer name is required" }),
+        name: z.string().trim().min(1, { message: "Жауап қажет" }),
         isCorrect: z.boolean(),
       }),
     )
-    .min(1, { message: "At least one answer is required" }),
+    .min(1, { message: "Кем дегенде 1 cұрақ қажет" }),
 });
 
 export const createExamSchema = z.object({
-  name: z.string().trim().min(1, { message: "Required" }),
-  description: z.string().trim().min(1, { message: "Required" }),
+  name: z.string().trim().min(1, { message: "Қажет" }),
+  description: z.string().trim().min(1, { message: "Қажет" }),
   questions: z
     .string()
     .trim()
-    .min(1, { message: "Required" })
+    .min(1, { message: "Қажет" })
     .transform((val) => {
       try {
         return JSON.parse(val);
       } catch (e) {
-        throw new Error("Invalid JSON format for questions");
+        throw new Error("Сұрақтар үшін жарамсыз JSON форматы");
       }
     })
     .refine((val) => Array.isArray(val), {
-      message: "Questions should be an array",
+      message: "Сұрақтар массив болуы керек",
     })
     .refine(
       (val) =>
         val.every(
           (question: any) => questionSchema.safeParse(question).success,
         ),
-      { message: "Invalid question format" },
+      { message: "Сұрақ форматы жарамсыз" },
     ),
 });
 
 export const createCourseSchema = z.object({
-  name: z.string().trim().min(1, { message: "Required" }),
-  description: z.string().trim().min(1, { message: "Required" }),
-  content: z.string().trim().min(1, { message: "Required" }),
+  name: z.string().trim().min(1, { message: "Қажет" }),
+  description: z.string().trim().min(1, { message: "Қажет" }),
+  content: z.string().trim().min(1, { message: "Қажет" }),
 });
 
 export const editUserSchema = z.object({
-  firstName: z.string().trim().min(1, { message: "Required" }),
-  lastName: z.string().trim().min(1, { message: "Required" }),
+  firstName: z.string().trim().min(1, { message: "Қажет" }),
+  lastName: z.string().trim().min(1, { message: "Қажет" }),
   email: z.string().trim().email(),
 });
 
@@ -141,17 +141,17 @@ export const createUserSchema = z
     password: z
       .string()
       .trim()
-      .min(6, { message: "Password must be at least 6 characters long" })
+      .min(6, { message: "Құпия сөз кемінде 6 таңбадан тұруы керек" })
       .regex(/(?=.*[0-9])(?=.*[a-zA-Z])/, {
-        message: "Password must contain at least one letter and one number",
+        message: "Құпия сөзде кем дегенде бір әріп және бір сан болуы керек",
       }),
     repeatPassword: z
       .string()
       .trim()
-      .min(6, { message: "Password must be at least 6 characters long" }),
+      .min(6, { message: "Құпия сөз кемінде 6 таңбадан тұруы керек" }),
   })
   .refine((data) => data.password === data.repeatPassword, {
-    message: "Passwords don't match",
+    message: "Құпия сөздер сәйкес келмейді",
     path: ["repeatPassword"], // path indicates where the error message should be placed
   });
 
@@ -165,8 +165,8 @@ export const loginSchema = z.object({
   password: z
     .string()
     .trim()
-    .min(6, { message: "Password must be at least 6 characters long" })
+    .min(6, { message: "Құпия сөз кемінде 6 таңбадан тұруы керек" })
     .regex(/(?=.*[0-9])(?=.*[a-zA-Z])/, {
-      message: "Password must contain at least one letter and one number",
+      message: "Құпия сөзде кем дегенде бір әріп және бір сан болуы керек",
     }),
 });

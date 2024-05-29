@@ -90,6 +90,13 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+
+  .line-clamp-three {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 }
 
 .tiptap.ProseMirror {

@@ -23,7 +23,7 @@ export default function AdminCourseInviteStudentPage({
     queryFn: () => courseStore.findCourseById(id),
   });
 
-  if (isLoading) {
+  if (isLoading || !data) {
     return <LayoutLoader />;
   }
 

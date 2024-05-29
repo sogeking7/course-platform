@@ -144,7 +144,7 @@ export default function LectureForm({
               variant="ghost"
               onClick={() => setOpen("default")}
             >
-              Cancel
+              Болдырмау
             </Button>
           )}
           {mode === "edit" && (
@@ -158,7 +158,7 @@ export default function LectureForm({
                 <AlertDialogHeader>
                   <AlertDialogTitle className="flex items-center">
                     <Trash
-                      size={18}
+                      size={20}
                       className="inline-block mr-2 text-destructive"
                     />
                     Өшіру: {data?.name!}

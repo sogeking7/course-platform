@@ -52,10 +52,10 @@ export const CourseSectionManager = (props: Props) => {
             key={section.id}
             className="p-5 bg-neutral-100 rounded-sm border border-neutral-300"
           >
-            {!edits.find(x => section.id === x) && (
+            {!edits.find((x) => section.id === x) && (
               <div className="flex w-full justify-between items-center">
                 <label className="block font-bold min-w-max">
-                  Section {index + 1}:
+                  Модуль {index + 1}:
                   <span className="ml-2 text-gray-700 font-normal">
                     {section.name}
                   </span>
@@ -64,7 +64,7 @@ export const CourseSectionManager = (props: Props) => {
                   <Button
                     variant={"ghost"}
                     size={"sm"}
-                    onClick={() => setEdits(x => [...x, section.id])}
+                    onClick={() => setEdits((x) => [...x, section.id])}
                   >
                     <Pencil size={16} className="mr-2" /> Өзгерту
                   </Button>
@@ -82,7 +82,7 @@ export const CourseSectionManager = (props: Props) => {
                       <AlertDialogHeader>
                         <AlertDialogTitle className="flex items-center">
                           <Trash
-                            size={18}
+                            size={20}
                             className="inline-block mr-2 text-destructive"
                           />
                           Өшіру: {section.name}
@@ -112,7 +112,7 @@ export const CourseSectionManager = (props: Props) => {
                 </div>
               </div>
             )}
-            {edits.find(x => section.id === x) && (
+            {edits.find((x) => section.id === x) && (
               <>
                 <Form
                   data={section}
@@ -142,7 +142,7 @@ export const CourseSectionManager = (props: Props) => {
           variant={"outline"}
           onClick={() => setMode("new")}
         >
-          <Plus size={18} className="mr-2" />
+          <Plus size={20} className="mr-2" />
           Модуль
         </Button>
       )}

@@ -39,7 +39,7 @@ export const LectureManager = (props: Props) => {
             <AccordionTrigger className="w-full bg-white px-3 py-4 border border-neutral-300">
               <label className=" flex gap-2 items-center min-w-max">
                 <File size={14} />
-                <span>Lecture {index + 1}:</span>
+                <span>Сабақ {index + 1}:</span>
                 <span className=" text-gray-700 font-normal">
                   {lecture.name}
                 </span>
@@ -72,8 +72,8 @@ export const LectureManager = (props: Props) => {
           variant={"outline"}
           onClick={() => setMode("new")}
         >
-          <Plus size={18} className="mr-2" />
-          Lecture
+          <Plus size={20} className="mr-2" />
+          Сабақ
         </Button>
       )}
     </div>

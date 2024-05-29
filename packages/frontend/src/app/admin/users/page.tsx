@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { useUserStore } from "@/store/user";
 import { LayoutLoader } from "@/components/loader";
+import { Plus } from "lucide-react";
 
 export default function AdminUsersPage() {
   const userStore = useUserStore();
@@ -26,7 +27,9 @@ export default function AdminUsersPage() {
       <div className="flex justify-between">
         <TypographyH1>Қолданушылар</TypographyH1>
         <Link href="/admin/users/create">
-          <Button>+ Қосу</Button>
+          <Button>
+            <Plus className="mr-2" size={20} /> Қосу
+          </Button>
         </Link>
       </div>
       <AdminUsersDataTable columns={columns} data={data} />

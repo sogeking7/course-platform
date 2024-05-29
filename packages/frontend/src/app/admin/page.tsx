@@ -1,4 +1,3 @@
-import HomeLayout from "../home/layout";
 import { TypographyH1 } from "@/components/ui/typography";
 
 export default function HomePage() {

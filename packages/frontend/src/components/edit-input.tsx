@@ -16,7 +16,7 @@ type Props = {
 };
 
 const schema = z.object({
-  name: z.string().min(1),
+  name: z.string().min(1, { message: "Қажет" }),
 });
 
 export const EditNameForm = (props: Props) => {

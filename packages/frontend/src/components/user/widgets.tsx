@@ -16,7 +16,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { useUserStore } from "@/store/user";
 
-export default function UserButton () {
+export default function UserButton() {
   const { data: session } = useSession();
   const user = session?.user;
 
@@ -37,13 +37,13 @@ export default function UserButton () {
       <DropdownMenuTrigger asChild>
         <Button
           size={"reset"}
-          className={cn("py-2.5 px-5")}
+          className={cn("max-sm:py-2.5 max-sm:px-2.5 sm:py-2.5 sm:px-5 ")}
           variant={"ghost"}
           asChild
         >
           <Link href="/home/profile">
-            <label>Жеке профиль</label>
-            <CircleUserRound strokeWidth={1.75} size={22} className="ml-2" />
+            <label className="max-sm:hidden">Жеке профиль</label>
+            <CircleUserRound size={22} className="sm:ml-2" />
           </Link>
         </Button>
       </DropdownMenuTrigger>
@@ -81,7 +81,7 @@ export default function UserButton () {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-};
+}
 
 export const SignOutButton = () => {
   return (
@@ -91,7 +91,7 @@ export const SignOutButton = () => {
       variant={"ghost"}
       onClick={() => signOut()}
     >
-      <LogOut className="mr-2" size={22} />
+      <LogOut className="mr-2" size={20} />
       Шығу
     </Button>
   );
@@ -105,7 +105,7 @@ export const SignInButton = () => {
       onClick={() => signIn()}
       variant={"ghost"}
     >
-      <LogIn className="mr-2" size={22} />
+      <LogIn className="mr-2" size={20} />
       Кіру
     </Button>
   );
