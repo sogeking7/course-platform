@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { Exam } from '@prisma/client';
 import { ExamService } from './exam.service';
-import { ExamCreateDto, ExamUpdateDto, QuestionCreateDto } from './dto/exam.dto';
+import { ExamCreateDto, ExamUpdateDto, QuestionCreateDto, QuestionUpdateDto } from './dto/exam.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
 
 @ApiTags('Exam')
@@ -111,7 +111,7 @@ export class ExamController {
   async updateQuestion(
     @Param('examId') examId: number,
     @Param('questionId') questionId: number,
-    @Body() data: Partial<QuestionCreateDto>
+    @Body() data: QuestionUpdateDto
   ): Promise<Exam> {
     return this.examService.updateQuestion(examId, questionId, data);
   }

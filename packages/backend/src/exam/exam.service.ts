@@ -1,7 +1,7 @@
 import { Injectable, HttpException, HttpStatus, BadRequestException, NotFoundException } from '@nestjs/common';
 import { Prisma, Exam } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { ExamCreateDto, ExamUpdateDto, QuestionCreateDto } from './dto/exam.dto';
+import { ExamCreateDto, ExamUpdateDto, QuestionCreateDto, QuestionUpdateDto } from './dto/exam.dto';
 
 @Injectable()
 export class ExamService {
@@ -95,7 +95,7 @@ export class ExamService {
     });
   }
 
-  async updateQuestion(examId: number, questionId: number, data: Partial<QuestionCreateDto>): Promise<Exam> {
+  async updateQuestion(examId: number, questionId: number, data: QuestionUpdateDto): Promise<Exam> {
     const questions = await this.getAllQuestions(examId);
     const questionIndex = questions.findIndex(q => q.id === questionId);
     if (questionIndex === -1) {

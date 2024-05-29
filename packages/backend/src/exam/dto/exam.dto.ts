@@ -71,3 +71,35 @@ export class QuestionCreateDto {
   @IsNumber()
   points: number;
 }
+
+export class QuestionUpdateDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  @IsOptional()
+  text: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsArray()
+  @IsOptional()
+  options: string[];
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsArray()
+  @IsOptional()
+  correctAnswer: number[];
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsBoolean()
+  @IsOptional()
+  isMultipleChoice: boolean;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  @IsOptional()
+  points: number;
+}
