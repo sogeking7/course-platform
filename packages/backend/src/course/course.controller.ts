@@ -46,6 +46,23 @@ export class CourseController {
   }
 
   @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get all courses by user id' })
+  @ApiResponse({ status: 400, description: 'Invalid input' })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
+  @ApiResponse({
+    status: 200,
+    type: Promise<Course[]>,
+    description: 'The all courses of user',
+  })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
+  @Get('/user/:id')
+  async getUserCourses(
+    @Param('id', new ParseIntPipe()) id: number,
+  ): Promise<Course[]> {
+    return await this.courseService.getCoursesByUserId(id);
+  }
+
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Find a course by ID' })
   @ApiResponse({ status: 200, type: Promise<Course | null> })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })

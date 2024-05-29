@@ -16,6 +16,26 @@ export class CourseService {
     });
   }
 
+  async getCoursesByUserId(userId: number): Promise<Course[]> {
+    return await this.prisma.course.findMany({
+      where: {
+        users: {
+          some: {
+            userId: userId,
+          },
+        },
+      },
+      include: {
+        users: true,
+        sections: {
+          include: {
+            lectures: true,
+          },
+        },
+      },
+    });
+  }
+
   async findOneById(id: number): Promise<Course | null> {
     try {
       // Fetch the course with sections and their lectures

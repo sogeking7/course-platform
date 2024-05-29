@@ -48,7 +48,7 @@ export const MySheet = () => {
         setIsMySheetOpen(!isMySheetOpen);
       }}
     >
-      <SheetContent className="w-[360px]" side={"left"}>
+      <SheetContent className="w-[360px] h-full bg-white" side={"left"}>
         <SheetHeader className="py-3 px-20 !h-[54px] border-b border-neutral-300 shadow-sm">
           <Logo />
         </SheetHeader>
@@ -89,7 +89,7 @@ export const SideBar = ({ noText = false }: any) => {
   const role = user?.role;
 
   return (
-    <nav className="my-1 relative">
+    <nav className="my-1 h-full bg-white">
       <ul className="space-y-1">
         {default_links.map((item) => (
           <li className="w-full" key={item.title}>
@@ -142,14 +142,14 @@ export const SideBarResizable = (props: any) => {
 
   if (!isSideBarOpen || pathname.includes("/lecture")) {
     return (
-      <aside className="max-xl:hidden pt-[54px] fixed border-r border-neutral-300 min-h-screen max-h-full ">
+      <aside className="max-xl:hidden z-10 bg-white pt-[54px] fixed border-r border-neutral-300 min-h-screen max-h-full ">
         <SideBar noText />
       </aside>
     );
   }
 
   return (
-    <aside className="max-xl:hidden min-w-[300px] pt-[54px] fixed border-r border-neutral-300 min-h-screen max-h-full ">
+    <aside className="max-xl:hidden bg-white min-w-[300px] pt-[54px] fixed border-r border-neutral-300 min-h-screen max-h-full ">
       <SideBar />
     </aside>
   );
@@ -195,13 +195,13 @@ const SideBarButton = (props: any) => {
             </Link>
           </Button>
         </TooltipTrigger>
-        {/* {noText ? ( */}
-        <TooltipContent side="right">
-          <p>{item.title}</p>
-        </TooltipContent>
-        {/* ) : (
+        {noText ? (
+          <TooltipContent side="right">
+            <p>{item.title}</p>
+          </TooltipContent>
+        ) : (
           noText
-        )} */}
+        )}
       </Tooltip>
     </TooltipProvider>
   );

@@ -21,7 +21,7 @@ export const LayoutLoader = () => {
             fill="currentFill"
           />
         </svg>
-        <span className="sr-only">Loading...</span>
+        <span className="sr-only">Жүктелуде...</span>
       </div>
     </div>
   );
