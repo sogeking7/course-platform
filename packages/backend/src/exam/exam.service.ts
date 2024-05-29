@@ -1,7 +1,7 @@
-import { Injectable, HttpException, HttpStatus, BadRequestException } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, BadRequestException, NotFoundException } from '@nestjs/common';
 import { Prisma, Exam } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { ExamCreateDto, ExamUpdateDto } from './dto/exam.dto';
+import { ExamCreateDto, ExamUpdateDto, QuestionCreateDto } from './dto/exam.dto';
 
 @Injectable()
 export class ExamService {
@@ -66,6 +66,70 @@ export class ExamService {
   async remove(where: Prisma.ExamWhereUniqueInput): Promise<Exam> {
     return await this.prisma.exam.delete({
       where,
+    });
+  }
+
+  async getAllQuestions(id: number): Promise<any[]> {
+    const questions = (
+      await this.prisma.exam.findUnique({
+        where: { id },
+      })
+    ).questions;
+
+    return JSON.parse(questions);
+  }
+
+  async addQuestion(id: number, data: QuestionCreateDto): Promise<Exam> {
+    const questions = await this.getAllQuestions(id);
+
+    questions.push({
+      id: (questions.length + 1).toString(),
+      ...data,
+    });
+
+    return await this.prisma.exam.update({
+      where: { id },
+      data: {
+        questions: JSON.stringify(questions),
+      },
+    });
+  }
+
+  async updateQuestion(id: number, questionId: number, data: Partial<QuestionCreateDto>): Promise<Exam> {
+    const questions = await this.getAllQuestions(id);
+    const questionIndex = questions.findIndex(q => q.id === questionId);
+    if (questionIndex === -1) {
+      throw new NotFoundException(`Question with ID ${questionId} not found`);
+    }
+
+    const updatedQuestion = {
+      ...questions[questionIndex],
+      ...data,
+    };
+    questions[questionIndex] = updatedQuestion;
+
+    return await this.prisma.exam.update({
+      where: { id },
+      data: {
+        questions: JSON.stringify(questions),
+      },
+    });
+  }
+
+  async deleteQuestion(id: number, questionId: number): Promise<Exam> {
+    const questions = await this.getAllQuestions(id);
+    const questionIndex = questions.findIndex(q => q.id === questionId);
+    if (questionIndex === -1) {
+      throw new NotFoundException(`Question with ID ${questionId} not found`);
+    }
+
+    questions.splice(questionIndex, 1);
+
+    return await this.prisma.exam.update({
+      where: { id },
+      data: {
+        questions: JSON.stringify(questions),
+      },
     });
   }
 }
