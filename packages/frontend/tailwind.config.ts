@@ -169,7 +169,7 @@ const config = {
         },
       }),
       fontFamily: {
-        sans: ["Noto Sans", "sans-serif"],
+        sans: ["Inter", "sans-serif"],
       },
       colors: {
         my_cyan: "#048998",
