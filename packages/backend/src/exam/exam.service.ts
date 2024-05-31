@@ -1,7 +1,7 @@
 import { Injectable, HttpException, HttpStatus, BadRequestException, NotFoundException } from '@nestjs/common';
 import { Prisma, Exam } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { ExamCreateDto, ExamUpdateDto, QuestionCreateDto, QuestionUpdateDto } from './dto/exam.dto';
+import { ExamCheckDto, ExamCreateDto, ExamUpdateDto, QuestionCreateDto, QuestionUpdateDto } from './dto/exam.dto';
 
 @Injectable()
 export class ExamService {
@@ -138,12 +138,13 @@ export class ExamService {
     });
   }
 
-  async checkAnswers(examId: number, answers: { questionId: number; givenAnswers: number[] }[]): Promise<{ totalPoints: number; results: { questionId: number; points: number }[] }> {
+  async checkAnswers(examId: number, data: ExamCheckDto): Promise<{ totalPoints: number; results: { questionId: number; points: number }[] }> {
     const questions = await this.getAllQuestions(examId);
     let totalPoints = 0;
     const results = [];
 
-    for (const answer of answers) {
+    for (let i = 0; i < data.answers.length; ++i) {
+      const answer = data.answers[i];
       const question = questions.find(q => q.id === answer.questionId.toString());
       if (!question) {
         throw new NotFoundException(`Question with ID ${answer.questionId} not found`);

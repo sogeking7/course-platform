@@ -103,3 +103,20 @@ export class QuestionUpdateDto {
   @IsOptional()
   points: number;
 }
+
+export class ExamCheckDto {
+  @ApiProperty()
+  @IsArray()
+  answers: ExamAnswerDto[];
+}
+
+export class ExamAnswerDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  questionId: number;
+
+  @ApiProperty()
+  @IsArray()
+  givenAnswers: number[];
+}
