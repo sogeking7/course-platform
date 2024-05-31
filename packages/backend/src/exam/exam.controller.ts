@@ -38,10 +38,9 @@ export class ExamController {
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   @ApiParam({ name: 'id', description: 'ID of the exam' })
   @Get(':id')
-  async findOneById(@Param('id') id: string): Promise<Exam | null> {
+  async findOneById(@Param('id') id: number): Promise<Exam | null> {
     try {
-      const examId = parseInt(id, 10);
-      return await this.examService.findOneById(examId);
+      return await this.examService.findOneById(id);
     } catch (error) {
       throw new HttpException(
         `Error finding exam: ${error.message}`,
@@ -90,7 +89,7 @@ export class ExamController {
   @ApiParam({ name: 'id', description: 'ID of the exam' })
   @Delete(':id')
   async remove(@Param('id') id: number): Promise<Exam> {
-    return await this.examService.remove({ id: Number(id) });
+    return await this.examService.remove({ id });
   }
 
   @ApiBearerAuth()
