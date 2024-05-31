@@ -31,10 +31,9 @@ export class LectureController {
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   @ApiParam({ name: 'id', description: 'ID of the lecture' })
   @Get(':id')
-  async findOneById(@Param('id') id: string): Promise<Lecture | null> {
+  async findOneById(@Param('id') id: number): Promise<Lecture | null> {
     try {
-      const lectureId = parseInt(id, 10);
-      return await this.lectureService.findOneById(lectureId);
+      return await this.lectureService.findOneById(id);
     } catch (error) {
       throw new HttpException(
         `Error finding lecture: ${error.message}`,
@@ -66,11 +65,11 @@ export class LectureController {
   @ApiParam({ name: 'id', description: 'ID of the lecture' })
   @Put(':id')
   async update(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() data: LectureCreateDto,
   ): Promise<Lecture> {
     return await this.lectureService.update({
-      where: { id: Number(id) },
+      where: { id },
       data,
     });
   }
@@ -85,7 +84,7 @@ export class LectureController {
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   @ApiParam({ name: 'id', description: 'ID of the lecture' })
   @Delete(':id')
-  async remove(@Param('id') id: string): Promise<Lecture> {
-    return await this.lectureService.remove({ id: Number(id) });
+  async remove(@Param('id') id: number): Promise<Lecture> {
+    return await this.lectureService.remove({ id });
   }
 }

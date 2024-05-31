@@ -31,10 +31,9 @@ export class SectionController {
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   @ApiParam({ name: 'id', description: 'ID of the section' })
   @Get(':id')
-  async findOneById(@Param('id') id: string): Promise<Section | null> {
+  async findOneById(@Param('id') id: number): Promise<Section | null> {
     try {
-      const sectionId = parseInt(id, 10);
-      return await this.sectionService.findOneById(sectionId);
+      return await this.sectionService.findOneById(id);
     } catch (error) {
       throw new HttpException(
         `Error finding section: ${error.message}`,
@@ -83,6 +82,6 @@ export class SectionController {
   @ApiParam({ name: 'id', description: 'ID of the section' })
   @Delete(':id')
   async remove(@Param('id') id: number): Promise<Section> {
-    return await this.sectionService.remove({ id: Number(id) });
+    return await this.sectionService.remove({ id });
   }
 }
