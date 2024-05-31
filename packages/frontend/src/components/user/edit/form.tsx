@@ -7,10 +7,11 @@ import { useMutation } from "@tanstack/react-query";
 import { useUserStore } from "@/store/user";
 import { useSession } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { editUserSchema } from "@/types";
+import { Course, User, editUserSchema } from "@/types";
 import { useEffect } from "react";
 import { Loader2 } from "lucide-react";
 import { z } from "zod";
+import { PictureForm } from "@/components/picture-form";
 
 const placeholders = {
   firstName: "Аты",
@@ -58,28 +59,44 @@ export const UserEditForm = () => {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="gap-5 w-full max-w-[320px] flex flex-col justify-center items-center"
-    >
-      <div className="space-y-3 w-full">
-        {(["firstName", "lastName", "email"] as const).map((field) => (
-          <div key={field}>
-            <Input placeholder={placeholders[field]} {...register(field)} />
-            {errors[field] && (
-              <span className="text-xs text-destructive">
-                {errors[field]?.message}
-              </span>
-            )}
-          </div>
-        ))}
-      </div>
-      <Button disabled={!isDirty} type="submit">
-        {mutation.isPending && (
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-        )}
-        Сақтау
-      </Button>
-    </form>
+    <div className="flex flex-col gap-5">
+      <PictureForm
+        uploadPhoto={userStore.uploadPhoto}
+        entityData={{
+          id: user?.id || 0,
+          profilePictureLink: user?.profilePictureLink || "",
+        }}
+        cropShape="round"
+        aspect={4/4}
+        entityType="user"
+        onSuccess={(newData: any) => {
+          update(newData);
+          /* Handle success, e.g., show a message */
+        }}
+      />
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="gap-5 w-full max-w-[320px] flex flex-col justify-center items-center"
+      >
+        <div className="space-y-3 w-full">
+          {(["firstName", "lastName", "email"] as const).map((field) => (
+            <div key={field}>
+              <Input placeholder={placeholders[field]} {...register(field)} />
+              {errors[field] && (
+                <span className="text-xs text-destructive">
+                  {errors[field]?.message}
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+        <Button disabled={!isDirty} type="submit">
+          {mutation.isPending && (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          )}
+          Сақтау
+        </Button>
+      </form>
+    </div>
   );
 };

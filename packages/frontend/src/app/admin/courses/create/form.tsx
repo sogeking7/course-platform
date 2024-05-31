@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Error, createCourseSchema } from "@/types";
+import { Course, Error, createCourseSchema } from "@/types";
 import { Loader2 } from "lucide-react";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -26,12 +26,13 @@ import {
   UserRoundPlus,
 } from "lucide-react";
 import Link from "next/link";
+import { PictureForm } from "@/components/picture-form";
 
 export const AdminCourseCreateForm = ({
-  data = null,
   mode = "create",
+  data,
 }: {
-  data?: any;
+  data?: Course;
   mode?: "create" | "edit";
 }) => {
   const queryClient = useQueryClient();
@@ -53,7 +54,7 @@ export const AdminCourseCreateForm = ({
       if (mode === "create") {
         return courseStore.create(newData);
       }
-      return courseStore.update(Number(data.id), newData);
+      return courseStore.update(Number(data?.id!), newData);
     },
     onError: (error: AxiosError) => {
       const errorData = error.response?.data as Error;
@@ -77,28 +78,46 @@ export const AdminCourseCreateForm = ({
 
   return (
     <div className="p-5 bg-white border rounded-sm shadow-md">
-      {mode === "edit" && (
-        <div className="mb-4 flex gap-4 justify-end">
-          <Link href={`/admin/courses/${data.id}/curriculum`}>
-            <Button variant={"outline"}>
-              <CircleFadingPlus className="mr-2" size={20} />
-              Курс бағдарламасы
-            </Button>
-          </Link>
-          <Link href={`/admin/courses/${data.id}/invite`}>
-            <Button variant={"outline"}>
-              <UserRoundPlus className="mr-2" size={20} />
-              Оқушы қосу
-            </Button>
-          </Link>
-          {/* <Link href={`/admin/courses/${data.id}`}>
+      <div className="flex justify-between flex-wrap gap-6">
+        {mode === "edit" && (
+          <PictureForm
+            uploadPhoto={courseStore.uploadPhoto}
+            entityData={{
+              id: data?.id || 0,
+              coursePictureLink: data?.profilePictureLink || "",
+            }}
+            aspect={240 / 135}
+            cropShape="rect"
+            entityType="course"
+            onSuccess={(newData: any) => {
+              queryClient.setQueryData(["course", { id: data?.id! }], data);
+            }}
+          />
+        )}
+
+        {mode === "edit" && (
+          <div className="mb-4 flex gap-4 flex-wrap justify-end">
+            <Link href={`/admin/courses/${data?.id!}/curriculum`}>
+              <Button variant={"outline"}>
+                <CircleFadingPlus className="mr-2" size={20} />
+                Курс бағдарламасы
+              </Button>
+            </Link>
+            <Link href={`/admin/courses/${data?.id!}/invite`}>
+              <Button variant={"outline"}>
+                <UserRoundPlus className="mr-2" size={20} />
+                Оқушы қосу
+              </Button>
+            </Link>
+            {/* <Link href={`/admin/courses/${data.id}`}>
               <Button variant={"outline"}>
                 <Pencil className="mr-2" size={20} />
                 Өңдеу
               </Button>
             </Link> */}
-        </div>
-      )}
+          </div>
+        )}
+      </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className=" space-y-5 ">
           <div className="space-y-3 ">

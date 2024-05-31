@@ -41,6 +41,7 @@ export type Course = z.infer<typeof createCourseSchema> & {
   id: number;
   sections: Section[];
   users?: CourseEnrollment[];
+  profilePictureLink?: string;
 };
 
 export type Section = z.infer<typeof createSectionSchema> & {

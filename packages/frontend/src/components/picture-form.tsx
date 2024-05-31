@@ -1,27 +1,24 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { Input } from "../../ui/input";
-import { Button } from "../../ui/button";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useUserStore } from "@/store/user";
-import { useSession } from "next-auth/react";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
+import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Minus, Plus } from "lucide-react";
 import { z } from "zod";
 import { fileSchema } from "@/types";
 import Image from "next/image";
 import Cropper, { Area } from "react-easy-crop";
-import { useState, useRef, useCallback } from "react";
+import { useState, useCallback } from "react";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
 
 type crop = {
   x: number;
@@ -35,11 +32,27 @@ interface cropAndOriginalImage {
   original: HTMLImageElement;
 }
 
-export const UserPictureForm = () => {
-  const { data: session, update, status } = useSession();
-  const user = session?.user;
-  const userStore = useUserStore();
+interface PictureFormProps {
+  uploadPhoto: (id: number, data: FormData) => Promise<any>;
+  entityData: {
+    id: number;
+    profilePictureLink?: string; // For user
+    coursePictureLink?: string; // For course
+  };
+  aspect: number;
+  cropShape: string;
+  entityType: "user" | "course";
+  onSuccess?: (data: any) => void;
+}
 
+export const PictureForm = ({
+  uploadPhoto,
+  entityData,
+  entityType,
+  onSuccess,
+  aspect,
+  cropShape,
+}: PictureFormProps) => {
   const [modal, setModal] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | null>("");
   const [crop, setCrop] = useState<crop>({
@@ -76,12 +89,13 @@ export const UserPictureForm = () => {
   const fileRef = register("file");
 
   const mutation = useMutation({
-    mutationFn: (formData: FormData) =>
-      userStore.uploadPhoto(user?.id!, formData),
-    onSuccess: (newUserData) => {
-      update(newUserData);
+    mutationFn: (formData: FormData) => uploadPhoto(entityData.id, formData),
+    onSuccess: (newData) => {
       reset(getValues());
       onCancel();
+      if (onSuccess) {
+        onSuccess(newData);
+      }
     },
   });
 
@@ -89,7 +103,6 @@ export const UserPictureForm = () => {
     const formData = new FormData();
     const file = data.file[0];
     formData.append("file", file);
-    // mutation.mutate(formData);
 
     setZoom(1.0);
     setCrop({ x: 0, y: 0, width: 500, height: 500 });
@@ -106,7 +119,7 @@ export const UserPictureForm = () => {
     mutation.mutate(imageObj.formData);
   };
 
-  const hendleZoom = (event: React.FormEvent<HTMLInputElement>) => {
+  const handleZoom = (event: React.FormEvent<HTMLInputElement>) => {
     setZoom(parseFloat(parseFloat(event.currentTarget.value).toFixed(1)));
   };
   const increment = () => {
@@ -147,12 +160,10 @@ export const UserPictureForm = () => {
 
     img.src = imageSrc || "";
 
-    // New lines to be added
     const pixelRatio = window.devicePixelRatio;
     canvas.width = cropFinal.width * pixelRatio;
     canvas.height = cropFinal.height * pixelRatio;
     ctx?.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-    // ctx?.imageSmoothingQuality && ctx.imageSmoothingQuality = "high";
     ctx?.drawImage(
       img,
       cropFinal.x,
@@ -167,13 +178,9 @@ export const UserPictureForm = () => {
 
     canvas.toBlob((file: any) => {
       const formData = new FormData();
-      // resolve(URL.createObjectURL(file));
       formData.append("file", file);
       setImageObj({ formData: formData, url: URL.createObjectURL(file) });
-      console.log(formData);
     }, "image/jpeg");
-
-    // setModal(false);
   };
 
   const onCancel = () => {
@@ -184,18 +191,6 @@ export const UserPictureForm = () => {
     setCrop({ x: 0, y: 0, width: 500, height: 500 });
   };
 
-  if (status === "loading") {
-    return <div className="p-5 bg-white border rounded-sm">Жүктелуде...</div>;
-  }
-
-  if (status === "unauthenticated") {
-    return (
-      <div className="p-5 bg-white border rounded-sm">
-        You must be logged in.
-      </div>
-    );
-  }
-
   return (
     <div>
       <Dialog open={modal} onOpenChange={(v) => setModal(!v)}>
@@ -204,15 +199,18 @@ export const UserPictureForm = () => {
             <DialogTitle>Фотоны жүктеу</DialogTitle>
           </DialogHeader>
           {imageObj ? (
-            <Image
-              className="rounded"
+            // <div className={`aspect-[${aspect}]`}>
+            <img
+              className={cn(
+                cropShape === "round" ? "rounded-full " : "",
+                "w-full h-full border",
+              )}
               src={imageObj.url}
-              width={300}
-              height={300}
               loading="lazy"
               alt="cropped-image"
             />
           ) : (
+            // </div>
             <>
               <div className="relative w-full max-h-[500px] aspect-square">
                 {/* @ts-ignore */}
@@ -221,8 +219,8 @@ export const UserPictureForm = () => {
                   crop={crop}
                   rotation={0}
                   zoom={zoom}
-                  aspect={4 / 4}
-                  cropShape="round"
+                  aspect={aspect}
+                  cropShape={cropShape}
                   showGrid={false}
                   onCropChange={onCropChange}
                   onCropComplete={onCropComplete}
@@ -240,7 +238,7 @@ export const UserPictureForm = () => {
                   <Minus />
                 </Button>
                 <input
-                  onChange={hendleZoom}
+                  onChange={handleZoom}
                   className="w-full"
                   type="range"
                   min={1}
@@ -281,16 +279,37 @@ export const UserPictureForm = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="flex gap-4 items-center justify-center flex-col"
       >
-        <label className="font-semibold">
-          {user?.role !== "USER" ? "Админ" : "Оқушы"}
-        </label>
-        <Image
-          width={160}
-          height={160}
-          className="w-[160px] h-[160px] rounded-full"
-          alt="profile-picture"
-          src={user?.profilePictureLink || "/placeholder.jpg"}
-        />
+        {cropShape === "round" ? (
+          <>
+            <Image
+              width={160}
+              height={160}
+              className="w-[160px] h-[160px] rounded-full border"
+              alt="profile-picture"
+              src={
+                entityType === "user"
+                  ? entityData.profilePictureLink || "/placeholder.jpg"
+                  : entityData.coursePictureLink || "/placeholder-course.png"
+              }
+            />
+          </>
+        ) : (
+          <div className="min-w-[240px] max-w-[300px]">
+            <img
+              className={cn(
+                cropShape === "round" ? "rounded-full " : "",
+                "w-full h-full border",
+              )}
+              src={
+                entityType === "user"
+                  ? entityData.profilePictureLink || "/placeholder.jpg"
+                  : entityData.coursePictureLink || "/placeholder-course.png"
+              }
+              loading="lazy"
+              alt="cropped-image"
+            />
+          </div>
+        )}
         <div>
           <Input
             className="py-2 !text-sm !leading-none w-[250px]"
