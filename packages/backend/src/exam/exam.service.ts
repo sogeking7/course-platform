@@ -21,14 +21,12 @@ export class ExamService {
   }
 
   private async isLectureExists(lectureId?: number) {
-    if (lectureId) {
-      const lecture = await this.prisma.lecture.findUnique({
-        where: { id: lectureId },
-      });
+    const lecture = await this.prisma.lecture.findUnique({
+      where: { id: lectureId },
+    });
 
-      if (!lecture) {
-        throw new BadRequestException(`Invalid lecture id (there is no lecture with given lectureId)`);
-      }
+    if (!lecture) {
+      throw new BadRequestException(`Invalid lecture id (there is no lecture with given lectureId)`);
     }
   }
 
