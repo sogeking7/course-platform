@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { Exam } from '@prisma/client';
 import { ExamService } from './exam.service';
-import { ExamCreateDto, ExamUpdateDto, QuestionCreateDto, QuestionUpdateDto } from './dto/exam.dto';
+import { ExamCheckDto, ExamCreateDto, ExamUpdateDto, QuestionCreateDto, QuestionUpdateDto } from './dto/exam.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
 
 @ApiTags('Exam')
@@ -126,5 +126,18 @@ export class ExamController {
   @Delete(':examId/questions/:questionId')
   async deleteQuestion(@Param('examId') examId: number, @Param('questionId') questionId: number): Promise<Exam> {
     return this.examService.deleteQuestion(examId, questionId);
+  }
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Check answers for a specific exam' })
+  @ApiResponse({ status: 200, description: 'Answers checked successfully' })
+  @ApiResponse({ status: 404, description: 'Exam or Question not found' })
+  @ApiParam({ name: 'examId', required: true, description: 'ID of the exam' })
+  @Post(':examId/check-answers')
+  async checkAnswers(
+    @Param('examId') examId: number,
+    @Body() data: ExamCheckDto
+  ): Promise<{ totalPoints: number; results: { questionId: number; points: number }[] }> {
+    return this.examService.checkAnswers(examId, data);
   }
 }
