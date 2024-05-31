@@ -12,7 +12,13 @@ import {
 import { Section } from '@prisma/client';
 import { SectionService } from './section.service';
 import { SectionCreateDto, SectionUpdateDto } from './dto/section.dto';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 
 @ApiTags('Section')
 @Controller('section')

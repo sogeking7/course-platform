@@ -6,7 +6,8 @@ import { join } from 'path';
 import * as dotenv from 'dotenv';
 
 @Injectable()
-export class UserService {  host_url: string;
+export class UserService {
+  host_url: string;
   constructor(private readonly prisma: PrismaService) {
     dotenv.config();
   }

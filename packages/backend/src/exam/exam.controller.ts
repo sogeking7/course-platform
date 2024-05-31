@@ -12,8 +12,20 @@ import {
 } from '@nestjs/common';
 import { Exam } from '@prisma/client';
 import { ExamService } from './exam.service';
-import { ExamCheckDto, ExamCreateDto, ExamUpdateDto, QuestionCreateDto, QuestionUpdateDto } from './dto/exam.dto';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ExamCheckDto,
+  ExamCreateDto,
+  ExamUpdateDto,
+  QuestionCreateDto,
+  QuestionUpdateDto,
+} from './dto/exam.dto';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 
 @ApiTags('Exam')
 @Controller('exam')
@@ -97,7 +109,10 @@ export class ExamController {
   @ApiResponse({ status: 404, description: 'Exam not found' })
   @ApiParam({ name: 'examId', required: true, description: 'ID of the exam' })
   @Post(':examId/questions')
-  async addQuestion(@Param('examId') examId: number, @Body() data: QuestionCreateDto): Promise<Exam> {
+  async addQuestion(
+    @Param('examId') examId: number,
+    @Body() data: QuestionCreateDto,
+  ): Promise<Exam> {
     return this.examService.addQuestion(examId, data);
   }
 
@@ -106,12 +121,16 @@ export class ExamController {
   @ApiResponse({ status: 200, description: 'Question updated successfully' })
   @ApiResponse({ status: 404, description: 'Question or Exam not found' })
   @ApiParam({ name: 'examId', required: true, description: 'ID of the exam' })
-  @ApiParam({ name: 'questionId', required: true, description: 'ID of the question' })
+  @ApiParam({
+    name: 'questionId',
+    required: true,
+    description: 'ID of the question',
+  })
   @Patch(':examId/questions/:questionId')
   async updateQuestion(
     @Param('examId') examId: number,
     @Param('questionId') questionId: number,
-    @Body() data: QuestionUpdateDto
+    @Body() data: QuestionUpdateDto,
   ): Promise<Exam> {
     return this.examService.updateQuestion(examId, questionId, data);
   }
@@ -119,12 +138,22 @@ export class ExamController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a question from a specific exam' })
   @ApiResponse({ status: 200, description: 'Question deleted successfully' })
-  @ApiResponse({ status: 400, description: 'Exam should have at least 1 question' })
+  @ApiResponse({
+    status: 400,
+    description: 'Exam should have at least 1 question',
+  })
   @ApiResponse({ status: 404, description: 'Question or Exam not found' })
   @ApiParam({ name: 'examId', required: true, description: 'ID of the exam' })
-  @ApiParam({ name: 'questionId', required: true, description: 'ID of the question' })
+  @ApiParam({
+    name: 'questionId',
+    required: true,
+    description: 'ID of the question',
+  })
   @Delete(':examId/questions/:questionId')
-  async deleteQuestion(@Param('examId') examId: number, @Param('questionId') questionId: number): Promise<Exam> {
+  async deleteQuestion(
+    @Param('examId') examId: number,
+    @Param('questionId') questionId: number,
+  ): Promise<Exam> {
     return this.examService.deleteQuestion(examId, questionId);
   }
 
@@ -136,8 +165,11 @@ export class ExamController {
   @Post(':examId/check-answers')
   async checkAnswers(
     @Param('examId') examId: number,
-    @Body() data: ExamCheckDto
-  ): Promise<{ totalPoints: number; results: { questionId: number; points: number }[] }> {
+    @Body() data: ExamCheckDto,
+  ): Promise<{
+    totalPoints: number;
+    results: { questionId: number; points: number }[];
+  }> {
     return this.examService.checkAnswers(examId, data);
   }
 }

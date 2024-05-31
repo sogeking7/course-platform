@@ -12,7 +12,13 @@ import {
 import { Lecture } from '@prisma/client';
 import { LectureService } from './lecture.service';
 import { LectureCreateDto } from './dto/lecture.dto';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 
 @ApiTags('Lecture')
 @Controller('lecture')
