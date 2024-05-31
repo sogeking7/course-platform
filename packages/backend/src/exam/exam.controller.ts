@@ -127,4 +127,17 @@ export class ExamController {
   async deleteQuestion(@Param('examId') examId: number, @Param('questionId') questionId: number): Promise<Exam> {
     return this.examService.deleteQuestion(examId, questionId);
   }
+  
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Check answers for a specific exam' })
+  @ApiResponse({ status: 200, description: 'Answers checked successfully' })
+  @ApiResponse({ status: 404, description: 'Exam or Question not found' })
+  @ApiParam({ name: 'examId', required: true, description: 'ID of the exam' })
+  @Post(':examId/check-answers')
+  async checkAnswers(
+    @Param('examId') examId: number,
+    @Body() answers: { questionId: number; givenAnswers: number[] }[]
+  ): Promise<{ totalPoints: number; results: { questionId: number; points: number }[] }> {
+    return this.examService.checkAnswers(examId, answers);
+  }
 }
