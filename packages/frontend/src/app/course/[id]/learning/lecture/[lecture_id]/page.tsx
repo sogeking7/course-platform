@@ -77,8 +77,8 @@ export default function LectureIdPage({
                     </p>
                   </div>
                 )}
-                <div className="relative aspect-video w-full overflow-hidden pt-[calc(56.25%)]">
-                  {videoUrl && (
+                {videoUrl && (
+                  <div className="relative aspect-video w-full overflow-hidden pt-[calc(56.25%)]">
                     <iframe
                       src={videoUrl}
                       className={cn(
@@ -87,8 +87,8 @@ export default function LectureIdPage({
                       onLoad={() => setVideoLoading(false)}
                       // allow="autoplay"
                     />
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
               <article className="prose !max-w-full mt-4 w-full relative">
                 <ReactMarkdown className="w-full" rehypePlugins={[rehypeRaw]}>
