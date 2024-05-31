@@ -20,14 +20,20 @@ export class ExamService {
     }
   }
 
-  async create(data: ExamCreateDto): Promise<Exam> {
-    const lecture = await this.prisma.lecture.findUnique({
-      where: { id: data.lectureId },
-    });
+  private async isLectureExists(lectureId?: number) {
+    if (lectureId) {
+      const lecture = await this.prisma.lecture.findUnique({
+        where: { id: lectureId },
+      });
 
-    if (!lecture) {
-      throw new BadRequestException(`Invalid lecture id (there is no lecture with given lectureId)`);
+      if (!lecture) {
+        throw new BadRequestException(`Invalid lecture id (there is no lecture with given lectureId)`);
+      }
     }
+  }
+
+  async create(data: ExamCreateDto): Promise<Exam> {
+    this.isLectureExists();
 
     return await this.prisma.exam.create({
       data: {
@@ -46,20 +52,14 @@ export class ExamService {
   }
 
   async update(id: number, data: ExamUpdateDto): Promise<Exam> {
+    this.isLectureExists();
+    
     const conflictingExam = await this.prisma.exam.findUnique({
       where: { lectureId: data.lectureId },
     });
 
     if (conflictingExam && conflictingExam.id !== id) {
       throw new BadRequestException('Another exam with the provided lecture ID already exists.');
-    }
-    
-    const lecture = await this.prisma.lecture.findUnique({
-      where: { id: data.lectureId },
-    });
-
-    if (!lecture) {
-      throw new BadRequestException(`Invalid lecture id (there is no lecture with given lectureId)`);
     }
 
     return await this.prisma.exam.update({
