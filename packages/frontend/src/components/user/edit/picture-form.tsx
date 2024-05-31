@@ -7,7 +7,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUserStore } from "@/store/user";
 import { useSession } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
+import { Loader2, Minus, Plus } from "lucide-react";
 import { z } from "zod";
 import { fileSchema } from "@/types";
 import Image from "next/image";
@@ -17,6 +17,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -35,15 +36,12 @@ interface cropAndOriginalImage {
 }
 
 export const UserPictureForm = () => {
-  const { data: session, update, loading } = useSession();
+  const { data: session, update, status } = useSession();
   const user = session?.user;
-  const queryClient = useQueryClient();
   const userStore = useUserStore();
 
   const [modal, setModal] = useState(false);
-  const imageRef = useRef<HTMLInputElement>(null);
   const [imageSrc, setImageSrc] = useState<string | null>("");
-  const [isLoading, setLoading] = useState<boolean>(false);
   const [crop, setCrop] = useState<crop>({
     x: 0,
     y: 0,
@@ -57,10 +55,10 @@ export const UserPictureForm = () => {
     height: 0,
   });
   const [zoom, setZoom] = useState<number>(1.0);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [imageObj, setImageObj] = useState<cropAndOriginalImage>(
-    {} as cropAndOriginalImage,
-  );
+  const [imageObj, setImageObj] = useState<{
+    formData: FormData;
+    url: string;
+  } | null>(null);
 
   const {
     register,
@@ -83,6 +81,7 @@ export const UserPictureForm = () => {
     onSuccess: (newUserData) => {
       update(newUserData);
       reset(getValues());
+      onCancel();
     },
   });
 
@@ -100,6 +99,11 @@ export const UserPictureForm = () => {
     };
     setModal(true);
     reader.readAsDataURL(file);
+  };
+
+  const onSave = () => {
+    if (!imageObj) return;
+    mutation.mutate(imageObj.formData);
   };
 
   const hendleZoom = (event: React.FormEvent<HTMLInputElement>) => {
@@ -132,55 +136,51 @@ export const UserPictureForm = () => {
   );
 
   const getCroppedImg = async () => {
-    setLoading(true);
-    let { crop, original }: cropAndOriginalImage = await new Promise(
-      async (resolve) => {
-        const canvas: HTMLCanvasElement = document.createElement("canvas");
+    const canvas: HTMLCanvasElement = document.createElement("canvas");
 
-        canvas.width = cropFinal.width;
-        canvas.height = cropFinal.height;
+    canvas.width = cropFinal.width;
+    canvas.height = cropFinal.height;
 
-        const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
+    const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
 
-        var img: HTMLImageElement = document.createElement("img");
+    var img: HTMLImageElement = document.createElement("img");
 
-        img.src = imageSrc || "";
+    img.src = imageSrc || "";
 
-        // New lines to be added
-        const pixelRatio = window.devicePixelRatio;
-        canvas.width = cropFinal.width * pixelRatio;
-        canvas.height = cropFinal.height * pixelRatio;
-        ctx?.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-        // ctx?.imageSmoothingQuality && ctx.imageSmoothingQuality = "high";
-        ctx?.drawImage(
-          img,
-          cropFinal.x,
-          cropFinal.y,
-          cropFinal.width,
-          cropFinal.height,
-          0,
-          0,
-          cropFinal.width,
-          cropFinal.height,
-        );
-
-        let canvasData: string = await new Promise((resolve) => {
-          canvas.toBlob((file: any) => {
-            resolve(URL.createObjectURL(file));
-          }, "image/jpeg");
-        });
-
-        resolve({ crop: canvasData, original: img });
-      },
+    // New lines to be added
+    const pixelRatio = window.devicePixelRatio;
+    canvas.width = cropFinal.width * pixelRatio;
+    canvas.height = cropFinal.height * pixelRatio;
+    ctx?.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+    // ctx?.imageSmoothingQuality && ctx.imageSmoothingQuality = "high";
+    ctx?.drawImage(
+      img,
+      cropFinal.x,
+      cropFinal.y,
+      cropFinal.width,
+      cropFinal.height,
+      0,
+      0,
+      cropFinal.width,
+      cropFinal.height,
     );
-    setImageObj({ original, crop });
-    setIsModalOpen(true);
-    setLoading(false);
+
+    canvas.toBlob((file: any) => {
+      const formData = new FormData();
+      // resolve(URL.createObjectURL(file));
+      formData.append("file", file);
+      setImageObj({ formData: formData, url: URL.createObjectURL(file) });
+      console.log(formData);
+    }, "image/jpeg");
+
+    // setModal(false);
   };
 
   const onCancel = () => {
+    setModal(false);
     setImageSrc(null);
     setZoom(1.0);
+    setImageObj(null);
     setCrop({ x: 0, y: 0, width: 500, height: 500 });
   };
 
@@ -188,137 +188,109 @@ export const UserPictureForm = () => {
     return <div className="p-5 bg-white border rounded-sm">Жүктелуде...</div>;
   }
 
+  if (status === "unauthenticated") {
+    return (
+      <div className="p-5 bg-white border rounded-sm">
+        You must be logged in.
+      </div>
+    );
+  }
+
   return (
-    <div className="p-5 bg-white border rounded-sm mb-6">
-      {/* <Image
-        width={150}
-        height={150}
-        className="w-[150px] h-[150px] rounded-full mb-6"
-        src={userData.profilePictureLink || ""}
-        alt="User Profile Image"
-      /> */}
+    <div>
       <Dialog open={modal} onOpenChange={(v) => setModal(!v)}>
-        <DialogTrigger>Open</DialogTrigger>
-        <DialogContent className="h-full p-0 bg-white">
+        <DialogContent>
           <DialogHeader>
-            <DialogTitle>Are you absolutely sure?</DialogTitle>
-            <DialogDescription>
-              <div className="p-5">
-                <div className="relative w-full aspect-square">
-                  {/* @ts-ignore */}
-                  <Cropper
-                    image={imageSrc}
-                    crop={crop}
-                    rotation={0}
-                    zoom={zoom}
-                    aspect={4 / 4}
-                    cropShape="round"
-                    showGrid={false}
-                    onCropChange={onCropChange}
-                    onCropComplete={onCropComplete}
-                    onZoomChange={onZoomChange}
-                  />
-                </div>
-              </div>
-            </DialogDescription>
+            <DialogTitle>Фотоны жүктеу</DialogTitle>
           </DialogHeader>
+          {imageObj ? (
+            <Image
+              className="rounded"
+              src={imageObj.url}
+              width={300}
+              height={300}
+              loading="lazy"
+              alt="cropped-image"
+            />
+          ) : (
+            <>
+              <div className="relative w-full max-h-[500px] aspect-square">
+                {/* @ts-ignore */}
+                <Cropper
+                  image={imageSrc}
+                  crop={crop}
+                  rotation={0}
+                  zoom={zoom}
+                  aspect={4 / 4}
+                  cropShape="round"
+                  showGrid={false}
+                  onCropChange={onCropChange}
+                  onCropComplete={onCropComplete}
+                  onZoomChange={onZoomChange}
+                />
+              </div>
+              <div className="mt-2 flex items-center space-x-2" id="image">
+                <Button
+                  onClick={decrement}
+                  size={"icon"}
+                  variant={"ghost"}
+                  className="min-w-10 px-1 text-gray-600 disabled:text-gray-400"
+                  disabled={zoom <= 1}
+                >
+                  <Minus />
+                </Button>
+                <input
+                  onChange={hendleZoom}
+                  className="w-full"
+                  type="range"
+                  min={1}
+                  max={3}
+                  step={0.1}
+                  value={zoom}
+                />
+                <Button
+                  onClick={increment}
+                  variant={"ghost"}
+                  size={"icon"}
+                  className="min-w-10 px-1 text-gray-600 disabled:text-gray-400"
+                  disabled={zoom >= 3}
+                >
+                  <Plus />
+                </Button>
+              </div>
+            </>
+          )}
+          <DialogFooter className="flex w-full items-center">
+            <Button variant={"outline"} onClick={onCancel}>
+              Болдырмау
+            </Button>
+            {imageObj ? (
+              <Button onClick={onSave}>Сақтау</Button>
+            ) : (
+              <Button
+                onClick={getCroppedImg}
+                disabled={cropFinal.width <= 0 && cropFinal.height <= 0}
+              >
+                Қию
+              </Button>
+            )}
+          </DialogFooter>
         </DialogContent>
       </Dialog>
-
-      {!imageSrc ? <p>No image</p> : <></>}
-
-      {imageSrc && (
-        <>
-          <div className="flex items-center space-x-2" id="image">
-            <button
-              onClick={decrement}
-              className="px-1 text-gray-600 disabled:text-gray-400"
-              disabled={zoom <= 1}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M18 12H6"
-                />
-              </svg>
-            </button>
-
-            <input
-              onChange={hendleZoom}
-              className="w-full"
-              type="range"
-              min={1}
-              max={3}
-              step={0.1}
-              value={zoom}
-            />
-
-            <button
-              onClick={increment}
-              className="px-1 text-gray-600 disabled:text-gray-400"
-              disabled={zoom >= 3}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 6v12m6-6H6"
-                />
-              </svg>
-            </button>
-          </div>
-          <div className="space-x-3 mt-4 flex justify-center items-center">
-            <button
-              onClick={onCancel}
-              className="border border-gray-700 rounded-md px-4 py-1.5 text-gray-700 hover:bg-gray-700 hover:text-white transition-colors duration-75"
-            >
-              Anuluj
-            </button>
-            <button
-              onClick={getCroppedImg}
-              disabled={cropFinal.width <= 0 && cropFinal.height <= 0}
-              className="border border-orange-600 bg-orange-600 rounded-md px-4 py-1.5 text-white hover:bg-orange-700 transition-colors duration-75 inline-flex items-center space-x-2"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className={`animate-spin ${isLoading ? "inline-block" : "hidden"}`}
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                strokeWidth="2"
-                stroke="currentColor"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                <path d="M12 3a9 9 0 1 0 9 9"></path>
-              </svg>
-              <span>Zapisz zmiany</span>
-            </button>
-          </div>
-        </>
-      )}
-
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex gap-4 items-center"
+        className="flex gap-4 items-center justify-center flex-col"
       >
+        <label className="font-semibold">
+          {user?.role !== "USER" ? "Админ" : "Оқушы"}
+        </label>
+        <Image
+          width={160}
+          height={160}
+          className="w-[160px] h-[160px] rounded-full"
+          alt="profile-picture"
+          src={user?.profilePictureLink || "/placeholder.jpg"}
+        />
         <div>
           <Input
             className="py-2 !text-sm !leading-none w-[250px]"

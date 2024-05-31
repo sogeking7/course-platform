@@ -4,6 +4,7 @@ export type User = z.infer<typeof createUserSchema> & {
   id: number;
   password?: string;
   profilePictureLink?: string;
+  access_token?: string;
   role?: UserRole;
 };
 

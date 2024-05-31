@@ -54,15 +54,15 @@ export const UserEditForm = () => {
   // }
 
   if (status === "loading") {
-    return <div className="p-5 bg-white border rounded-sm">Жүктелуде...</div>;
+    return <div className="">Жүктелуде...</div>;
   }
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-5 p-5 bg-white border rounded-sm"
+      className="gap-5 w-full max-w-[320px] flex flex-col justify-center items-center"
     >
-      <div className="space-y-3 max-w-[320px]">
+      <div className="space-y-3 w-full">
         {(["firstName", "lastName", "email"] as const).map((field) => (
           <div key={field}>
             <Input placeholder={placeholders[field]} {...register(field)} />

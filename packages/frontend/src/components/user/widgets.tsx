@@ -13,6 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Image from "next/image";
 
 export default function UserButton() {
   const { data: session, status } = useSession();
@@ -27,17 +28,16 @@ export default function UserButton() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          size={"reset"}
-          className={cn("max-sm:py-2.5 max-sm:px-2.5 sm:py-2.5 sm:px-5 ")}
-          variant={"ghost"}
-          asChild
-        >
-          <Link href="/home/profile">
-            <label className="max-sm:hidden">Жеке профиль</label>
-            <CircleUserRound size={22} className="sm:ml-2" />
-          </Link>
-        </Button>
+        <button className={cn("w-[]")}>
+          {/* <label className="max-sm:hidden">Жеке профиль</label> */}
+          <Image
+            width={35}
+            height={35}
+            className="border border-[#1f2d5a] w-[35px] h-[35px] rounded-full"
+            src={user?.profilePictureLink || "/placeholder.jpg"}
+            alt="user"
+          ></Image>
+        </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent side="top">
         <DropdownMenuLabel className="text-base leading-tight">
