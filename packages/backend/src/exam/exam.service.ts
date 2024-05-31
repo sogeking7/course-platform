@@ -21,6 +21,14 @@ export class ExamService {
   }
 
   async create(data: ExamCreateDto): Promise<Exam> {
+    const lecture = await this.prisma.lecture.findUnique({
+      where: { id: data.lectureId },
+    });
+
+    if (!lecture) {
+      throw new BadRequestException(`Invalid lecture id (there is no lecture with given lectureId)`);
+    }
+
     return await this.prisma.exam.create({
       data: {
         name: data.name,
@@ -46,6 +54,14 @@ export class ExamService {
       throw new BadRequestException('Another exam with the provided lecture ID already exists.');
     }
     
+    const lecture = await this.prisma.lecture.findUnique({
+      where: { id: data.lectureId },
+    });
+
+    if (!lecture) {
+      throw new BadRequestException(`Invalid lecture id (there is no lecture with given lectureId)`);
+    }
+
     return await this.prisma.exam.update({
       where: {id},
       data: {
