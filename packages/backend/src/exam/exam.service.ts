@@ -1,7 +1,19 @@
-import { Injectable, HttpException, HttpStatus, BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  HttpException,
+  HttpStatus,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { Prisma, Exam } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { ExamCheckDto, ExamCreateDto, ExamUpdateDto, QuestionCreateDto, QuestionUpdateDto } from './dto/exam.dto';
+import {
+  ExamCheckDto,
+  ExamCreateDto,
+  ExamUpdateDto,
+  QuestionCreateDto,
+  QuestionUpdateDto,
+} from './dto/exam.dto';
 
 @Injectable()
 export class ExamService {
@@ -26,7 +38,9 @@ export class ExamService {
     });
 
     if (!lecture) {
-      throw new BadRequestException(`Invalid lecture id (there is no lecture with given lectureId)`);
+      throw new BadRequestException(
+        `Invalid lecture id (there is no lecture with given lectureId)`,
+      );
     }
   }
 
@@ -45,23 +59,25 @@ export class ExamService {
             },
           },
         }),
-      }
+      },
     });
   }
 
   async update(id: number, data: ExamUpdateDto): Promise<Exam> {
     this.isLectureExists();
-    
+
     const conflictingExam = await this.prisma.exam.findUnique({
       where: { lectureId: data.lectureId },
     });
 
     if (conflictingExam && conflictingExam.id !== id) {
-      throw new BadRequestException('Another exam with the provided lecture ID already exists.');
+      throw new BadRequestException(
+        'Another exam with the provided lecture ID already exists.',
+      );
     }
 
     return await this.prisma.exam.update({
-      where: {id},
+      where: { id },
       data: {
         name: data.name,
         description: data.description,
@@ -73,7 +89,7 @@ export class ExamService {
             },
           },
         }),
-      }, 
+      },
     });
   }
 
@@ -109,9 +125,13 @@ export class ExamService {
     });
   }
 
-  async updateQuestion(examId: number, questionId: number, data: QuestionUpdateDto): Promise<Exam> {
+  async updateQuestion(
+    examId: number,
+    questionId: number,
+    data: QuestionUpdateDto,
+  ): Promise<Exam> {
     const questions = await this.getAllQuestions(examId);
-    const questionIndex = questions.findIndex(q => q.id === questionId);
+    const questionIndex = questions.findIndex((q) => q.id === questionId);
     if (questionIndex === -1) {
       throw new NotFoundException(`Question with ID ${questionId} not found`);
     }
@@ -137,7 +157,7 @@ export class ExamService {
       throw new BadRequestException(`Exam should have at least 1 question`);
     }
 
-    const questionIndex = questions.findIndex(q => q.id === questionId);
+    const questionIndex = questions.findIndex((q) => q.id === questionId);
     if (questionIndex === -1) {
       throw new NotFoundException(`Question with ID ${questionId} not found`);
     }
@@ -152,16 +172,26 @@ export class ExamService {
     });
   }
 
-  async checkAnswers(examId: number, data: ExamCheckDto): Promise<{ totalPoints: number; results: { questionId: number; points: number }[] }> {
+  async checkAnswers(
+    examId: number,
+    data: ExamCheckDto,
+  ): Promise<{
+    totalPoints: number;
+    results: { questionId: number; points: number }[];
+  }> {
     const questions = await this.getAllQuestions(examId);
     let totalPoints = 0;
     const results = [];
 
     for (let i = 0; i < data.answers.length; ++i) {
       const answer = data.answers[i];
-      const question = questions.find(q => q.id === answer.questionId.toString());
+      const question = questions.find(
+        (q) => q.id === answer.questionId.toString(),
+      );
       if (!question) {
-        throw new NotFoundException(`Question with ID ${answer.questionId} not found`);
+        throw new NotFoundException(
+          `Question with ID ${answer.questionId} not found`,
+        );
       }
 
       const points = this.calculatePoints(question, answer.givenAnswers);
@@ -180,11 +210,14 @@ export class ExamService {
     }
   }
 
-  private calculatePointsMultipleChoice(question: any, givenAnswers: number[]): number {
+  private calculatePointsMultipleChoice(
+    question: any,
+    givenAnswers: number[],
+  ): number {
     const correctAnswers = new Set(question.correctAnswer);
     let points = 0;
 
-    givenAnswers.forEach(answer => {
+    givenAnswers.forEach((answer) => {
       if (correctAnswers.has(answer)) {
         points += question.points / correctAnswers.size;
       }
@@ -193,7 +226,10 @@ export class ExamService {
     return points;
   }
 
-  private calculatePointsSingleChoice(question: any, givenAnswers: number[]): number {
+  private calculatePointsSingleChoice(
+    question: any,
+    givenAnswers: number[],
+  ): number {
     if (givenAnswers.length !== 1 || question.correctAnswer.length !== 1) {
       return 0;
     }
