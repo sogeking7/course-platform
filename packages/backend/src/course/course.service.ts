@@ -52,7 +52,19 @@ export class CourseService {
           },
           sections: {
             include: {
-              lectures: true,
+              lectures: {
+                select: {
+                  id: true, // include other fields as necessary
+                  name: true,
+                  content: true,
+                  videoUrl: true,
+                  exam: {
+                    select: {
+                      id: true, // only include the examId
+                    },
+                  },
+                },
+              },
             },
           },
         },

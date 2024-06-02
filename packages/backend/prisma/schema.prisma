@@ -35,7 +35,7 @@ model Exam {
 model Course {
   id                 Int                @id @default(autoincrement())
   name               String
-  description        String
+  description        String 
   content            String
   profilePictureLink String?
   sections           Section[]

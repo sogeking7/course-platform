@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Lecture, createLectureSchema } from "@/types";
+import { Exam, Lecture, createExamSchema, createLectureSchema } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -13,7 +13,7 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Tiptap } from "@/components/tip-tap";
-import { Loader2, Trash } from "lucide-react";
+import { BookCheck, Loader, Loader2, Plus, Trash } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -28,6 +28,8 @@ import {
 import { useLectureStore } from "@/store/lecture";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { cn, convertToPreviewLink } from "@/lib/utils";
+import Link from "next/link";
+import { useExamStore } from "@/store/exam";
 
 type Props = {
   sectionId: number;
@@ -48,6 +50,7 @@ export default function LectureForm({
 }: Props) {
   const queryClient = useQueryClient();
   const lectureStore = useLectureStore();
+  const examStore = useExamStore();
 
   const form = useForm<z.infer<typeof createLectureSchema>>({
     resolver: zodResolver(createLectureSchema),
@@ -98,6 +101,38 @@ export default function LectureForm({
     },
   });
 
+  const mutationCreateExam = useMutation({
+    mutationFn: (newData: any) => examStore.create(data?.id!, newData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["course", { id: courseId }],
+      });
+    },
+  });
+
+  const mutationDeleteExam = useMutation({
+    mutationFn: (id: any) => examStore.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["course", { id: courseId }],
+      });
+    },
+  });
+
+  const handleCreateExam = () => {
+    const newExam: z.infer<typeof createExamSchema> = {
+      name: `Quiz`,
+      description: `Quiz: ${data?.name}`,
+      questions: "[]",
+      lectureId: data?.id!,
+    };
+    mutationCreateExam.mutate(newExam);
+  };
+
+  const handleDeleteExam = (id: number) => {
+    mutationDeleteExam.mutate(id);
+  };
+
   const onSubmit = (data: z.infer<typeof createLectureSchema>) => {
     mutation.mutate(data);
   };
@@ -106,8 +141,68 @@ export default function LectureForm({
 
   return (
     <Form {...form}>
+      {mode === "edit" && (
+        <div className="w-full justify-end flex mb-6 gap-4">
+          {data?.exam ? (
+            <>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant={"destructive"}>
+                    <Trash size={16} className="mr-2" /> Өшіру
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle className="flex items-center">
+                      <Trash
+                        size={20}
+                        className="inline-block mr-2 text-destructive"
+                      />
+                      Quiz: {data?.name!}
+                      {/* Сіз мүлдем сенімдісіз бе? */}
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Бұл әрекетті қайтару мүмкін емес. Бұл сіздің есептік
+                      жазбаңызды біржола жояды және деректеріңізді біздің
+                      серверлерден жояды.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Болдырмау</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={() => handleDeleteExam(data?.exam.id)}
+                    >
+                      {mutationDeleteExam.isPending && (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      )}
+                      Жалғастыру
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+              <Link
+                href={`/admin/courses/${courseId}/curriculum/section/lecture/${data?.id!}/${data.exam.id}`}
+              >
+                <Button>
+                  <BookCheck size={16} className="mr-2" />
+                  Quiz
+                </Button>
+              </Link>
+            </>
+          ) : (
+            <Button variant={"outline"} onClick={handleCreateExam}>
+              {mutationCreateExam.isPending ? (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              ) : (
+                <Plus size={16} className="mr-2" />
+              )}
+              Жаңа quiz
+            </Button>
+          )}
+        </div>
+      )}
       {videoUrl && (
-        <div className="p-4 mb-6 relative aspect-video w-full overflow-hidden pt-[calc(56.25%)]">
+        <div className="p-4 mb-6 relative aspect-video min-w-[240px] max-w-[300px] overflow-hidden ">
           <iframe
             src={videoUrl}
             className={cn(

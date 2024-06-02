@@ -1,12 +1,22 @@
 import axios from "@/lib/axios";
+import { Exam, Question } from "@/types";
 import { create } from "zustand";
 
 type Store = {
-  delete: (id: number) => Promise<any>;
-  update: (id: number, data: any) => Promise<any>;
-  create: (lectureId: number, data: any) => Promise<any>;
+  delete: (id: number) => Promise<Exam>;
+  update: (id: number, data: any) => Promise<Exam>;
+  create: (lectureId: number, data: any) => Promise<Exam>;
   getAll: () => Promise<any>;
-  getById: (id: number) => Promise<any>;
+  getById: (id: number) => Promise<Exam>;
+  getQuestions: (examId: number) => Promise<Question[]>;
+  addQuestion: (examId: number, data: any) => Promise<any>;
+  updateQuestion: (
+    examId: number,
+    questionId: number,
+    data: any,
+  ) => Promise<any>;
+  deleteQuestion: (examId: number, questionId: number) => Promise<any>;
+  checkAnswers: (examId: number, data: any) => Promise<any>;
 };
 
 export const useExamStore = create<Store>()((set) => {
@@ -19,5 +29,16 @@ export const useExamStore = create<Store>()((set) => {
       (await axios.post(`${url}`, { lectureId, ...data })).data,
     getAll: async () => (await axios.get(`${url}`)).data,
     getById: async (id) => (await axios.get(`${url}/${id}`)).data,
+    getQuestions: async (examId) =>
+      (await axios.get(`${url}/${examId}/questions`)).data,
+    addQuestion: async (examId, data) =>
+      (await axios.post(`${url}/${examId}/questions`, data)).data,
+    updateQuestion: async (examId, questionId, data) =>
+      (await axios.patch(`${url}/${examId}/questions/${questionId}`, data))
+        .data,
+    deleteQuestion: async (examId, questionId) =>
+      (await axios.delete(`${url}/${examId}/questions/${questionId}`)).data,
+    checkAnswers: async (examId, data) =>
+      (await axios.post(`${url}/${examId}/check-answers`, data)).data,
   };
 });

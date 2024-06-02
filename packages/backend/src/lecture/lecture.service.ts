@@ -11,6 +11,18 @@ export class LectureService {
     try {
       return await this.prisma.lecture.findUnique({
         where: { id },
+        include: {
+          exam: true,
+          section: {
+            include: {
+              course: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+        },
       });
     } catch (error) {
       throw new HttpException(

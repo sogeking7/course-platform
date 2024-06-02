@@ -61,7 +61,18 @@ export type Lecture = z.infer<typeof createLectureSchema> & {
 
 export type Exam = z.infer<typeof createExamSchema> & {
   id: number;
-  lecture: Lecture;
+  lecture?: Lecture;
+  // lectureId?: number;
+  // questions: string;
+};
+
+export type Question = {
+  id: number | string;
+  text: string;
+  options: string[];
+  correctAnswer: string[];
+  isMultipleChoice: boolean;
+  points: number;
 };
 
 export type Topic = {
@@ -98,30 +109,61 @@ const questionSchema = z.object({
     .min(1, { message: "Кем дегенде 1 cұрақ қажет" }),
 });
 
+export const createQuestionSchema = z.object({
+  text: z.string().trim().min(1, { message: "Қажет" }),
+  options: z
+    .array(
+      z.object({
+        value: z.string().trim().min(1, { message: "Option cannot be empty" }),
+        isTrue: z.boolean().default(false),
+      }),
+    )
+    .min(2, { message: "At least two options are required" })
+    .refine(
+      (options) => {
+        const trueCount = options.filter((option) => option.isTrue).length;
+        return trueCount === 1;
+      },
+      { message: "Only one option must be true" },
+    )
+    .refine(
+      (options) => {
+        const values = options.map((option) => option.value);
+        const uniqueValues = new Set(values);
+        return values.length === uniqueValues.size;
+      },
+      { message: "Option names must be unique" },
+    ),
+  isMultipleChoice: z.boolean().default(false),
+  points: z.number().nonnegative().min(1).max(100),
+});
+
 export const createExamSchema = z.object({
   name: z.string().trim().min(1, { message: "Қажет" }),
   description: z.string().trim().min(1, { message: "Қажет" }),
-  questions: z
-    .string()
-    .trim()
-    .min(1, { message: "Қажет" })
-    .transform((val) => {
-      try {
-        return JSON.parse(val);
-      } catch (e) {
-        throw new Error("Сұрақтар үшін жарамсыз JSON форматы");
-      }
-    })
-    .refine((val) => Array.isArray(val), {
-      message: "Сұрақтар массив болуы керек",
-    })
-    .refine(
-      (val) =>
-        val.every(
-          (question: any) => questionSchema.safeParse(question).success,
-        ),
-      { message: "Сұрақ форматы жарамсыз" },
-    ),
+  questions: z.string(),
+  lectureId: z.number(),
+  // questions: z
+  //   .string()
+  //   .trim()
+  //   .min(1, { message: "Қажет" })
+  //   .transform((val) => {
+  //     try {
+  //       return JSON.parse(val);
+  //     } catch (e) {
+  //       throw new Error("Сұрақтар үшін жарамсыз JSON форматы");
+  //     }
+  //   })
+  //   .refine((val) => Array.isArray(val), {
+  //     message: "Сұрақтар массив болуы керек",
+  //   })
+  //   .refine(
+  //     (val) =>
+  //       val.every(
+  //         (question: any) => questionSchema.safeParse(question).success,
+  //       ),
+  //     { message: "Сұрақ форматы жарамсыз" },
+  //   ),
 });
 
 export const createCourseSchema = z.object({
