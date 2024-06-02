@@ -170,7 +170,7 @@ export default function LectureForm({
                   <AlertDialogFooter>
                     <AlertDialogCancel>Болдырмау</AlertDialogCancel>
                     <AlertDialogAction
-                      onClick={() => handleDeleteExam(data?.exam.id)}
+                      onClick={() => handleDeleteExam(data?.exam?.id!)}
                     >
                       {mutationDeleteExam.isPending && (
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
