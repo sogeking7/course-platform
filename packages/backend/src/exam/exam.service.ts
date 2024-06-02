@@ -5,22 +5,8 @@ import {
   BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
-import {
-  Injectable,
-  HttpException,
-  HttpStatus,
-  BadRequestException,
-  NotFoundException,
-} from '@nestjs/common';
 import { Prisma, Exam } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import {
-  ExamCheckDto,
-  ExamCreateDto,
-  ExamUpdateDto,
-  QuestionCreateDto,
-  QuestionUpdateDto,
-} from './dto/exam.dto';
 import {
   ExamCheckDto,
   ExamCreateDto,
@@ -59,7 +45,7 @@ export class ExamService {
   }
 
   async create(data: ExamCreateDto): Promise<Exam> {
-    this.isLectureExists();
+    this.isLectureExists(data.lectureId);
 
     return await this.prisma.exam.create({
       data: {
@@ -73,7 +59,6 @@ export class ExamService {
             },
           },
         }),
-      },
       },
     });
   }
@@ -89,14 +74,9 @@ export class ExamService {
       throw new BadRequestException(
         'Another exam with the provided lecture ID already exists.',
       );
-      throw new BadRequestException(
-        'Another exam with the provided lecture ID already exists.',
-      );
     }
 
-
     return await this.prisma.exam.update({
-      where: { id },
       where: { id },
       data: {
         name: data.name,
@@ -109,7 +89,6 @@ export class ExamService {
             },
           },
         }),
-      },
       },
     });
   }
@@ -151,16 +130,10 @@ export class ExamService {
     questionId: number,
     data: QuestionUpdateDto,
   ): Promise<Exam> {
-  async updateQuestion(
-    examId: number,
-    questionId: number,
-    data: QuestionUpdateDto,
-  ): Promise<Exam> {
     const questions = await this.getAllQuestions(examId);
     const questionIndex = questions.findIndex(
       (q) => q.id === questionId.toString(),
     );
-    const questionIndex = questions.findIndex((q) => q.id === questionId);
     if (questionIndex === -1) {
       throw new NotFoundException(`Question with ID ${questionId} not found`);
     }
@@ -189,7 +162,6 @@ export class ExamService {
     const questionIndex = questions.findIndex(
       (q) => q.id === questionId.toString(),
     );
-    const questionIndex = questions.findIndex((q) => q.id === questionId);
     if (questionIndex === -1) {
       throw new NotFoundException(`Question with ID ${questionId} not found`);
     }
@@ -211,13 +183,6 @@ export class ExamService {
     totalPoints: number;
     results: { questionId: number; points: number }[];
   }> {
-  async checkAnswers(
-    examId: number,
-    data: ExamCheckDto,
-  ): Promise<{
-    totalPoints: number;
-    results: { questionId: number; points: number }[];
-  }> {
     const questions = await this.getAllQuestions(examId);
     let totalPoints = 0;
     const results = [];
@@ -227,13 +192,7 @@ export class ExamService {
       const question = questions.find(
         (q) => q.id === answer.questionId.toString(),
       );
-      const question = questions.find(
-        (q) => q.id === answer.questionId.toString(),
-      );
       if (!question) {
-        throw new NotFoundException(
-          `Question with ID ${answer.questionId} not found`,
-        );
         throw new NotFoundException(
           `Question with ID ${answer.questionId} not found`,
         );
@@ -259,14 +218,9 @@ export class ExamService {
     question: any,
     givenAnswers: number[],
   ): number {
-  private calculatePointsMultipleChoice(
-    question: any,
-    givenAnswers: number[],
-  ): number {
     const correctAnswers = new Set(question.correctAnswer);
     let points = 0;
 
-    givenAnswers.forEach((answer) => {
     givenAnswers.forEach((answer) => {
       if (correctAnswers.has(answer)) {
         points += question.points / correctAnswers.size;
@@ -276,10 +230,6 @@ export class ExamService {
     return points;
   }
 
-  private calculatePointsSingleChoice(
-    question: any,
-    givenAnswers: number[],
-  ): number {
   private calculatePointsSingleChoice(
     question: any,
     givenAnswers: number[],

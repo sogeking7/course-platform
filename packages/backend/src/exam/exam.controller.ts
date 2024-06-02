@@ -39,7 +39,7 @@ export class ExamController {
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   @ApiParam({ name: 'id', description: 'ID of the exam' })
   @Get(':id')
-  async findOneById(@Param('id') id: number): Promise<Exam | null> {
+  async findOneById(@Param('id', new ParseIntPipe()) id: number): Promise<Exam | null> {
     try {
       return await this.examService.findOneById(id);
     } catch (error) {
@@ -73,7 +73,7 @@ export class ExamController {
   @ApiParam({ name: 'id', description: 'ID of the exam' })
   @Put(':id')
   async update(
-    @Param('id') id: number,
+    @Param('id', new ParseIntPipe()) id: number,
     @Body() data: ExamUpdateDto,
   ): Promise<Exam> {
     return await this.examService.update(id, data);

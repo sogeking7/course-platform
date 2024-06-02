@@ -34,9 +34,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 export const QuizCreator = ({
   lectureId,
   examId,
+  length,
   mode,
   data,
 }: {
+  length?: number;
   lectureId?: number;
   examId?: number;
   data?: z.infer<typeof createQuestionSchema> & { id: number };
@@ -79,7 +81,7 @@ export const QuizCreator = ({
   });
 
   const mutationDelete = useMutation({
-    mutationFn: (id) => examStore.deleteQuestion(examId!, id),
+    mutationFn: (id: number) => examStore.deleteQuestion(examId!, id),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["exam", { id: examId! }],
@@ -113,7 +115,7 @@ export const QuizCreator = ({
               <FormItem>
                 {/* <FormLabel>Question</FormLabel> */}
                 <FormControl>
-                  <Input placeholder="Question" {...field} />
+                  <Input placeholder="Сурақ" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -154,7 +156,7 @@ export const QuizCreator = ({
                     </FormControl>
                     <FormControl>
                       <Input
-                        placeholder={`Option ${index + 1}`}
+                        placeholder={`Вариант ${index + 1}`}
                         {...form.register(`options.${index}.value`, {
                           required: true,
                         })}
@@ -183,7 +185,7 @@ export const QuizCreator = ({
                       })
                     }
                   >
-                    <Plus size={20} className="mr-2" /> Option
+                    <Plus size={20} className="mr-2" /> Вариант 
                   </Button>
                 </div>
                 {/* <FormMessage /> */}
@@ -197,7 +199,7 @@ export const QuizCreator = ({
             )}
           />
           <div className="w-full justify-end flex gap-4">
-            {mode === "edit" && (
+            {(mode === "edit" && length && length > 1) && (
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button variant={"destructive"}>
@@ -223,7 +225,7 @@ export const QuizCreator = ({
                   <AlertDialogFooter>
                     <AlertDialogCancel>Болдырмау</AlertDialogCancel>
                     <AlertDialogAction
-                      onClick={() => mutationDelete.mutate(data?.id)}
+                      onClick={() => mutationDelete.mutate(data?.id!)}
                     >
                       {mutationDelete.isPending && (
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />

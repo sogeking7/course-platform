@@ -74,6 +74,7 @@ export default function AdminLecturePage({
             };
             return (
               <QuizCreator
+                length={data.length}
                 examId={examId}
                 key={question.id}
                 data={modifiedQuestion}

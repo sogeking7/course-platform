@@ -8,6 +8,7 @@ import {
   Delete,
   HttpException,
   HttpStatus,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { Lecture } from '@prisma/client';
 import { LectureService } from './lecture.service';
@@ -31,7 +32,9 @@ export class LectureController {
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   @ApiParam({ name: 'id', description: 'ID of the lecture' })
   @Get(':id')
-  async findOneById(@Param('id') id: number): Promise<Lecture | null> {
+  async findOneById(
+    @Param('id', new ParseIntPipe()) id: number,
+  ): Promise<Lecture | null> {
     try {
       return await this.lectureService.findOneById(id);
     } catch (error) {
@@ -65,7 +68,7 @@ export class LectureController {
   @ApiParam({ name: 'id', description: 'ID of the lecture' })
   @Put(':id')
   async update(
-    @Param('id') id: number,
+    @Param('id', new ParseIntPipe()) id: number,
     @Body() data: LectureCreateDto,
   ): Promise<Lecture> {
     return await this.lectureService.update({
@@ -84,7 +87,7 @@ export class LectureController {
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   @ApiParam({ name: 'id', description: 'ID of the lecture' })
   @Delete(':id')
-  async remove(@Param('id') id: number): Promise<Lecture> {
+  async remove(@Param('id', new ParseIntPipe()) id: number): Promise<Lecture> {
     return await this.lectureService.remove({ id });
   }
 }

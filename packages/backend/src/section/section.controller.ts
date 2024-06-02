@@ -8,6 +8,7 @@ import {
   Delete,
   HttpException,
   HttpStatus,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { Section } from '@prisma/client';
 import { SectionService } from './section.service';
@@ -31,7 +32,9 @@ export class SectionController {
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   @ApiParam({ name: 'id', description: 'ID of the section' })
   @Get(':id')
-  async findOneById(@Param('id') id: number): Promise<Section | null> {
+  async findOneById(
+    @Param('id', new ParseIntPipe()) id: number,
+  ): Promise<Section | null> {
     try {
       return await this.sectionService.findOneById(id);
     } catch (error) {
@@ -65,7 +68,7 @@ export class SectionController {
   @ApiParam({ name: 'id', description: 'ID of the section' })
   @Put(':id')
   async update(
-    @Param('id') id: number,
+    @Param('id', new ParseIntPipe()) id: number,
     @Body() data: SectionUpdateDto,
   ): Promise<Section> {
     return await this.sectionService.update(id, data);
@@ -81,7 +84,7 @@ export class SectionController {
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   @ApiParam({ name: 'id', description: 'ID of the section' })
   @Delete(':id')
-  async remove(@Param('id') id: number): Promise<Section> {
+  async remove(@Param('id', new ParseIntPipe()) id: number): Promise<Section> {
     return await this.sectionService.remove({ id });
   }
 }

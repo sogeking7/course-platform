@@ -51,7 +51,7 @@ export class UserController {
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   @ApiParam({ name: 'id', description: 'ID of the user' })
   @Get(':id')
-  async findOneById(@Param('id') id: number): Promise<User | null> {
+  async findOneById(@Param('id', new ParseIntPipe()) id: number): Promise<User | null> {
     try {
       return await this.userService.findOneById(id);
     } catch (error) {
@@ -85,7 +85,7 @@ export class UserController {
   @ApiParam({ name: 'id', description: 'ID of the user' })
   @Put(':id')
   async update(
-    @Param('id') id: number,
+    @Param('id', new ParseIntPipe()) id: number,
     @Body() data: UserCreateDto,
   ): Promise<User> {
     return await this.userService.update({
@@ -104,7 +104,7 @@ export class UserController {
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   @ApiParam({ name: 'id', description: 'ID of the user' })
   @Delete(':id')
-  async remove(@Param('id') id: number): Promise<User> {
+  async remove(@Param('id', new ParseIntPipe()) id: number): Promise<User> {
     return await this.userService.remove({ id });
   }
 
