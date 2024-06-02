@@ -1,7 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-	images: {
-    domains: ['localhost'],
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'shoqan-api.devhouse.kz',
+        port: '',
+      },
+    ],
+    // domains: ['localhost', 'shoqan-api.devhouse.kz'],
   },
 };
 
