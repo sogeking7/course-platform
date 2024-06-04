@@ -68,7 +68,9 @@ export class CourseController {
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   @ApiParam({ name: 'id', description: 'ID of the course' })
   @Get(':id')
-  async findOneById(@Param('id') id: number): Promise<Course | null> {
+  async findOneById(
+    @Param('id', new ParseIntPipe()) id: number,
+  ): Promise<Course | null> {
     try {
       return await this.courseService.findOneById(id);
     } catch (error) {
@@ -102,7 +104,7 @@ export class CourseController {
   @ApiParam({ name: 'id', description: 'ID of the course' })
   @Put(':id')
   async update(
-    @Param('id') id: number,
+    @Param('id', new ParseIntPipe()) id: number,
     @Body() data: CourseCreateDto,
   ): Promise<Course> {
     return await this.courseService.update({
@@ -121,7 +123,7 @@ export class CourseController {
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   @ApiParam({ name: 'id', description: 'ID of the course' })
   @Delete(':id')
-  async remove(@Param('id') id: number): Promise<Course> {
+  async remove(@Param('id', new ParseIntPipe()) id: number): Promise<Course> {
     return await this.courseService.remove({ id });
   }
 

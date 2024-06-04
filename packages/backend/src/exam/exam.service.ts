@@ -44,7 +44,7 @@ export class ExamService {
   }
 
   async create(data: ExamCreateDto): Promise<Exam> {
-    this.isLectureExists();
+    this.isLectureExists(data.lectureId);
 
     return await this.prisma.exam.create({
       data: {
@@ -131,7 +131,9 @@ export class ExamService {
     data: QuestionUpdateDto,
   ): Promise<Exam> {
     const questions = await this.getAllQuestions(examId);
-    const questionIndex = questions.findIndex((q) => q.id === questionId);
+    const questionIndex = questions.findIndex(
+      (q) => q.id === questionId.toString(),
+    );
     if (questionIndex === -1) {
       throw new NotFoundException(`Question with ID ${questionId} not found`);
     }
@@ -160,7 +162,9 @@ export class ExamService {
       );
     }
 
-    const questionIndex = questions.findIndex((q) => q.id === questionId);
+    const questionIndex = questions.findIndex(
+      (q) => q.id === questionId.toString(),
+    );
     if (questionIndex === -1) {
       throw new NotFoundException(`Question with ID ${questionId} not found`);
     }

@@ -30,13 +30,13 @@ export default function UserButton() {
       <DropdownMenuTrigger asChild>
         <button className={cn("w-[]")}>
           {/* <label className="max-sm:hidden">Жеке профиль</label> */}
-          <Image
+          <img
             width={35}
             height={35}
             className="border border-[#1f2d5a] w-[35px] h-[35px] rounded-full"
             src={user?.profilePictureLink || "/placeholder.jpg"}
             alt="user"
-          ></Image>
+          />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent side="top">

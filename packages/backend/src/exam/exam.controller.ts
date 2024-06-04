@@ -9,6 +9,7 @@ import {
   Delete,
   HttpException,
   HttpStatus,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { Exam } from '@prisma/client';
 import { ExamService } from './exam.service';
@@ -38,7 +39,7 @@ export class ExamController {
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   @ApiParam({ name: 'id', description: 'ID of the exam' })
   @Get(':id')
-  async findOneById(@Param('id') id: number): Promise<Exam | null> {
+  async findOneById(@Param('id', new ParseIntPipe()) id: number): Promise<Exam | null> {
     try {
       return await this.examService.findOneById(id);
     } catch (error) {
@@ -72,7 +73,7 @@ export class ExamController {
   @ApiParam({ name: 'id', description: 'ID of the exam' })
   @Put(':id')
   async update(
-    @Param('id') id: number,
+    @Param('id', new ParseIntPipe()) id: number,
     @Body() data: ExamUpdateDto,
   ): Promise<Exam> {
     return await this.examService.update(id, data);
@@ -88,7 +89,7 @@ export class ExamController {
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   @ApiParam({ name: 'id', description: 'ID of the exam' })
   @Delete(':id')
-  async remove(@Param('id') id: number): Promise<Exam> {
+  async remove(@Param('id', new ParseIntPipe()) id: number): Promise<Exam> {
     return await this.examService.remove({ id });
   }
 
@@ -98,7 +99,7 @@ export class ExamController {
   @ApiResponse({ status: 404, description: 'Exam not found' })
   @ApiParam({ name: 'examId', required: true, description: 'ID of the exam' })
   @Get(':examId/questions')
-  async getAllQuestions(@Param('examId') examId: number): Promise<any[]> {
+  async getAllQuestions(@Param('examId', new ParseIntPipe()) examId: number): Promise<any[]> {
     return this.examService.getAllQuestions(examId);
   }
 
@@ -108,10 +109,7 @@ export class ExamController {
   @ApiResponse({ status: 404, description: 'Exam not found' })
   @ApiParam({ name: 'examId', required: true, description: 'ID of the exam' })
   @Post(':examId/questions')
-  async addQuestion(
-    @Param('examId') examId: number,
-    @Body() data: QuestionCreateDto,
-  ): Promise<Exam> {
+  async addQuestion(@Param('examId', new ParseIntPipe()) examId: number, @Body() data: QuestionCreateDto): Promise<Exam> {
     return this.examService.addQuestion(examId, data);
   }
 
@@ -127,9 +125,9 @@ export class ExamController {
   })
   @Patch(':examId/questions/:questionId')
   async updateQuestion(
-    @Param('examId') examId: number,
-    @Param('questionId') questionId: number,
-    @Body() data: QuestionUpdateDto,
+    @Param('examId', new ParseIntPipe()) examId: number,
+    @Param('questionId', new ParseIntPipe()) questionId: number,
+    @Body() data: QuestionUpdateDto
   ): Promise<Exam> {
     return this.examService.updateQuestion(examId, questionId, data);
   }
@@ -149,10 +147,7 @@ export class ExamController {
     description: 'ID of the question',
   })
   @Delete(':examId/questions/:questionId')
-  async deleteQuestion(
-    @Param('examId') examId: number,
-    @Param('questionId') questionId: number,
-  ): Promise<Exam> {
+  async deleteQuestion(@Param('examId', new ParseIntPipe()) examId: number, @Param('questionId', new ParseIntPipe()) questionId: number): Promise<Exam> {
     return this.examService.deleteQuestion(examId, questionId);
   }
 
@@ -163,12 +158,9 @@ export class ExamController {
   @ApiParam({ name: 'examId', required: true, description: 'ID of the exam' })
   @Post(':examId/check-answers')
   async checkAnswers(
-    @Param('examId') examId: number,
-    @Body() data: ExamCheckDto,
-  ): Promise<{
-    totalPoints: number;
-    results: { questionId: number; points: number }[];
-  }> {
+    @Param('examId', new ParseIntPipe()) examId: number,
+    @Body() data: ExamCheckDto
+  ): Promise<{ totalPoints: number; results: { questionId: number; points: number }[] }> {
     return this.examService.checkAnswers(examId, data);
   }
 }
