@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { Lecture } from '@prisma/client';
 import { LectureService } from './lecture.service';
-import { LectureCreateDto } from './dto/lecture.dto';
+import { LectureCreateDto, LectureUpdateDto } from './dto/lecture.dto';
 import {
   ApiTags,
   ApiOperation,
@@ -68,13 +68,10 @@ export class LectureController {
   @ApiParam({ name: 'id', description: 'ID of the lecture' })
   @Put(':id')
   async update(
-    @Param('id', new ParseIntPipe()) id: number,
-    @Body() data: LectureCreateDto,
+    @Param('id') id: number,
+    @Body() data: LectureUpdateDto,
   ): Promise<Lecture> {
-    return await this.lectureService.update({
-      where: { id },
-      data,
-    });
+    return await this.lectureService.update(id, data);
   }
 
   @ApiBearerAuth()

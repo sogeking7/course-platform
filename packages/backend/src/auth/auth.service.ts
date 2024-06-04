@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
@@ -36,7 +36,7 @@ export class AuthService {
       where: { email: user.email },
     });
     if (existingUser) {
-      throw new BadRequestException('Email already in use');
+      throw new HttpException('Email already in use', HttpStatus.BAD_REQUEST);
     }
 
     const hashedPassword = bcrypt.hashSync(user.password, 10);

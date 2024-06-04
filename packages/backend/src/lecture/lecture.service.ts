@@ -1,7 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { Prisma, Lecture } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { LectureCreateDto } from './dto/lecture.dto';
+import { LectureCreateDto, LectureUpdateDto } from './dto/lecture.dto';
 
 @Injectable()
 export class LectureService {
@@ -32,7 +32,34 @@ export class LectureService {
     }
   }
 
+  private async isSectionExists(sectionId: number) {
+    const section = await this.prisma.section.findUnique({
+      where: { id: sectionId },
+    });
+    if (sectionId && !section) {
+      throw new HttpException(
+        `Section with id ${sectionId} does not exist`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  private async isExamExists(examId: number) {
+    const exam = await this.prisma.exam.findUnique({
+      where: { id: examId },
+    });
+    if (examId && !exam) {
+      throw new HttpException(
+        `Exam with id ${examId} does not exist`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
   async create(data: LectureCreateDto): Promise<Lecture> {
+    this.isSectionExists(data.sectionId);
+    this.isExamExists(data.examId);
+
     return await this.prisma.lecture.create({
       data: {
         name: data.name,
@@ -54,14 +81,29 @@ export class LectureService {
     });
   }
 
-  async update(params: {
-    where: Prisma.LectureWhereUniqueInput;
-    data: Prisma.LectureUpdateInput;
-  }): Promise<Lecture> {
-    const { where, data } = params;
+  async update(id: number, data: LectureUpdateDto): Promise<Lecture> {
+    this.isSectionExists(data.sectionId);
+    this.isExamExists(data.examId);
+
     return await this.prisma.lecture.update({
-      data,
-      where,
+      where: { id },
+      data: {
+        name: data.name,
+        content: data.content,
+        videoUrl: data.videoUrl,
+        section: {
+          connect: {
+            id: data.sectionId,
+          },
+        },
+        ...(data.examId && {
+          exam: {
+            connect: {
+              id: data.examId,
+            },
+          },
+        }),
+      },
     });
   }
 

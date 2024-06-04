@@ -27,3 +27,35 @@ export class LectureCreateDto {
   @IsInt()
   examId?: number;
 }
+
+export class LectureUpdateDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  @IsOptional()
+  name: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  @IsOptional()
+  content: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  @IsOptional()
+  videoUrl: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsInt()
+  @IsOptional()
+  sectionId: number;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsInt()
+  @IsOptional()
+  examId?: number;
+}
