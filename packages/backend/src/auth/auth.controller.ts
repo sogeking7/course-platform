@@ -4,7 +4,6 @@ import {
   Body,
   UsePipes,
   ValidationPipe,
-  BadRequestException,
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
@@ -41,10 +40,7 @@ export class AuthController {
     try {
       return await this.authService.register(data);
     } catch (error) {
-      if (error instanceof BadRequestException) {
-        throw new BadRequestException(error.message);
-      }
-      throw new BadRequestException('Registration failed');
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 }

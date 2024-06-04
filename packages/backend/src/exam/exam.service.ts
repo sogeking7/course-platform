@@ -2,7 +2,6 @@ import {
   Injectable,
   HttpException,
   HttpStatus,
-  BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma, Exam } from '@prisma/client';
@@ -36,10 +35,10 @@ export class ExamService {
     const lecture = await this.prisma.lecture.findUnique({
       where: { id: lectureId },
     });
-
-    if (!lecture) {
-      throw new BadRequestException(
-        `Invalid lecture id (there is no lecture with given lectureId)`,
+    if (lectureId && !lecture) {
+      throw new HttpException(
+        `Lecture with id ${lectureId} does not exist`,
+        HttpStatus.BAD_REQUEST,
       );
     }
   }
@@ -71,8 +70,9 @@ export class ExamService {
     });
 
     if (conflictingExam && conflictingExam.id !== id) {
-      throw new BadRequestException(
+      throw new HttpException(
         'Another exam with the provided lecture ID already exists.',
+        HttpStatus.BAD_REQUEST,
       );
     }
 
@@ -154,7 +154,10 @@ export class ExamService {
     const questions = await this.getAllQuestions(examId);
 
     if (questions.length === 1) {
-      throw new BadRequestException(`Exam should have at least 1 question`);
+      throw new HttpException(
+        `Exam should have at least 1 question`,
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     const questionIndex = questions.findIndex((q) => q.id === questionId);
