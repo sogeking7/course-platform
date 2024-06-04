@@ -36,10 +36,7 @@ export class AuthService {
       where: { email: user.email },
     });
     if (existingUser) {
-      throw new HttpException(
-        'Email already in use',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException('Email already in use', HttpStatus.BAD_REQUEST);
     }
 
     const hashedPassword = bcrypt.hashSync(user.password, 10);
