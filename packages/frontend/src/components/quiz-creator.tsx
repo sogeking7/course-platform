@@ -236,11 +236,11 @@ export const QuizCreator = ({
                 </AlertDialogContent>
               </AlertDialog>
             )}
-            {mode === "new" && (
+            {/* {mode === "new" && (
               <Button variant={"ghost"} onClick={() => form.reset()}>
                 Болдырмау
               </Button>
-            )}
+            )} */}
             <Button
               type="submit"
               disabled={mode === "new" ? false : !form.formState.isDirty}

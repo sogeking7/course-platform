@@ -51,7 +51,9 @@ export class UserController {
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   @ApiParam({ name: 'id', description: 'ID of the user' })
   @Get(':id')
-  async findOneById(@Param('id', new ParseIntPipe()) id: number): Promise<User | null> {
+  async findOneById(
+    @Param('id', new ParseIntPipe()) id: number,
+  ): Promise<User | null> {
     try {
       return await this.userService.findOneById(id);
     } catch (error) {

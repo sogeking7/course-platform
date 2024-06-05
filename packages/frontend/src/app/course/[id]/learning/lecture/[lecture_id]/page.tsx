@@ -8,7 +8,8 @@ import { TypographyH1 } from "@/components/ui/typography";
 import { cn, convertToPreviewLink } from "@/lib/utils";
 import { useLectureStore } from "@/store/lecture";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { BookCheck, ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -95,6 +96,16 @@ export default function LectureIdPage({
                   {lecture.content}
                 </ReactMarkdown>
               </article>
+              <div className="mt-16 w-full">
+                <Link
+                  href={`/course/${course_id}/learning/lecture/${lecture_id}/quiz`}
+                >
+                  <Button>
+                    <BookCheck className="mr-2" size={20} />
+                    Тестілеу бастау
+                  </Button>
+                </Link>
+              </div>
               <div className="mt-16 flex justify-between">
                 <Button variant={"ghost"} className="flex items-center">
                   <ChevronLeft className="inline-block mr-2" size={20} />

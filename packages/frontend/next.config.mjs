@@ -8,7 +8,8 @@ const nextConfig = {
         port: '',
       },
     ],
-    // domains: ['localhost', 'shoqan-api.devhouse.kz'],
+    // domains: ['shoqan-api.devhouse.kz'],  
+    unoptimized: true,
   },
 };
 

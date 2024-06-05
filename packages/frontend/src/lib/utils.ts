@@ -14,3 +14,10 @@ export function convertToPreviewLink(url: string): string | null {
     return null;
   }
 }
+
+export const calcPercentage = (
+  correct_answers: number,
+  total_answers: number,
+): number => {
+  return (correct_answers * 100) / total_answers;
+};
