@@ -319,6 +319,7 @@ export const PictureForm = ({
           />
           {errors.file && (
             <span className="text-xs text-destructive">
+              {/* @ts-ignore */}
               {errors.file.message}
             </span>
           )}

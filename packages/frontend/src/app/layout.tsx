@@ -3,6 +3,7 @@ import "./globals.css";
 import { Providers } from "@/components/Providers";
 import { ThemeProvider } from "@/components/theme-provider";
 import { getServerSession } from "next-auth";
+import { authOptions } from "../../next-auth.config";
 
 export const metadata: Metadata = {
   title: "Shoqan Education",
@@ -14,7 +15,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
 
   return (
     <html lang="en" suppressHydrationWarning>
