@@ -24,7 +24,8 @@ export default function LectureIdPage({
   const router = useRouter();
 
   const course_id = Number(params.id);
-  const lecture_id = Number(params.lecture_id);
+  const lecture_id =
+    params.lecture_id === "default" ? null : Number(params.lecture_id);
 
   const lectureStore = useLectureStore();
   const courseStore = useCourseStore();
@@ -37,8 +38,16 @@ export default function LectureIdPage({
   });
 
   const { data: lecture, isLoading: lectureIsLoading } = useQuery({
-    queryKey: ["lecture", { id: lecture_id }],
-    queryFn: () => lectureStore.getById(lecture_id),
+    queryKey: [
+      "lecture",
+      { id: lecture_id },
+    ],
+    queryFn: () => {
+      if (lecture_id) return lectureStore.getById(lecture_id);
+      else if (course?.sections[0].lectures[0].id)
+        return lectureStore.getById(course?.sections[0].lectures[0].id!);
+    },
+    enabled: !!(course)
   });
 
   const nextLecture = (): number | null | undefined => {

@@ -30,7 +30,7 @@ export default function MyCoursesPage() {
       <div className="grid lg:grid-cols-3 xl:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-8">
         {data.map((course: Course) => (
           <CourseCard
-            link={`/course/${course.id}/learning/lecture/${course.sections[0].lectures[0].id}`}
+            link={`/course/${course.id}/learning/lecture/default`}
             key={course.id}
             item={course as Course}
           />
