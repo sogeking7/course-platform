@@ -80,7 +80,7 @@ export const SignOutButton = () => {
       variant={"ghost"}
       onClick={() => signOut()}
     >
-      <LogOut className="mr-2" size={20} />
+      <LogOut className="mr-2" size={18} />
       Шығу
     </Button>
   );
@@ -94,7 +94,7 @@ export const SignInButton = () => {
       onClick={() => signIn()}
       variant={"ghost"}
     >
-      <LogIn className="mr-2" size={20} />
+      <LogIn className="mr-2" size={18} />
       Кіру
     </Button>
   );

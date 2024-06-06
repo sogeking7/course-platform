@@ -82,7 +82,7 @@ export const CourseSectionManager = (props: Props) => {
                       <AlertDialogHeader>
                         <AlertDialogTitle className="flex items-center">
                           <Trash
-                            size={20}
+                            size={18}
                             className="inline-block mr-2 text-destructive"
                           />
                           Өшіру: {section.name}
@@ -142,7 +142,7 @@ export const CourseSectionManager = (props: Props) => {
           variant={"outline"}
           onClick={() => setMode("new")}
         >
-          <Plus size={20} className="mr-2" />
+          <Plus size={18} className="mr-2" />
           Модуль
         </Button>
       )}

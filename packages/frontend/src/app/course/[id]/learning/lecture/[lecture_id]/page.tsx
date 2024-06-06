@@ -101,19 +101,19 @@ export default function LectureIdPage({
                   href={`/course/${course_id}/learning/lecture/${lecture_id}/quiz`}
                 >
                   <Button>
-                    <BookCheck className="mr-2" size={20} />
+                    <BookCheck className="mr-2" size={18} />
                     Тестілеу бастау
                   </Button>
                 </Link>
               </div>
               <div className="mt-16 flex justify-between">
                 <Button variant={"ghost"} className="flex items-center">
-                  <ChevronLeft className="inline-block mr-2" size={20} />
+                  <ChevronLeft className="inline-block mr-2" size={18} />
                   Алдыңғы тақырып
                 </Button>
                 <Button variant={"ghost"} className="flex items-center">
                   Келесі тақырып
-                  <ChevronRight className="ml-2 inline-block" size={20} />
+                  <ChevronRight className="ml-2 inline-block" size={18} />
                 </Button>
               </div>
             </div>

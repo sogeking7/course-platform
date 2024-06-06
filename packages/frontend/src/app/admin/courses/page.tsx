@@ -28,7 +28,7 @@ export default function AdminUsersPage() {
         <TypographyH1>Курстар</TypographyH1>
         <Link href="/admin/courses/create">
           <Button>
-            <Plus className="mr-2" size={20} />
+            <Plus className="mr-2" size={18} />
             Қосу
           </Button>
         </Link>

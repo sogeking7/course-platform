@@ -99,19 +99,19 @@ export const AdminCourseCreateForm = ({
           <div className="mb-4 flex gap-4 flex-wrap justify-end">
             <Link href={`/admin/courses/${data?.id!}/curriculum`}>
               <Button variant={"outline"}>
-                <CircleFadingPlus className="mr-2" size={20} />
+                <CircleFadingPlus className="mr-2" size={18} />
                 Курс бағдарламасы
               </Button>
             </Link>
             <Link href={`/admin/courses/${data?.id!}/invite`}>
               <Button variant={"outline"}>
-                <UserRoundPlus className="mr-2" size={20} />
+                <UserRoundPlus className="mr-2" size={18} />
                 Оқушы қосу
               </Button>
             </Link>
             {/* <Link href={`/admin/courses/${data.id}`}>
               <Button variant={"outline"}>
-                <Pencil className="mr-2" size={20} />
+                <Pencil className="mr-2" size={18} />
                 Өңдеу
               </Button>
             </Link> */}

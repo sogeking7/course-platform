@@ -11,12 +11,12 @@ export const default_links = [
   {
     title: "Басты бет",
     href: "/",
-    icon: <Home size={20} />,
+    icon: <Home size={18} />,
   },
   {
     title: "Барлық курстар",
     href: "/home/all-courses",
-    icon: <LibraryBig size={20} />,
+    icon: <LibraryBig size={18} />,
   },
 ];
 
@@ -24,7 +24,7 @@ export const sidebar_links = [
   {
     title: "Менің курстарым",
     href: "/home/my-courses",
-    icon: <BookOpen size={20} />,
+    icon: <BookOpen size={18} />,
   },
   // {
   //   title: "Байқау тесті",
@@ -37,22 +37,22 @@ export const admin_links = [
   {
     title: "Админ панель",
     href: "/admin",
-    icon: <LayoutDashboard size={20} />,
+    icon: <LayoutDashboard size={18} />,
   },
   {
     title: "Қолданушылар",
     href: "/admin/users",
-    icon: <UsersRound size={20} />,
+    icon: <UsersRound size={18} />,
   },
   {
     title: "Курстар",
     href: "/admin/courses",
-    icon: <LibraryBig size={20} />,
+    icon: <LibraryBig size={18} />,
   },
   // {
   //   title: "Менің курстарым",
   //   href: "/home/my-courses",
-  //   icon: <BookOpen size={20} />,
+  //   icon: <BookOpen size={18} />,
   // },
 ];
 
@@ -195,7 +195,7 @@ export const courseContent = [
         content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
       },
       {
-        id: 20,
+        id: 18,
         title: "Topic 2: Authentication and Authorization",
         content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
       },

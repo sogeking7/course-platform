@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { admin_links, default_links, sidebar_links } from "../../public/shared";
 
-import { MenuIcon, X } from "lucide-react";
+import { CircleX, MenuIcon, X } from "lucide-react";
 import { useSidebar } from "@/store/sidebar";
 import { Sheet, SheetHeader, SheetContent } from "@/components/ui/sheet";
 import { Logo } from "./logo";
@@ -21,20 +21,18 @@ import {
 export const MySheetTrigger = () => {
   const { isMySheetOpen, setIsMySheetOpen } = useSidebar();
   return (
-    <Button
+    <button
       onClick={() => setIsMySheetOpen(!isMySheetOpen)}
-      size={"reset"}
-      variant={"ghost"}
-      className="text-neutral-700 w-[67px] h-[47px] flex items-center justify-center hover:opacity-100"
+      className="hover:bg-slate-300 bg-slate-200 text-neutral-700 w-[50px] h-[40px] flex items-center justify-center hover:opacity-100"
     >
       {isMySheetOpen ? (
-        <div className="w-6 h-6 border-neutral-700  rounded-full border flex items-center justify-center">
-          <X size={20} />
+        <div className="!w-6 !h-6 border-neutral-700  rounded-full border flex items-center justify-center">
+          <X size={16} />
         </div>
       ) : (
-        <MenuIcon />
+        <MenuIcon strokeWidth={2.25} size={20} className="rounded-none" />
       )}
-    </Button>
+    </button>
   );
 };
 
@@ -48,11 +46,11 @@ export const MySheet = () => {
         setIsMySheetOpen(!isMySheetOpen);
       }}
     >
-      <SheetContent className="w-[360px] h-full bg-white" side={"left"}>
-        <SheetHeader className="py-3 px-20 !h-[54px] border-b border-neutral-300 shadow-sm">
+      <SheetContent className="w-[285px] h-full bg-white" side={"left"}>
+        <SheetHeader className="py-3 px-20 !h-[50px] flex items-center border-b border-neutral-300 shadow-sm">
           <Logo />
         </SheetHeader>
-        <SideBar />
+        <SideBar str />
       </SheetContent>
     </Sheet>
   );
@@ -66,20 +64,19 @@ export const SideBarTrigger = () => {
     return <MySheetTrigger />;
   }
   return (
-    <Button
+    <button
       onClick={() => setIsSideBarOpen(!isSideBarOpen)}
-      size={"reset"}
-      variant={"ghost"}
-      className=" text-neutral-700 w-[67px] h-[47px] flex items-center justify-center hover:opacity-100"
+      className="hover:bg-slate-300 bg-slate-200 text-neutral-700 w-[50px] h-[40px] flex items-center justify-center "
     >
       {isSideBarOpen ? (
-        <div className="w-6 h-6 border-neutral-700  rounded-full border flex items-center justify-center">
-          <X size={20} />
+        <div className="h-[24px] w-[24px] border-neutral-700 rounded-full border flex items-center justify-center">
+          <X size={16} />
         </div>
       ) : (
-        <MenuIcon size={20} className="text-neutral-700" />
+        // <CircleX size={20}/>
+        <MenuIcon strokeWidth={2.25} size={20} className="rounded-none" />
       )}
-    </Button>
+    </button>
   );
 };
 
@@ -89,7 +86,7 @@ export const SideBar = ({ noText = false }: any) => {
   const role = user?.role;
 
   return (
-    <nav className="my-1 h-full bg-white">
+    <nav className="my-[2px] h-full bg-white">
       <ul className="space-y-1">
         {default_links.map((item) => (
           <li className="w-full" key={item.title}>
@@ -128,11 +125,11 @@ export const SideBarSkeleton = () => {
 
   if (!isSideBarOpen || pathname.includes("/lecture")) {
     return (
-      <aside className="min-w-[73px] max-xl:hidden min-h-screen max-h-full"></aside>
+      <aside className="min-w-[68px] max-xl:hidden min-h-screen max-h-full"></aside>
     );
   }
   return (
-    <aside className="min-w-[300px] max-xl:hidden min-h-screen max-h-full"></aside>
+    <aside className="min-w-[285px] max-xl:hidden min-h-screen max-h-full"></aside>
   );
 };
 
@@ -142,14 +139,14 @@ export const SideBarResizable = (props: any) => {
 
   if (!isSideBarOpen || pathname.includes("/lecture")) {
     return (
-      <aside className="max-xl:hidden z-10 bg-white pt-[54px] fixed border-r border-neutral-300 min-h-screen max-h-full ">
+      <aside className="max-xl:hidden z-10 bg-white pt-[50px] fixed border-r border-neutral-300 min-h-screen max-h-full ">
         <SideBar noText />
       </aside>
     );
   }
 
   return (
-    <aside className="max-xl:hidden bg-white min-w-[300px] pt-[54px] fixed border-r border-neutral-300 min-h-screen max-h-full ">
+    <aside className="max-xl:hidden bg-white min-w-[285px] pt-[50px] fixed border-r border-neutral-300 min-h-screen max-h-full ">
       <SideBar />
     </aside>
   );
@@ -176,7 +173,7 @@ const SideBarButton = (props: any) => {
             }}
             className={cn(
               "w-full justify-start font-normal text-base",
-              "py-4 pr-6 pl-6 rounded-none gap-3.5 border-transparent  border-l-[4px]",
+              "py-[15px] pr-6 pl-6 rounded-none gap-2 border-transparent  border-l-[4px]",
               pathname === item.href
                 ? "bg-neutral-200 border-[#1F2D5A] hover:bg-neutral-200/80 "
                 : "hover:border-neutral-200/50 hover:bg-neutral-200/50",

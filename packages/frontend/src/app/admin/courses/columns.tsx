@@ -42,19 +42,19 @@ export const columns: ColumnDef<Course>[] = [
             {/* <DropdownMenuLabel>Actions</DropdownMenuLabel> */}
             <DropdownMenuItem asChild>
               <Link href={`/admin/courses/${course.id}/curriculum`}>
-                <CircleFadingPlus className="mr-2" size={20} />
+                <CircleFadingPlus className="mr-2" size={18} />
                 Курс бағдарламасы
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link href={`/admin/courses/${course.id}/invite`}>
-                <UserRoundPlus className="mr-2" size={20} />
+                <UserRoundPlus className="mr-2" size={18} />
                 Оқушы қосу
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link href={`/admin/courses/${course.id}`}>
-                <Pencil className="mr-2" size={20} />
+                <Pencil className="mr-2" size={18} />
                 Өңдеу
               </Link>
             </DropdownMenuItem>

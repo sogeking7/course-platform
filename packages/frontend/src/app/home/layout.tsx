@@ -16,7 +16,7 @@ export default function HomeLayout({
       </div>
       <main className="w-full overflow-y-auto flex bg-[#F5F5F5]">
         <SideBarSkeleton />
-        <div className="relative pb-[calc(226px+48px)] sm:pb-[calc(138px+48px)] w-full pt-[55px]">
+        <div className="relative pb-[calc(226px+48px)] sm:pb-[calc(138px+48px)] w-full pt-[50px]">
           <MyContainer>{children}</MyContainer>
           <Footer />
         </div>

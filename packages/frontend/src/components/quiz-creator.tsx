@@ -185,7 +185,7 @@ export const QuizCreator = ({
                       })
                     }
                   >
-                    <Plus size={20} className="mr-2" /> Вариант 
+                    <Plus size={18} className="mr-2" /> Вариант
                   </Button>
                 </div>
                 {/* <FormMessage /> */}
@@ -199,7 +199,7 @@ export const QuizCreator = ({
             )}
           />
           <div className="w-full justify-end flex gap-4">
-            {(mode === "edit" && length && length > 1) && (
+            {mode === "edit" && length && length > 1 && (
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button variant={"destructive"}>
@@ -210,7 +210,7 @@ export const QuizCreator = ({
                   <AlertDialogHeader>
                     <AlertDialogTitle className="flex items-center">
                       <Trash
-                        size={20}
+                        size={18}
                         className="inline-block mr-2 text-destructive"
                       />
                       Өшіру: {data?.text!}

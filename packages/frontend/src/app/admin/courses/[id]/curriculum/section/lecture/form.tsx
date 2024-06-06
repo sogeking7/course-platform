@@ -155,7 +155,7 @@ export default function LectureForm({
                   <AlertDialogHeader>
                     <AlertDialogTitle className="flex items-center">
                       <Trash
-                        size={20}
+                        size={18}
                         className="inline-block mr-2 text-destructive"
                       />
                       Quiz: {data?.name!}
@@ -280,7 +280,7 @@ export default function LectureForm({
                 <AlertDialogHeader>
                   <AlertDialogTitle className="flex items-center">
                     <Trash
-                      size={20}
+                      size={18}
                       className="inline-block mr-2 text-destructive"
                     />
                     Өшіру: {data?.name!}

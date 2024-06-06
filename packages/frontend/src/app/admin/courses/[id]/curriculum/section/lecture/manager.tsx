@@ -72,7 +72,7 @@ export const LectureManager = (props: Props) => {
           variant={"outline"}
           onClick={() => setMode("new")}
         >
-          <Plus size={20} className="mr-2" />
+          <Plus size={18} className="mr-2" />
           Сабақ
         </Button>
       )}
