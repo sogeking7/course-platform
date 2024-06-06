@@ -41,18 +41,6 @@ export default function ClientQuizPage({
     return <LayoutLoader />;
   }
 
-  if (!exam) {
-    return (
-      <div className="w-full h-full">
-        <MyContainer>
-          <div className="border bg-white rounded-sm p-5">
-            No Exam Available
-          </div>
-        </MyContainer>
-      </div>
-    );
-  }
-
   const breadcrumbs = [
     {
       name: lecture.name,
@@ -78,6 +66,23 @@ export default function ClientQuizPage({
     }));
 
   const examId = lecture.exam?.id!;
+
+  if (!exam || exam.length === 0) {
+    return (
+      <div className="w-full h-full">
+        <MyContainer>
+          <Bread breadcrumbs={breadcrumbs} />
+          <div className="flex items-start">
+            <GoBackButton />
+            <TypographyH1>Quiz: {lecture.name}</TypographyH1>
+          </div>
+          <div className="border bg-white rounded-sm p-6">
+            0 Cұрақтар
+          </div>
+        </MyContainer>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full h-full">
