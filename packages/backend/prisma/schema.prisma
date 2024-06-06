@@ -67,3 +67,11 @@ model CourseEnrollment {
   courseId Int
   @@id([userId, courseId])
 }
+
+model ExamAttempt {
+  id         Int   @id @default(autoincrement())
+  userId     Int
+  examId     Int
+  examResult Float
+  @@unique([userId, examId], name: "userId_examId")
+}
