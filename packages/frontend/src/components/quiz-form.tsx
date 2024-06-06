@@ -94,14 +94,14 @@ export const QuizForm = ({ examId, questions }: Props) => {
   }
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-12">
         {fields.map((question, index) => (
           <FormField
             key={question.id}
             control={form.control}
             name={`questions.${index}.selectedOption`}
             render={({ field }) => (
-              <FormItem className="space-y-6">
+              <FormItem className="space-y-4">
                 <FormLabel className="text-base">
                   {index + 1 + ".  " + question.text}
                 </FormLabel>

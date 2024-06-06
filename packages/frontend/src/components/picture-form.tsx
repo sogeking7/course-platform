@@ -92,6 +92,7 @@ export const PictureForm = ({
     mutationFn: (formData: FormData) => uploadPhoto(entityData.id, formData),
     onSuccess: (newData) => {
       reset(getValues());
+      reset();
       onCancel();
       if (onSuccess) {
         onSuccess(newData);
@@ -285,7 +286,7 @@ export const PictureForm = ({
               unoptimized
               width={160}
               height={160}
-              className="w-[160px] h-[160px] rounded-full border"
+              className="w-[160px] border border-[#1f2d5a] h-[160px] rounded-full border"
               alt="profile-picture"
               src={
                 entityType === "user"

@@ -208,7 +208,7 @@ export const loginSchema = z.object({
 });
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 3; // 3MB
-const ACCEPTED_FILE_TYPES = ["image/png", "image/gif", "image/jpeg"];
+const ACCEPTED_FILE_TYPES = ["image/png", "image/gif", "image/jpeg", "image/webp", ];
 
 export const fileSchema = z.object({
   file: (typeof window === "undefined" ? z.any() : z.instanceof(FileList))

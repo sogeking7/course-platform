@@ -90,7 +90,7 @@ export const AdminCourseCreateForm = ({
             cropShape="rect"
             entityType="course"
             onSuccess={(newData: any) => {
-              queryClient.setQueryData(["course", { id: data?.id! }], data);
+              queryClient.setQueryData(["course", { id: data?.id! }], newData);
             }}
           />
         )}

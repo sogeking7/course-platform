@@ -30,12 +30,12 @@ export const AccordionContents = ({
     : [];
 
   return (
-    <div className="fixed max-w-[350px] min-w-[350px] pb-10 h-[calc(100vh-55px)] bg-[#23292F] text-slate-50 overflow-scroll ">
-      <button className="p-5 text-left bg-[#23292F] z-10 flex font-bold items-center fixed w-[350px] border-b border-b-zinc-700">
-        <ListCollapse className="mr-4" />
+    <div className="fixed max-w-[345px] min-w-[345px] pb-10 h-[calc(100vh-50px)] bg-[#23292F] text-slate-50 overflow-scroll ">
+      <button className="p-5 text-left bg-[#23292F] z-10 flex font-bold items-center fixed w-[345px] border-b border-b-zinc-600 text-base">
+        <ListCollapse className="mr-2" />
         Контент
       </button>
-      <div className="pt-[69px] min-h-[calc(100% - 69px)] z-[5]">
+      <div className="pt-[60px] min-h-[calc(100% - 60px)] z-[5]">
         {courseIsLoading || !course ? (
           <div className="p-5">Жүктелуде...</div>
         ) : (
@@ -50,15 +50,15 @@ export const AccordionContents = ({
                 key={section.id}
                 value={`section-${section.id}`}
               >
-                <AccordionTrigger className="p-5 border-b border-zinc-700 text-left text-sm font-bold">
-                  {section.name}
+                <AccordionTrigger className="pl-[25px] py-5 border-b border-zinc-600 text-left text-sm font-semibold">
+                  {index + 1}. {section.name}
                 </AccordionTrigger>
                 <AccordionContent
                   className={cn(
                     "px-0 text-sm font-normal",
                     index === course.sections.length - 1
                       ? ""
-                      : "border-b  border-b-zinc-700",
+                      : "border-b  border-b-zinc-600",
                   )}
                 >
                   <ul>
@@ -68,21 +68,19 @@ export const AccordionContents = ({
                         href={`/course/${courseId}/learning/lecture/${lecture.id}`}
                         className={cn(
                           "cursor-pointer",
-                          lectureId === lecture.id
-                            ? "bg-red-500 font-bold"
-                            : "",
+                          lectureId === lecture.id ? "bg-red-500" : "",
                         )}
                       >
                         <li
                           className={cn(
-                            "border-l-4 ",
+                            "border-l-4 text-sm",
                             "pt-2 pb-5 pl-4 pr-5 hover:underline flex cursor-pointer",
                             lectureId === lecture.id
-                              ? "bg-[#030405] font-bold border-l-white"
+                              ? "bg-[#030405] border-l-white"
                               : "border-l-transparent",
                           )}
                         >
-                          <div className="min-w-3 h-3 rounded-full border mr-3 relative top-[5px]"></div>
+                          <div className="w-[11px] h-[11px] rounded-full border mr-3 relative top-[3px]"></div>
                           {lecture.name}
                         </li>
                       </Link>

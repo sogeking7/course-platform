@@ -11,7 +11,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { File } from "lucide-react";
+import { File, MonitorPlay } from "lucide-react";
 import HomeLayout from "@/app/home/layout";
 import { Bread } from "@/components/bread";
 import { TypographyH2 } from "@/components/ui/typography";
@@ -32,7 +32,7 @@ export default function CoursePage({ params }: { params: { id: string } }) {
 
   const breadcrumbs = [
     { name: "Курстар", path: "/home/all-courses" },
-    { name: data.name, path: "/learning/" + id },
+    { name: data.name, path: "/course/" + id },
   ];
 
   return (
@@ -73,19 +73,29 @@ export default function CoursePage({ params }: { params: { id: string } }) {
                 <label className=" flex gap-2 items-center min-w-max">
                   {/* <File size={14} /> */}
                   {/* <span>sections {index + 1}:</span> */}
-                  <span className=" text-gray-700 font-semibold">
-                    {section.name}
+                  <span className="  font-semibold">
+                    {index + 1}. {section.name}
                   </span>
                 </label>
               </AccordionTrigger>
               <AccordionContent className="py-4 px-5 border-t  bg-white">
                 <ul className="flex flex-col gap-4">
-                  {section.lectures.map((lecture, index) => (
-                    <li key={lecture.id} className="flex items-center gap-4">
+                  {section.lectures.map((lecture, index) => {
+                    const hasVideo = lecture.videoUrl.includes(
+                      "drive.google.com/file/d/",
+                    );
+                    const icon = hasVideo ? (
+                      <MonitorPlay size={14} />
+                    ) : (
                       <File size={14} />
-                      <label>{lecture.name}</label>
-                    </li>
-                  ))}
+                    );
+                    return (
+                      <li key={lecture.id} className="flex items-center gap-4">
+                        {icon}
+                        <label>{lecture.name}</label>
+                      </li>
+                    );
+                  })}
                 </ul>
               </AccordionContent>
             </AccordionItem>

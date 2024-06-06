@@ -48,7 +48,7 @@ export default function LectureIdPage({
   return (
     <>
       <AccordionContents lectureId={lecture?.id} courseId={course_id} />
-      <div className="pl-[calc(350px)] h-full w-full">
+      <div className="pl-[calc(345px)] h-full w-full">
         {lectureIsLoading || !lecture ? (
           <LayoutLoader />
         ) : (
@@ -96,16 +96,18 @@ export default function LectureIdPage({
                   {lecture.content}
                 </ReactMarkdown>
               </article>
-              <div className="mt-16 w-full">
-                <Link
-                  href={`/course/${course_id}/learning/lecture/${lecture_id}/quiz`}
-                >
-                  <Button>
-                    <BookCheck className="mr-2" size={18} />
-                    Тестілеу бастау
-                  </Button>
-                </Link>
-              </div>
+              {lecture.exam && (
+                <div className="mt-16 w-full">
+                  <Link
+                    href={`/course/${course_id}/learning/lecture/${lecture_id}/quiz`}
+                  >
+                    <Button>
+                      <BookCheck className="mr-2" size={18} />
+                      Тестілеу бастау
+                    </Button>
+                  </Link>
+                </div>
+              )}
               <div className="mt-16 flex justify-between">
                 <Button variant={"ghost"} className="flex items-center">
                   <ChevronLeft className="inline-block mr-2" size={18} />

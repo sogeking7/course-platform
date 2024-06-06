@@ -87,7 +87,7 @@ export default function ClientQuizPage({
           <GoBackButton />
           <TypographyH1>Quiz: {lecture.name}</TypographyH1>
         </div>
-        <div className="border bg-white rounded-sm p-5">
+        <div className="border bg-white rounded-sm p-6">
           <QuizForm examId={examId} questions={formattedQuestions} />
         </div>
       </MyContainer>
