@@ -6,10 +6,12 @@ import { LayoutLoader } from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import { TypographyH1 } from "@/components/ui/typography";
 import { cn, convertToPreviewLink } from "@/lib/utils";
+import { useCourseStore } from "@/store/course";
 import { useLectureStore } from "@/store/lecture";
 import { useQuery } from "@tanstack/react-query";
 import { BookCheck, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -19,15 +21,88 @@ export default function LectureIdPage({
 }: {
   params: { lecture_id: string; id: string };
 }) {
+  const router = useRouter();
+
   const course_id = Number(params.id);
   const lecture_id = Number(params.lecture_id);
 
   const lectureStore = useLectureStore();
+  const courseStore = useCourseStore();
+
   const [videoLoading, setVideoLoading] = useState(true);
+
+  const { data: course, isLoading: courseIsLoading } = useQuery({
+    queryKey: ["accordion", { id: course_id }],
+    queryFn: () => courseStore.findCourseById(course_id),
+  });
+
   const { data: lecture, isLoading: lectureIsLoading } = useQuery({
     queryKey: ["lecture", { id: lecture_id }],
     queryFn: () => lectureStore.getById(lecture_id),
   });
+
+  const nextLecture = (): number | null | undefined => {
+    if (!course || courseIsLoading) return;
+
+    let nextLectureId = null;
+
+    const sections = course?.sections;
+
+    for (let i = 0; i < sections.length; i++) {
+      for (let j = 0; j < sections[i].lectures.length; j++) {
+        const thisLectureId = sections[i].lectures[j].id;
+        if (lecture_id === thisLectureId) {
+          if (j !== sections[i].lectures.length - 1) {
+            nextLectureId = sections[i].lectures[j + 1].id;
+          } else {
+            if (i !== sections.length - 1) {
+              nextLectureId = sections[i + 1].lectures[0].id;
+            } else {
+              console.log("nextLectureId", nextLectureId);
+              return null;
+            }
+          }
+        }
+      }
+    }
+
+    console.log("nextLectureId", nextLectureId);
+    return nextLectureId;
+  };
+
+  const prevLecture = (): number | null | undefined => {
+    if (!course || courseIsLoading) return;
+
+    let prevLectureId = null;
+
+    const sections = course?.sections;
+
+    for (let i = 0; i < sections.length; i++) {
+      for (let j = 0; j < sections[i].lectures.length; j++) {
+        const thisLectureId = sections[i].lectures[j].id;
+        if (lecture_id === thisLectureId) {
+          if (j !== 0) {
+            prevLectureId = sections[i].lectures[j - 1].id;
+          } else {
+            if (i !== 0) {
+              prevLectureId =
+                sections[i - 1].lectures[sections[i - 1].lectures.length - 1]
+                  .id;
+            } else {
+              console.log("prevLectureId", prevLectureId);
+              return null;
+            }
+          }
+        }
+      }
+    }
+
+    console.log("prevLectureId", prevLectureId);
+    return prevLectureId;
+  };
+
+  const prevLectureId = prevLecture();
+  const nextLectureId = nextLecture();
 
   const videoUrl = lecture?.videoUrl
     ? convertToPreviewLink(lecture.videoUrl)
@@ -108,15 +183,46 @@ export default function LectureIdPage({
                   </Link>
                 </div>
               )}
-              <div className="mt-16 flex justify-between">
-                <Button variant={"ghost"} className="flex items-center">
-                  <ChevronLeft className="inline-block mr-2" size={18} />
-                  Алдыңғы тақырып
-                </Button>
-                <Button variant={"ghost"} className="flex items-center">
-                  Келесі тақырып
-                  <ChevronRight className="ml-2 inline-block" size={18} />
-                </Button>
+              <div
+                className={cn(
+                  prevLectureId && nextLectureId
+                    ? "justify-between"
+                    : prevLectureId
+                      ? "justify-start"
+                      : "justify-end",
+
+                  "mt-16 flex  w-full",
+                )}
+              >
+                {prevLectureId && (
+                  <Button
+                    onClick={() => {
+                      router.push(
+                        `/course/${course_id}/learning/lecture/${prevLectureId}`,
+                      );
+                    }}
+                    variant={"ghost"}
+                    className="flex items-center"
+                  >
+                    <ChevronLeft className="inline-block mr-2" size={18} />
+                    Алдыңғы тақырып
+                  </Button>
+                )}
+
+                {nextLectureId && (
+                  <Button
+                    onClick={() => {
+                      router.push(
+                        `/course/${course_id}/learning/lecture/${nextLectureId}`,
+                      );
+                    }}
+                    variant={"ghost"}
+                    className="flex items-center"
+                  >
+                    Келесі тақырып
+                    <ChevronRight className="ml-2 inline-block" size={18} />
+                  </Button>
+                )}
               </div>
             </div>
           </MyContainer>

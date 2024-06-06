@@ -81,7 +81,7 @@ export const AccordionContents = ({
                           )}
                         >
                           <div className="w-[11px] h-[11px] rounded-full border mr-3 relative top-[3px]"></div>
-                          {lecture.name}
+                          {lecture.id} {lecture.name}
                         </li>
                       </Link>
                     ))}
