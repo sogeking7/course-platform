@@ -175,18 +175,20 @@ export const QuizCreator = ({
                   </div>
                 ))}
                 <div className="pt-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() =>
-                      append({
-                        value: "",
-                        isTrue: false,
-                      })
-                    }
-                  >
-                    <Plus size={18} className="mr-2" /> Вариант
-                  </Button>
+                  {fields.length < 5 && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => {
+                        append({
+                          value: "",
+                          isTrue: false,
+                        });
+                      }}
+                    >
+                      <Plus size={18} className="mr-2" /> Вариант
+                    </Button>
+                  )}
                 </div>
                 {/* <FormMessage /> */}
                 {/* {JSON.stringify(form.formState.errors)} */}

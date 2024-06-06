@@ -22,6 +22,7 @@ import { LectureQuizResultsTable } from "@/app/course/[id]/learning/lecture/[lec
 import { columns } from "@/app/course/[id]/learning/lecture/[lecture_id]/quiz/columns";
 import { TypographyH1 } from "./ui/typography";
 import { useRouter } from "next/navigation";
+import { kazakhVariants } from "../../public/shared";
 
 type Props = {
   examId: number;
@@ -120,7 +121,7 @@ export const QuizForm = ({ examId, questions }: Props) => {
                           <RadioGroupItem value={option.value} />
                         </FormControl>
                         <FormLabel className="font-normal">
-                          {option.value}
+                          {kazakhVariants[optIndex]} {option.value}
                         </FormLabel>
                       </FormItem>
                     ))}

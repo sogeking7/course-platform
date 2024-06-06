@@ -125,6 +125,7 @@ const baseQuestionSchema = z.object({
   options: z
     .array(optionSchema)
     .min(2, { message: "At least two options are required" })
+    .max(5, { message: 'Maximum 5 options can be added'})
     .refine(
       (options) => options.filter((option) => option.isTrue).length === 1,
       { message: "Only one option must be true" },
