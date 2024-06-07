@@ -183,18 +183,69 @@ export class ExamController {
   }
 
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get results for a specific exam' })
+  @ApiOperation({ summary: 'Get results for a specific exam and user' })
   @ApiResponse({ status: 200, description: 'Result got successfully' })
   @ApiResponse({ status: 404, description: 'Attempt not found' })
   @ApiParam({ name: 'examId', required: true, description: 'ID of the exam' })
-  @Post(':examId/get-result')
-  async getResult(
+  @Post(':examId/get-result-by-userId')
+  async getResultByUserIdExamId(
     @Param('examId', new ParseIntPipe()) examId: number,
     @Headers('Authorization') authHeader: string,
   ): Promise<number> {
     const token = authHeader.split(' ')[1];
     const payload = this.jwtUtils.parseJwtToken(token);
     const userId = payload.userId;
-    return await this.examService.getResult(userId, examId);
+
+    try {
+      const examResult = await this.examService.getResultByUserIdExamId(
+        userId,
+        examId,
+      );
+      if (!examResult) {
+        throw new HttpException('Attempt not found', HttpStatus.NOT_FOUND);
+      }
+      return examResult;
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      } else {
+        throw new HttpException(
+          'Error getting exam result',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+    }
+  }
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get all results for a specific exam' })
+  @ApiResponse({ status: 200, description: 'Result got successfully' })
+  @ApiResponse({ status: 404, description: 'Attempt not found' })
+  @ApiParam({ name: 'examId', required: true, description: 'ID of the exam' })
+  @Post(':examId/get-result')
+  async getAllResultsByExamId(
+    @Param('examId', new ParseIntPipe()) examId: number,
+  ): Promise<
+    { firstName: string; lastName: string; email: string; examResult: number }[]
+  > {
+    try {
+      const results = await this.examService.getAllResultsByExamId(examId);
+      if (results.length === 0) {
+        throw new HttpException(
+          'No results found for the given exam',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      return results;
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      } else {
+        throw new HttpException(
+          'Error getting exam results',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+    }
   }
 }
