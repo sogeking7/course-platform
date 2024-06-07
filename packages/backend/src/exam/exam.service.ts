@@ -4,7 +4,7 @@ import {
   HttpStatus,
   NotFoundException,
 } from '@nestjs/common';
-import { Prisma, Exam } from '@prisma/client';
+import { Prisma, Exam, ExamAttempt } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import {
   ExamCheckDto,
@@ -279,5 +279,19 @@ export class ExamService {
       email: user.email,
       examResult,
     }));
+  }
+
+  async resetResult(examId: number, email: string): Promise<ExamAttempt> {
+    const user = await this.prisma.user.findUnique({ where: { email } });
+
+    if (!user) {
+      throw new NotFoundException(`User with email ${email} not found`);
+    }
+
+    const userId = user.id;
+
+    return await this.prisma.examAttempt.delete({
+      where: { userId_examId: { userId, examId } },
+    });
   }
 }

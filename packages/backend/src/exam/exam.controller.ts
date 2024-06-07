@@ -12,7 +12,7 @@ import {
   ParseIntPipe,
   Headers,
 } from '@nestjs/common';
-import { Exam } from '@prisma/client';
+import { Exam, ExamAttempt } from '@prisma/client';
 import { ExamService } from './exam.service';
 import {
   ExamCheckDto,
@@ -247,5 +247,18 @@ export class ExamController {
         );
       }
     }
+  }
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Reset result of user (by email) specific exam' })
+  @ApiResponse({ status: 200, description: 'Deleted successfully' })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  @ApiParam({ name: 'examId', required: true, description: 'ID of the exam' })
+  @Post(':examId/reset-result/:userEmail')
+  async resetResult(
+    @Param('examId', new ParseIntPipe()) examId: number,
+    @Param('userEmail') userEmail: string,
+  ): Promise<ExamAttempt> {
+    return await this.examService.resetResult(examId, userEmail);
   }
 }
