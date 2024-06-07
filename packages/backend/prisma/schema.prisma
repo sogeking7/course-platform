@@ -16,6 +16,7 @@ model User {
   profilePictureLink String?
   role               UserRole           @default(USER)
   courses            CourseEnrollment[]
+  ExamAttempt        ExamAttempt[]
 }
 
 enum UserRole {
@@ -24,18 +25,18 @@ enum UserRole {
 }
 
 model Exam {
-  id          Int      @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   name        String
   description String
   questions   String
-  lecture     Lecture  @relation(fields: [lectureId], references: [id])
-  lectureId   Int      @unique
+  lecture     Lecture @relation(fields: [lectureId], references: [id])
+  lectureId   Int     @unique
 }
 
 model Course {
   id                 Int                @id @default(autoincrement())
   name               String
-  description        String 
+  description        String
   content            String
   profilePictureLink String?
   sections           Section[]
@@ -47,15 +48,15 @@ model Section {
   name     String
   course   Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
   courseId Int
-  lectures Lecture[] 
+  lectures Lecture[]
 }
 
 model Lecture {
-  id        Int       @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   name      String
   content   String
   videoUrl  String
-  section   Section   @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  section   Section @relation(fields: [sectionId], references: [id], onDelete: Cascade)
   sectionId Int
   exam      Exam?
 }
@@ -65,5 +66,16 @@ model CourseEnrollment {
   userId   Int
   course   Course @relation(fields: [courseId], references: [id])
   courseId Int
+
   @@id([userId, courseId])
+}
+
+model ExamAttempt {
+  id         Int   @id @default(autoincrement())
+  userId     Int
+  user       User  @relation(fields: [userId], references: [id])
+  examId     Int
+  examResult Float
+
+  @@unique([userId, examId], name: "userId_examId")
 }
