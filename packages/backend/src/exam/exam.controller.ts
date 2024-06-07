@@ -10,7 +10,8 @@ import {
   HttpException,
   HttpStatus,
   ParseIntPipe,
-  Headers,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { Exam, ExamAttempt } from '@prisma/client';
 import { ExamService } from './exam.service';
@@ -28,7 +29,10 @@ import {
   ApiParam,
   ApiBearerAuth,
 } from '@nestjs/swagger';
+import { Request } from 'express';
 import { JwtUtils } from '../auth/jwt.utils';
+import { RolesGuard } from '../auth/role/roles.guard';
+import { Roles } from '../auth/role/roles.decorator';
 
 @ApiTags('Exam')
 @Controller('exam')
@@ -39,6 +43,8 @@ export class ExamController {
   ) {}
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN', 'USER')
   @ApiOperation({ summary: 'Find a exam by ID' })
   @ApiResponse({ status: 200, type: Promise<Exam | null> })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
@@ -58,6 +64,8 @@ export class ExamController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
   @ApiOperation({ summary: 'Create a new exam' })
   @ApiResponse({
     status: 201,
@@ -70,6 +78,8 @@ export class ExamController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
   @ApiOperation({ summary: 'Update a exam' })
   @ApiResponse({
     status: 200,
@@ -87,6 +97,8 @@ export class ExamController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
   @ApiOperation({ summary: 'Delete a exam' })
   @ApiResponse({
     status: 200,
@@ -101,6 +113,8 @@ export class ExamController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
   @ApiOperation({ summary: 'Get all questions for a specific exam' })
   @ApiResponse({ status: 200, description: 'Questions retrieved successfully' })
   @ApiResponse({ status: 404, description: 'Exam not found' })
@@ -113,6 +127,8 @@ export class ExamController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
   @ApiOperation({ summary: 'Add a question to a specific exam' })
   @ApiResponse({ status: 201, description: 'Question added successfully' })
   @ApiResponse({ status: 404, description: 'Exam not found' })
@@ -126,6 +142,8 @@ export class ExamController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
   @ApiOperation({ summary: 'Update a question in a specific exam' })
   @ApiResponse({ status: 200, description: 'Question updated successfully' })
   @ApiResponse({ status: 404, description: 'Question or Exam not found' })
@@ -145,6 +163,8 @@ export class ExamController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
   @ApiOperation({ summary: 'Delete a question from a specific exam' })
   @ApiResponse({ status: 200, description: 'Question deleted successfully' })
   @ApiResponse({
@@ -167,6 +187,8 @@ export class ExamController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN', 'USER')
   @ApiOperation({ summary: 'Check answers for a specific exam' })
   @ApiResponse({ status: 200, description: 'Answers checked successfully' })
   @ApiResponse({ status: 404, description: 'Exam or Question not found' })
@@ -183,6 +205,8 @@ export class ExamController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN', 'USER')
   @ApiOperation({ summary: 'Get results for a specific exam and user' })
   @ApiResponse({ status: 200, description: 'Result got successfully' })
   @ApiResponse({ status: 404, description: 'Attempt not found' })
@@ -190,9 +214,9 @@ export class ExamController {
   @Post(':examId/get-result-by-userId')
   async getResultByUserIdExamId(
     @Param('examId', new ParseIntPipe()) examId: number,
-    @Headers('Authorization') authHeader: string,
+    @Req() request: Request,
   ): Promise<number> {
-    const token = authHeader.split(' ')[1];
+    const token = request.headers.authorization.replace('Bearer ', '');
     const payload = this.jwtUtils.parseJwtToken(token);
     const userId = payload.userId;
 
@@ -218,6 +242,8 @@ export class ExamController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
   @ApiOperation({ summary: 'Get all results for a specific exam' })
   @ApiResponse({ status: 200, description: 'Result got successfully' })
   @ApiResponse({ status: 404, description: 'Attempt not found' })
@@ -250,6 +276,8 @@ export class ExamController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
   @ApiOperation({ summary: 'Reset result of user (by email) specific exam' })
   @ApiResponse({ status: 200, description: 'Deleted successfully' })
   @ApiResponse({ status: 404, description: 'User not found' })

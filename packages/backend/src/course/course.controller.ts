@@ -12,7 +12,8 @@ import {
   ParseIntPipe,
   UseInterceptors,
   NotFoundException,
-  Headers,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { Course } from '@prisma/client';
 import { CourseService } from './course.service';
@@ -26,7 +27,10 @@ import {
   ApiConsumes,
   ApiBody,
 } from '@nestjs/swagger';
+import { Request } from 'express';
 import { fileIntercepting } from 'utils';
+import { RolesGuard } from '../auth/role/roles.guard';
+import { Roles } from '../auth/role/roles.decorator';
 import { JwtUtils } from '../auth/jwt.utils';
 
 @ApiTags('Course')
@@ -38,6 +42,8 @@ export class CourseController {
   ) {}
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN', 'USER')
   @ApiOperation({ summary: 'Get all courses' })
   @ApiResponse({
     status: 200,
@@ -51,6 +57,8 @@ export class CourseController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN', 'USER')
   @ApiOperation({ summary: 'Get all courses by user id' })
   @ApiResponse({ status: 400, description: 'Invalid input' })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
@@ -68,6 +76,8 @@ export class CourseController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN', 'USER')
   @ApiOperation({ summary: 'Find a course by ID' })
   @ApiResponse({ status: 200, type: Promise<Course | null> })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
@@ -75,9 +85,9 @@ export class CourseController {
   @Get(':id')
   async findOneById(
     @Param('id', new ParseIntPipe()) id: number,
-    @Headers('Authorization') authHeader: string,
+    @Req() request: Request,
   ): Promise<Course | null> {
-    const token = authHeader.split(' ')[1];
+    const token = request.headers.authorization.replace('Bearer ', '');
     const payload = this.jwtUtils.parseJwtToken(token);
     const userId = payload.userId;
     try {
@@ -91,6 +101,8 @@ export class CourseController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN', 'USER')
   @ApiOperation({ summary: 'Create a new course' })
   @ApiResponse({
     status: 201,
@@ -103,6 +115,8 @@ export class CourseController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
   @ApiOperation({ summary: 'Update a course' })
   @ApiResponse({
     status: 200,
@@ -123,6 +137,8 @@ export class CourseController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
   @ApiOperation({ summary: 'Delete a course' })
   @ApiResponse({
     status: 200,
@@ -154,6 +170,8 @@ export class CourseController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
   @ApiOperation({ summary: 'Upload Course Photo' })
   @ApiResponse({ status: 201, description: 'Course photo uploaded' })
   @ApiConsumes('multipart/form-data')
@@ -182,6 +200,8 @@ export class CourseController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
   @ApiOperation({ summary: 'Delete Course Photo' })
   @ApiResponse({ status: 200, description: 'Course photo deleted' })
   @ApiParam({ name: 'id', description: 'ID of the course' })

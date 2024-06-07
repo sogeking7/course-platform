@@ -12,6 +12,7 @@ import {
   ParseIntPipe,
   UseInterceptors,
   NotFoundException,
+  UseGuards,
 } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { UserService } from './user.service';
@@ -26,6 +27,8 @@ import {
   ApiBody,
 } from '@nestjs/swagger';
 import { fileIntercepting } from 'utils';
+import { RolesGuard } from '../auth/role/roles.guard';
+import { Roles } from '../auth/role/roles.decorator';
 
 @ApiTags('User')
 @Controller('user')
@@ -33,6 +36,8 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({
     status: 200,
@@ -46,6 +51,8 @@ export class UserController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
   @ApiOperation({ summary: 'Find a user by ID' })
   @ApiResponse({ status: 200, type: Promise<User | null> })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
@@ -65,6 +72,8 @@ export class UserController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
   @ApiOperation({ summary: 'Create a new user' })
   @ApiResponse({
     status: 201,
@@ -77,6 +86,8 @@ export class UserController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN', 'USER')
   @ApiOperation({ summary: 'Update a user' })
   @ApiResponse({
     status: 200,
@@ -97,6 +108,8 @@ export class UserController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
   @ApiOperation({ summary: 'Delete a user' })
   @ApiResponse({
     status: 200,
@@ -111,6 +124,8 @@ export class UserController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN', 'USER')
   @ApiOperation({ summary: 'Upload User Photo' })
   @ApiResponse({ status: 201, description: 'User photo uploaded' })
   @ApiConsumes('multipart/form-data')
@@ -139,6 +154,8 @@ export class UserController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN', 'USER')
   @ApiOperation({ summary: 'Delete User Photo' })
   @ApiResponse({ status: 200, description: 'User photo deleted' })
   @ApiParam({ name: 'id', description: 'ID of the user' })
