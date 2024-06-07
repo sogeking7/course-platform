@@ -243,4 +243,12 @@ export class ExamService {
 
     return givenAnswers[0] === question.correctAnswer[0] ? question.points : 0;
   }
+
+  async getResult(userId: number, examId: number): Promise<number> {
+    return (
+      await this.prisma.examAttempt.findUnique({
+        where: { userId_examId: { userId, examId } },
+      })
+    ).examResult;
+  }
 }

@@ -10,6 +10,7 @@ import {
   HttpException,
   HttpStatus,
   ParseIntPipe,
+  Headers,
 } from '@nestjs/common';
 import { Exam } from '@prisma/client';
 import { ExamService } from './exam.service';
@@ -27,11 +28,15 @@ import {
   ApiParam,
   ApiBearerAuth,
 } from '@nestjs/swagger';
+import { JwtUtils } from '../auth/jwt.utils';
 
 @ApiTags('Exam')
 @Controller('exam')
 export class ExamController {
-  constructor(private readonly examService: ExamService) {}
+  constructor(
+    private readonly examService: ExamService,
+    private readonly jwtUtils: JwtUtils,
+  ) {}
 
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Find a exam by ID' })
@@ -175,5 +180,21 @@ export class ExamController {
     results: { questionId: number; points: number }[];
   }> {
     return this.examService.checkAnswers(examId, data);
+  }
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get results for a specific exam' })
+  @ApiResponse({ status: 200, description: 'Result got successfully' })
+  @ApiResponse({ status: 404, description: 'Attempt not found' })
+  @ApiParam({ name: 'examId', required: true, description: 'ID of the exam' })
+  @Post(':examId/get-result')
+  async getResult(
+    @Param('examId', new ParseIntPipe()) examId: number,
+    @Headers('Authorization') authHeader: string,
+  ): Promise<number> {
+    const token = authHeader.split(' ')[1];
+    const payload = this.jwtUtils.parseJwtToken(token);
+    const userId = payload.userId;
+    return await this.examService.getResult(userId, examId);
   }
 }
