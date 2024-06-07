@@ -243,4 +243,41 @@ export class ExamService {
 
     return givenAnswers[0] === question.correctAnswer[0] ? question.points : 0;
   }
+
+  async getResultByUserIdExamId(
+    userId: number,
+    examId: number,
+  ): Promise<number> {
+    return (
+      await this.prisma.examAttempt.findUnique({
+        where: { userId_examId: { userId, examId } },
+      })
+    ).examResult;
+  }
+
+  async getAllResultsByExamId(
+    examId: number,
+  ): Promise<
+    { firstName: string; lastName: string; email: string; examResult: number }[]
+  > {
+    const examAttempts = await this.prisma.examAttempt.findMany({
+      where: { examId },
+      include: {
+        user: {
+          select: {
+            firstName: true,
+            lastName: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    return examAttempts.map(({ user, examResult }) => ({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      examResult,
+    }));
+  }
 }
