@@ -4,7 +4,7 @@ import { MySheet, MySheetTrigger, SideBarTrigger } from "./sidebar";
 
 export const HomeHeader = (props: any) => {
   return (
-    <header className="pl-3 pr-4 flex py-2 h-[50px] w-full border-b border-neutral-300  shadow-sm bg-white">
+    <header className="pl-3 pr-4 flex relative z-[1000] py-2 h-[50px] w-full border-b border-neutral-300  shadow-sm bg-white">
       <div className="flex items-center w-full justify-between gap-8">
         <div className="flex gap-6 items-center">
           <div className="max-xl:hidden">

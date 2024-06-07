@@ -21,7 +21,13 @@ dotenv.config();
       signOptions: { expiresIn: '24h' },
     }),
   ],
-  providers: [AuthService, JwtStrategy, PrismaService, HiddenGuard, UserService],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    PrismaService,
+    HiddenGuard,
+    UserService,
+  ],
   controllers: [AuthController],
   exports: [AuthService, JwtModule],
 })

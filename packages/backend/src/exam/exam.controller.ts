@@ -10,7 +10,6 @@ import {
   HttpException,
   HttpStatus,
   ParseIntPipe,
-  Headers,
   UseGuards,
   Req,
 } from '@nestjs/common';

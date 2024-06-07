@@ -39,11 +39,11 @@ export default function CoursePage({ params }: { params: { id: string } }) {
     <HomeLayout>
       <Bread breadcrumbs={breadcrumbs} />
       <div className="p-5 w-full bg-white rounded-sm border">
-        <div className="flex gap-6">
+        <div className="flex gap-6 xl:flex-row flex-col">
           {/* <div className="w-full max-w-[420px] h-[250px] bg-neutral-400 rounded-sm"></div> */}
           <div>
             <img
-              className="min-w-[240px] max-w-[300px]"
+              className="sm:min-w-[240px] sm:max-w-[300px]"
               src={data.profilePictureLink || ""}
             />
           </div>

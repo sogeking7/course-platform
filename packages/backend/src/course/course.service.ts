@@ -39,7 +39,25 @@ export class CourseService {
     });
   }
 
-  async findOneById(id: number): Promise<Course | null> {
+  async findOneById(userId: number, id: number): Promise<Course | null> {
+    const courseEnrollment = await this.prisma.courseEnrollment.findFirst({
+      where: {
+        userId: userId,
+        courseId: id,
+      },
+    });
+
+    const userRole = (
+      await this.prisma.user.findUnique({ where: { id: userId } })
+    ).role;
+
+    if (!courseEnrollment && userRole != 'ADMIN') {
+      throw new HttpException(
+        'You are not enrolled in this course',
+        HttpStatus.FORBIDDEN,
+      );
+    }
+
     try {
       // Fetch the course with sections and their lectures
       const course = await this.prisma.course.findUnique({

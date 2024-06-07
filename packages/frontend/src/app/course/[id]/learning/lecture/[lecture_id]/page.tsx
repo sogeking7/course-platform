@@ -2,6 +2,7 @@
 
 import { MyContainer } from "@/components/container";
 import { AccordionContents } from "@/components/course/accordion-contents";
+import { AccordionSheet } from "@/components/course/accordion-sheet";
 import { LayoutLoader } from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import { TypographyH1 } from "@/components/ui/typography";
@@ -9,7 +10,12 @@ import { cn, convertToPreviewLink } from "@/lib/utils";
 import { useCourseStore } from "@/store/course";
 import { useLectureStore } from "@/store/lecture";
 import { useQuery } from "@tanstack/react-query";
-import { BookCheck, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  BookCheck,
+  ChevronLeft,
+  ChevronRight,
+  ListCollapse,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -31,6 +37,7 @@ export default function LectureIdPage({
   const courseStore = useCourseStore();
 
   const [videoLoading, setVideoLoading] = useState(true);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   const { data: course, isLoading: courseIsLoading } = useQuery({
     queryKey: ["accordion", { id: course_id }],
@@ -38,16 +45,13 @@ export default function LectureIdPage({
   });
 
   const { data: lecture, isLoading: lectureIsLoading } = useQuery({
-    queryKey: [
-      "lecture",
-      { id: lecture_id },
-    ],
+    queryKey: ["lecture", { id: lecture_id }],
     queryFn: () => {
       if (lecture_id) return lectureStore.getById(lecture_id);
       else if (course?.sections[0].lectures[0].id)
         return lectureStore.getById(course?.sections[0].lectures[0].id!);
     },
-    enabled: !!(course)
+    enabled: !!course,
   });
 
   const nextLecture = (): number | null | undefined => {
@@ -132,13 +136,25 @@ export default function LectureIdPage({
   return (
     <>
       <AccordionContents lectureId={lecture?.id} courseId={course_id} />
-      <div className="pl-[calc(345px)] h-full w-full">
+      <AccordionSheet lectureId={lecture?.id} courseId={course_id} isOpen={isSheetOpen} setIsOpen={setIsSheetOpen}>
+        <p>Your content goes here</p>
+      </AccordionSheet>
+      <div className="md:pl-[calc(345px)] h-full w-full">
         {lectureIsLoading || !lecture ? (
           <LayoutLoader />
         ) : (
-          <MyContainer>
-            <div className="p-5 border rounded-sm bg-white">
-              <TypographyH1>{lecture.name}</TypographyH1>
+          <div className=" md:p-6 w-full max-w-[1248px] mx-auto">
+            <div className=" md:border md:rounded-sm  md:bg-white">
+              <button onClick={() => setIsSheetOpen(true)} className="flex font-semibold items-center md:hidden max-md:px-4 max-md:pt-5 ">
+                <ListCollapse className="mr-2" />
+                Контент
+              </button>
+              <div className="border-b pb-4 px-4 pt-7 md:pb-5 md:px-5 md:pt-5">
+                <h1 className="text-slate-900 tracking-[0.015em] scroll-m-20 text-base  lg:text-lg font-semibold">
+                  {course?.name}
+                </h1>
+                <h2>{lecture.name}</h2>
+              </div>
               <div className="relative">
                 {videoUrl && videoLoading && (
                   <div className="absolute w-full h-full z-[10] bg-opacity-90 bg-black">
@@ -175,66 +191,58 @@ export default function LectureIdPage({
                   </div>
                 )}
               </div>
-              <article className="prose !max-w-full mt-4 w-full relative">
-                <ReactMarkdown className="w-full" rehypePlugins={[rehypeRaw]}>
-                  {lecture.content}
-                </ReactMarkdown>
-              </article>
-              {lecture.exam && (
-                <div className="mt-16 w-full">
-                  <Link
-                    href={`/course/${course_id}/learning/lecture/${lecture_id}/quiz`}
-                  >
-                    <Button>
-                      <BookCheck className="mr-2" size={18} />
-                      Тестілеу бастау
-                    </Button>
-                  </Link>
+              <div className="p-4 md:p-5">
+                <article className=" prose !max-w-full mt-4 w-full relative">
+                  <ReactMarkdown className="w-full" rehypePlugins={[rehypeRaw]}>
+                    {lecture.content}
+                  </ReactMarkdown>
+                </article>
+                {lecture.exam && (
+                  <div className="flex justify-end mt-16 w-full">
+                    <Link
+                      href={`/course/${course_id}/learning/lecture/${lecture_id}/quiz`}
+                    >
+                      <Button>
+                        <BookCheck className="mr-2" size={18} />
+                        Тестілеу бастау
+                      </Button>
+                    </Link>
+                  </div>
+                )}
+                <div
+                  className={cn(
+                    prevLectureId && nextLectureId
+                      ? "justify-between"
+                      : prevLectureId
+                        ? "justify-start"
+                        : "justify-end",
+
+                    "mt-16 flex  w-full ",
+                  )}
+                >
+                  {prevLectureId && (
+                    <Link
+                      href={`/course/${course_id}/learning/lecture/${prevLectureId}`}
+                      className="flex items-center flex-start hover:underline"
+                    >
+                      <ChevronLeft className="inline-block mr-2" size={18} />
+                      Алдыңғы сабақ
+                    </Link>
+                  )}
+
+                  {nextLectureId && (
+                    <Link
+                      href={`/course/${course_id}/learning/lecture/${nextLectureId}`}
+                      className="flex items-center flex-end hover:underline"
+                    >
+                      Келесі сабақ
+                      <ChevronRight className="ml-2 inline-block" size={18} />
+                    </Link>
+                  )}
                 </div>
-              )}
-              <div
-                className={cn(
-                  prevLectureId && nextLectureId
-                    ? "justify-between"
-                    : prevLectureId
-                      ? "justify-start"
-                      : "justify-end",
-
-                  "mt-16 flex  w-full",
-                )}
-              >
-                {prevLectureId && (
-                  <Button
-                    onClick={() => {
-                      router.push(
-                        `/course/${course_id}/learning/lecture/${prevLectureId}`,
-                      );
-                    }}
-                    variant={"ghost"}
-                    className="flex items-center"
-                  >
-                    <ChevronLeft className="inline-block mr-2" size={18} />
-                    Алдыңғы тақырып
-                  </Button>
-                )}
-
-                {nextLectureId && (
-                  <Button
-                    onClick={() => {
-                      router.push(
-                        `/course/${course_id}/learning/lecture/${nextLectureId}`,
-                      );
-                    }}
-                    variant={"ghost"}
-                    className="flex items-center"
-                  >
-                    Келесі тақырып
-                    <ChevronRight className="ml-2 inline-block" size={18} />
-                  </Button>
-                )}
               </div>
             </div>
-          </MyContainer>
+          </div>
         )}
       </div>
     </>

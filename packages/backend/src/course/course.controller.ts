@@ -29,11 +29,15 @@ import {
 import { fileIntercepting } from 'utils';
 import { RolesGuard } from '../auth/role/roles.guard';
 import { Roles } from '../auth/role/roles.decorator';
+import { JwtUtils } from '../auth/jwt.utils';
 
 @ApiTags('Course')
 @Controller('course')
 export class CourseController {
-  constructor(private readonly courseService: CourseService) {}
+  constructor(
+    private readonly courseService: CourseService,
+    private readonly jwtUtils: JwtUtils,
+  ) {}
 
   @ApiBearerAuth()
   @UseGuards(RolesGuard)
@@ -79,9 +83,13 @@ export class CourseController {
   @Get(':id')
   async findOneById(
     @Param('id', new ParseIntPipe()) id: number,
+    @Headers('Authorization') authHeader: string,
   ): Promise<Course | null> {
+    const token = authHeader.split(' ')[1];
+    const payload = this.jwtUtils.parseJwtToken(token);
+    const userId = payload.userId;
     try {
-      return await this.courseService.findOneById(id);
+      return await this.courseService.findOneById(userId, id);
     } catch (error) {
       throw new HttpException(
         `Error finding course: ${error.message}`,
