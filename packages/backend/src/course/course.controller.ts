@@ -12,6 +12,7 @@ import {
   ParseIntPipe,
   UseInterceptors,
   NotFoundException,
+  Headers,
 } from '@nestjs/common';
 import { Course } from '@prisma/client';
 import { CourseService } from './course.service';
@@ -26,11 +27,15 @@ import {
   ApiBody,
 } from '@nestjs/swagger';
 import { fileIntercepting } from 'utils';
+import { JwtUtils } from '../auth/jwt.utils';
 
 @ApiTags('Course')
 @Controller('course')
 export class CourseController {
-  constructor(private readonly courseService: CourseService) {}
+  constructor(
+    private readonly courseService: CourseService,
+    private readonly jwtUtils: JwtUtils,
+  ) {}
 
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get all courses' })
@@ -70,9 +75,13 @@ export class CourseController {
   @Get(':id')
   async findOneById(
     @Param('id', new ParseIntPipe()) id: number,
+    @Headers('Authorization') authHeader: string,
   ): Promise<Course | null> {
+    const token = authHeader.split(' ')[1];
+    const payload = this.jwtUtils.parseJwtToken(token);
+    const userId = payload.userId;
     try {
-      return await this.courseService.findOneById(id);
+      return await this.courseService.findOneById(userId, id);
     } catch (error) {
       throw new HttpException(
         `Error finding course: ${error.message}`,
