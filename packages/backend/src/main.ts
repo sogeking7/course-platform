@@ -13,6 +13,16 @@ async function bootstrap() {
       .setTitle('Course Platform')
       .setDescription('Johny ozi biled (NA)')
       .setVersion('1.0')
+      .addBearerAuth(
+        {
+          description: 'Default JWT Authorization',
+          type: 'http',
+          in: 'header',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+        'defaultBearerAuth',
+      )
       .build();
 
     const document = SwaggerModule.createDocument(app, options);
