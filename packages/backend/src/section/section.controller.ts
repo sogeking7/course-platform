@@ -9,6 +9,7 @@ import {
   HttpException,
   HttpStatus,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { Section } from '@prisma/client';
 import { SectionService } from './section.service';
@@ -20,6 +21,8 @@ import {
   ApiParam,
   ApiBearerAuth,
 } from '@nestjs/swagger';
+import { RolesGuard } from '../auth/role/roles.guard';
+import { Roles } from '../auth/role/roles.decorator';
 
 @ApiTags('Section')
 @Controller('section')
@@ -27,6 +30,8 @@ export class SectionController {
   constructor(private readonly sectionService: SectionService) {}
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN', 'USER')
   @ApiOperation({ summary: 'Find a section by ID' })
   @ApiResponse({ status: 200, type: Promise<Section | null> })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
@@ -46,6 +51,8 @@ export class SectionController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
   @ApiOperation({ summary: 'Create a new section' })
   @ApiResponse({
     status: 201,
@@ -58,6 +65,8 @@ export class SectionController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
   @ApiOperation({ summary: 'Update a section' })
   @ApiResponse({
     status: 200,
@@ -75,6 +84,8 @@ export class SectionController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
   @ApiOperation({ summary: 'Delete a section' })
   @ApiResponse({
     status: 200,

@@ -1,19 +1,14 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { ExamController } from './exam.controller';
 import { ExamService } from './exam.service';
 import { PrismaService } from '../prisma/prisma.service';
-import { JwtModule } from '@nestjs/jwt';
 import { JwtUtils } from '../auth/jwt.utils';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '60s' },
-    }),
-  ],
   controllers: [ExamController],
   providers: [ExamService, PrismaService, JwtUtils],
   exports: [JwtUtils],
+  imports: [forwardRef(() => AuthModule)],
 })
 export class ExamModule {}

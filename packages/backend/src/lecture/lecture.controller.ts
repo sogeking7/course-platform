@@ -9,6 +9,7 @@ import {
   HttpException,
   HttpStatus,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { Lecture } from '@prisma/client';
 import { LectureService } from './lecture.service';
@@ -20,6 +21,8 @@ import {
   ApiParam,
   ApiBearerAuth,
 } from '@nestjs/swagger';
+import { RolesGuard } from '../auth/role/roles.guard';
+import { Roles } from '../auth/role/roles.decorator';
 
 @ApiTags('Lecture')
 @Controller('lecture')
@@ -27,6 +30,8 @@ export class LectureController {
   constructor(private readonly lectureService: LectureService) {}
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN', 'USER')
   @ApiOperation({ summary: 'Find a lecture by ID' })
   @ApiResponse({ status: 200, type: Promise<Lecture | null> })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
@@ -46,6 +51,8 @@ export class LectureController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
   @ApiOperation({ summary: 'Create a new lecture' })
   @ApiResponse({
     status: 201,
@@ -58,6 +65,8 @@ export class LectureController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
   @ApiOperation({ summary: 'Update a lecture' })
   @ApiResponse({
     status: 200,
@@ -75,6 +84,8 @@ export class LectureController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
   @ApiOperation({ summary: 'Delete a lecture' })
   @ApiResponse({
     status: 200,
