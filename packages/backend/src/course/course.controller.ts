@@ -13,6 +13,7 @@ import {
   UseInterceptors,
   NotFoundException,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { Course } from '@prisma/client';
 import { CourseService } from './course.service';
@@ -26,6 +27,7 @@ import {
   ApiConsumes,
   ApiBody,
 } from '@nestjs/swagger';
+import { Request } from 'express';
 import { fileIntercepting } from 'utils';
 import { RolesGuard } from '../auth/role/roles.guard';
 import { Roles } from '../auth/role/roles.decorator';
@@ -83,9 +85,9 @@ export class CourseController {
   @Get(':id')
   async findOneById(
     @Param('id', new ParseIntPipe()) id: number,
-    @Headers('Authorization') authHeader: string,
+    @Req() request: Request,
   ): Promise<Course | null> {
-    const token = authHeader.split(' ')[1];
+    const token = request.headers.authorization.replace('Bearer ', '');
     const payload = this.jwtUtils.parseJwtToken(token);
     const userId = payload.userId;
     try {
