@@ -180,6 +180,7 @@ export class ExamService {
   }
 
   async checkAnswers(
+    userId: number,
     examId: number,
     data: ExamCheckDto,
   ): Promise<{
@@ -206,15 +207,19 @@ export class ExamService {
       results.push({ questionId: answer.questionId, points });
     }
 
+    await this.prisma.examAttempt.create({
+      data: { examId, userId, examResult: totalPoints },
+    });
+
     return { totalPoints, results };
   }
 
   private calculatePoints(question: any, givenAnswers: number[]): number {
     if (question.isMultipleChoice) {
       return this.calculatePointsMultipleChoice(question, givenAnswers);
-    } else {
-      return this.calculatePointsSingleChoice(question, givenAnswers);
     }
+
+    return this.calculatePointsSingleChoice(question, givenAnswers);
   }
 
   private calculatePointsMultipleChoice(
