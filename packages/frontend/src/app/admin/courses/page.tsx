@@ -9,9 +9,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useCourseStore } from "@/store/course";
 import { LayoutLoader } from "@/components/loader";
 import { Plus } from "lucide-react";
+import { useAxiosAuth } from "@/hooks/useAxiosAuth";
 
 export default function AdminUsersPage() {
-  const courseStore = useCourseStore();
+  const axios = useAxiosAuth();
+  const courseStore = useCourseStore(axios)
 
   const { data, isLoading } = useQuery({
     queryKey: ["courses"],

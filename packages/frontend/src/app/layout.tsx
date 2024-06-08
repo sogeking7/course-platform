@@ -4,6 +4,8 @@ import { Providers } from "@/components/Providers";
 import { ThemeProvider } from "@/components/theme-provider";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../next-auth.config";
+import { useAxiosAuth } from "@/hooks/useAxiosAuth";
+import { TokenHandler } from "@/components/TokenHandler";
 
 export const metadata: Metadata = {
   title: "Shoqan Education",
@@ -28,6 +30,7 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
             {children}
+            <TokenHandler />
           </ThemeProvider>
         </Providers>
       </body>
