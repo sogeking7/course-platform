@@ -53,7 +53,7 @@ export default function ClientQuizPage({
   ];
 
   const formattedQuestions: z.infer<typeof QuizFormSchema>["questions"] =
-    exam.map((question: Question) => ({
+    exam!.map((question: Question) => ({
       id: parseInt(question.id as string),
       text: question.text,
       points: question.points,

@@ -13,7 +13,7 @@ import { useAxiosAuth } from "@/hooks/useAxiosAuth";
 
 export default function AdminUsersPage() {
   const axios = useAxiosAuth();
-  const courseStore = useCourseStore(axios)
+  const courseStore = useCourseStore()
 
   const { data, isLoading } = useQuery({
     queryKey: ["courses"],
