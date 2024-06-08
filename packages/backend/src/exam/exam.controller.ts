@@ -197,11 +197,15 @@ export class ExamController {
   async checkAnswers(
     @Param('examId', new ParseIntPipe()) examId: number,
     @Body() data: ExamCheckDto,
+    @Req() request: Request,
   ): Promise<{
     totalPoints: number;
     results: { questionId: number; points: number }[];
   }> {
-    return this.examService.checkAnswers(examId, data);
+    const token = request.headers.authorization.replace('Bearer ', '');
+    const payload = this.jwtUtils.parseJwtToken(token);
+    const userId = payload.userId;
+    return this.examService.checkAnswers(userId, examId, data);
   }
 
   @ApiBearerAuth()
