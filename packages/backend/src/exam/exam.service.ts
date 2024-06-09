@@ -3,6 +3,7 @@ import {
   HttpException,
   HttpStatus,
   NotFoundException,
+  NotImplementedException,
 } from '@nestjs/common';
 import { Prisma, Exam, ExamAttempt } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
@@ -191,6 +192,17 @@ export class ExamService {
     let totalPoints = 0;
     const results = [];
 
+    // Check if the user has already attempted this exam
+    const existingAttempt = await this.prisma.examAttempt.findUnique({
+      where: { userId_examId: { userId, examId } },
+    });
+
+    if (existingAttempt) {
+      throw new NotImplementedException(
+        `User ${userId} has already attempted exam ${examId}`,
+      );
+    }
+
     for (let i = 0; i < data.answers.length; ++i) {
       const answer = data.answers[i];
       const question = questions.find(
@@ -207,6 +219,7 @@ export class ExamService {
       results.push({ questionId: answer.questionId, points });
     }
 
+    // Create the exam attempt
     await this.prisma.examAttempt.create({
       data: { examId, userId, examResult: totalPoints },
     });
@@ -252,12 +265,14 @@ export class ExamService {
   async getResultByUserIdExamId(
     userId: number,
     examId: number,
-  ): Promise<number> {
-    return (
-      await this.prisma.examAttempt.findUnique({
-        where: { userId_examId: { userId, examId } },
-      })
-    ).examResult;
+  ): Promise<number | null> {
+    const result = await this.prisma.examAttempt.findUnique({
+      where: { userId_examId: { userId, examId } },
+    });
+    if (!result?.examResult) {
+      return null;
+    }
+    return result.examResult || null;
   }
 
   async getAllResultsByExamId(

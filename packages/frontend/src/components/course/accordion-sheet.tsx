@@ -21,7 +21,6 @@ import { ListCollapse, X } from "lucide-react";
 export const AccordionSheet = ({
   isOpen,
   setIsOpen,
-  children,
   lectureId,
   courseId,
 }: any) => {

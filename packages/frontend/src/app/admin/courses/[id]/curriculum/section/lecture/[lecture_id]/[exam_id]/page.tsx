@@ -4,11 +4,13 @@ import { Bread } from "@/components/bread";
 import { GoBackButton } from "@/components/go-back-button";
 import { LayoutLoader } from "@/components/loader";
 import { QuizCreator } from "@/components/quiz-creator";
+import { Button } from "@/components/ui/button";
 import { TypographyH1 } from "@/components/ui/typography";
 import { useExamStore } from "@/store/exam";
-import { useLectureStore } from "@/store/lecture";
-import { Question, createQuestionSchema } from "@/types";
+import { createQuestionSchema } from "@/types";
 import { useQuery } from "@tanstack/react-query";
+import { ClipboardList } from "lucide-react";
+import Link from "next/link";
 import { z } from "zod";
 
 export default function AdminLecturePage({
@@ -44,7 +46,13 @@ export default function AdminLecturePage({
     },
     {
       name: `Quiz: Lecture ${lectureId}`,
-      path: "/admin/courses/" + courseId + "/curriculum",
+      path:
+        "/admin/courses/" +
+        courseId +
+        "/curriculum/section/lecture/" +
+        lectureId +
+        "/" +
+        examId,
     },
   ];
 
@@ -55,9 +63,27 @@ export default function AdminLecturePage({
   return (
     <>
       <Bread breadcrumbs={breadcrumbs} />
-      <div className="flex items-start">
-        <GoBackButton />
-        <TypographyH1>Quiz: Lecture {lectureId}</TypographyH1>
+      <div className="w-full justify-between flex">
+        <div className="flex items-start">
+          <GoBackButton />
+          <TypographyH1>Quiz: Lecture {lectureId}</TypographyH1>
+        </div>
+        <Link
+          href={
+            "/admin/courses/" +
+            courseId +
+            "/curriculum/section/lecture/" +
+            lectureId +
+            "/" +
+            examId +
+            "/results"
+          }
+        >
+          <Button>
+            <ClipboardList size={16} className="mr-2" />
+            Results
+          </Button>
+        </Link>
       </div>
       <div className="border p-5 bg-white rounded-sm">
         <div className="flex flex-col gap-6 mb-6">

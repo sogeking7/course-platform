@@ -88,6 +88,12 @@ export type QuizResult = {
   points: number;
 };
 
+export type ExamResult = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  examResult: number;
+};
 export const inviteStudentToCourseSchema = z.object({
   email: z.string().trim().email("Электрондық почта дұрыс емес"),
 });
@@ -125,7 +131,7 @@ const baseQuestionSchema = z.object({
   options: z
     .array(optionSchema)
     .min(2, { message: "At least two options are required" })
-    .max(5, { message: 'Maximum 5 options can be added'})
+    .max(5, { message: "Maximum 5 options can be added" })
     .refine(
       (options) => options.filter((option) => option.isTrue).length === 1,
       { message: "Only one option must be true" },
@@ -208,7 +214,12 @@ export const loginSchema = z.object({
 });
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 3; // 3MB
-const ACCEPTED_FILE_TYPES = ["image/png", "image/gif", "image/jpeg", "image/webp", ];
+const ACCEPTED_FILE_TYPES = [
+  "image/png",
+  "image/gif",
+  "image/jpeg",
+  "image/webp",
+];
 
 export const fileSchema = z.object({
   file: (typeof window === "undefined" ? z.any() : z.instanceof(FileList))

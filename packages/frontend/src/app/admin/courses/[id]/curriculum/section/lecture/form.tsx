@@ -13,7 +13,7 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Tiptap } from "@/components/tip-tap";
-import { BookCheck, Loader, Loader2, Plus, Trash } from "lucide-react";
+import { BookCheck, ClipboardList, Loader, Loader2, Plus, Trash } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -186,6 +186,14 @@ export default function LectureForm({
                 <Button>
                   <BookCheck size={16} className="mr-2" />
                   Quiz
+                </Button>
+              </Link>
+              <Link
+                href={`/admin/courses/${courseId}/curriculum/section/lecture/${data?.id!}/${data.exam.id}/results`}
+              >
+                <Button variant={'outline'}>
+                  <ClipboardList size={16} className="mr-2" />
+                  Нәтижелер
                 </Button>
               </Link>
             </>

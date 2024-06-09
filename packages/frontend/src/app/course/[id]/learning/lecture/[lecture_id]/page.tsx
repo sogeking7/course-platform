@@ -1,13 +1,12 @@
 "use client";
 
-import { MyContainer } from "@/components/container";
 import { AccordionContents } from "@/components/course/accordion-contents";
 import { AccordionSheet } from "@/components/course/accordion-sheet";
 import { LayoutLoader } from "@/components/loader";
 import { Button } from "@/components/ui/button";
-import { TypographyH1 } from "@/components/ui/typography";
-import { cn, convertToPreviewLink } from "@/lib/utils";
+import { calcPercentage, cn, convertToPreviewLink } from "@/lib/utils";
 import { useCourseStore } from "@/store/course";
+import { useExamStore } from "@/store/exam";
 import { useLectureStore } from "@/store/lecture";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -17,24 +16,25 @@ import {
   ListCollapse,
 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
+import { LectureQuizResultsTable } from "./quiz/result-table";
+import { columns } from "./quiz/columns";
+import { QuizResult } from "@/types";
 
 export default function LectureIdPage({
   params,
 }: {
   params: { lecture_id: string; id: string };
 }) {
-  const router = useRouter();
-
   const course_id = Number(params.id);
   const lecture_id =
     params.lecture_id === "default" ? null : Number(params.lecture_id);
 
   const lectureStore = useLectureStore();
   const courseStore = useCourseStore();
+  const examStore = useExamStore();
 
   const [videoLoading, setVideoLoading] = useState(true);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
@@ -52,6 +52,14 @@ export default function LectureIdPage({
         return lectureStore.getById(course?.sections[0].lectures[0].id!);
     },
     enabled: !!course,
+  });
+
+  const examId = lecture?.exam?.id;
+
+  const { data: examResults, isLoading: examResultsLoading } = useQuery({
+    queryKey: ["exam-results", { id: examId }],
+    queryFn: () => examStore.getUserResults(examId!),
+    enabled: !!examId,
   });
 
   const nextLecture = (): number | null | undefined => {
@@ -117,6 +125,21 @@ export default function LectureIdPage({
     ? convertToPreviewLink(lecture.videoUrl)
     : null;
 
+  // const x = calcPercentage(
+  //   examResults,
+  //   JSON.parse(lecture?.exam?.questions as string).length,
+  // );
+
+  // const r: QuizResult = {
+  //   grade: x,
+  //   points: examResults,
+  //   state: "Аяқталды",
+  // };
+
+  // const modColumns = [...columns];
+  // modColumns[1].header = `Балл / ${JSON.parse(lecture?.exam?.questions as string).length.toFixed(2)}`;
+  // modColumns[2].header = `Баға / ${Number(100).toFixed(2)}%`;
+
   return (
     <>
       <AccordionContents lectureId={lecture?.id} courseId={course_id} />
@@ -125,11 +148,9 @@ export default function LectureIdPage({
         courseId={course_id}
         isOpen={isSheetOpen}
         setIsOpen={setIsSheetOpen}
-      >
-        <p>Your content goes here</p>
-      </AccordionSheet>
+      />
       <div className="md:pl-[calc(345px)] h-full w-full">
-        {lectureIsLoading || !lecture ? (
+        {lectureIsLoading || !lecture  || examResultsLoading? (
           <LayoutLoader />
         ) : (
           <div className=" md:p-6 w-full max-w-[1248px] mx-auto">
@@ -189,16 +210,47 @@ export default function LectureIdPage({
                     {lecture.content}
                   </ReactMarkdown>
                 </article>
-                {lecture.exam && (
-                  <div className="flex justify-end mt-16 w-full">
-                    <Link
-                      href={`/course/${course_id}/learning/lecture/${lecture_id || course?.sections[0].lectures[0].id!}/quiz`}
-                    >
-                      <Button>
-                        <BookCheck className="mr-2" size={18} />
-                        Тестілеу бастау
-                      </Button>
-                    </Link>
+              {lecture.exam && (
+                  <div className="mt-16 w-full">
+                    {/* {JSON.stringify(examResults)} */}
+                    {examResults && !examResultsLoading && (
+                      <LectureQuizResultsTable
+                        columns={[
+                          { ...columns[0] },
+                          {
+                            ...columns[1],
+                            header: `Балл / ${JSON.parse(lecture?.exam?.questions as string).length.toFixed(2)}`,
+                          },
+                          {
+                            ...columns[2],
+                            header: `Баға / ${Number(100).toFixed(2)}%`,
+                          },
+                        ]}
+                        data={[
+                          {
+                            grade: calcPercentage(
+                              examResults || 1,
+                              JSON.parse(lecture?.exam?.questions as string)
+                                .length,
+                            ),
+                            points: examResults || 1,
+                            state: "Аяқталды",
+                          },
+                        ]}
+                      />
+                    )}
+                    {!examResults && !examResultsLoading && (
+                      <div className="flex justify-end">
+                        <Link
+                          href={`/course/${course_id}/learning/lecture/${lecture_id || course?.sections[0].lectures[0].id!}/quiz`}
+                        >
+                          <Button>
+                            <BookCheck className="mr-2" size={18} />
+                            Тестілеу бастау
+                          </Button>
+                        </Link>
+                      </div>
+                    )}
                   </div>
                 )}
                 <div

@@ -215,7 +215,7 @@ export class ExamController {
   @ApiResponse({ status: 200, description: 'Result got successfully' })
   @ApiResponse({ status: 404, description: 'Attempt not found' })
   @ApiParam({ name: 'examId', required: true, description: 'ID of the exam' })
-  @Post(':examId/get-result-by-userId')
+  @Get(':examId/get-result-by-userId')
   async getResultByUserIdExamId(
     @Param('examId', new ParseIntPipe()) examId: number,
     @Req() request: Request,
@@ -229,9 +229,9 @@ export class ExamController {
         userId,
         examId,
       );
-      if (!examResult) {
-        throw new HttpException('Attempt not found', HttpStatus.NOT_FOUND);
-      }
+      // if (!examResult) {
+      //   throw new HttpException('Attempt not found', HttpStatus.NOT_FOUND);
+      // }
       return examResult;
     } catch (error) {
       if (error instanceof HttpException) {
@@ -252,7 +252,7 @@ export class ExamController {
   @ApiResponse({ status: 200, description: 'Result got successfully' })
   @ApiResponse({ status: 404, description: 'Attempt not found' })
   @ApiParam({ name: 'examId', required: true, description: 'ID of the exam' })
-  @Post(':examId/get-result')
+  @Get(':examId/get-result')
   async getAllResultsByExamId(
     @Param('examId', new ParseIntPipe()) examId: number,
   ): Promise<
@@ -260,14 +260,15 @@ export class ExamController {
   > {
     try {
       const results = await this.examService.getAllResultsByExamId(examId);
-      if (results.length === 0) {
-        throw new HttpException(
-          'No results found for the given exam',
-          HttpStatus.NOT_FOUND,
-        );
-      }
+      // if (results.length === 0) {
+      //   throw new HttpException(
+      //     'No results found for the given exam',
+      //     HttpStatus.NOT_FOUND,
+      //   );
+      // }
       return results;
     } catch (error) {
+      console.log(error.message);
       if (error instanceof HttpException) {
         throw error;
       } else {
@@ -286,7 +287,7 @@ export class ExamController {
   @ApiResponse({ status: 200, description: 'Deleted successfully' })
   @ApiResponse({ status: 404, description: 'User not found' })
   @ApiParam({ name: 'examId', required: true, description: 'ID of the exam' })
-  @Post(':examId/reset-result/:userEmail')
+  @Delete(':examId/reset-result/:userEmail')
   async resetResult(
     @Param('examId', new ParseIntPipe()) examId: number,
     @Param('userEmail') userEmail: string,

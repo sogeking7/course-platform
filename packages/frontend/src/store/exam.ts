@@ -17,6 +17,9 @@ type Store = {
   ) => Promise<any>;
   deleteQuestion: (examId: number, questionId: number) => Promise<any>;
   checkAnswers: (examId: number, data: any) => Promise<any>;
+  getUserResults: (examId: number) => Promise<any>;
+  getAllResults: (examId: number) => Promise<any>;
+  resetResultOfUser: (examId: number, userEmail: string) => Promise<any>;
 };
 
 export const useExamStore = create<Store>()((set) => {
@@ -40,5 +43,11 @@ export const useExamStore = create<Store>()((set) => {
       (await axios.delete(`${url}/${examId}/questions/${questionId}`)).data,
     checkAnswers: async (examId, data) =>
       (await axios.post(`${url}/${examId}/check-answers`, data)).data,
+    getUserResults: async (examId) =>
+      (await axios.get(`${url}/${examId}/get-result-by-userId`)).data,
+    getAllResults: async (examId) =>
+      (await axios.get(`${url}/${examId}/get-result`)).data,
+    resetResultOfUser: async (examId, userEmail) =>
+      (await axios.delete(`${url}/${examId}/reset-result/${userEmail}`)).data,
   };
 });
