@@ -85,9 +85,9 @@ export class UserController {
     return await this.userService.create(data);
   }
 
-  @ApiBearerAuth()
-  @UseGuards(RolesGuard)
-  @Roles('ADMIN', 'USER')
+  // @ApiBearerAuth()
+  // @UseGuards(RolesGuard)
+  // @Roles('ADMIN', 'USER')
   @ApiOperation({ summary: 'Update a user' })
   @ApiResponse({
     status: 200,

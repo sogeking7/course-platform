@@ -8,6 +8,9 @@ import { JwtService } from '@nestjs/jwt';
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -30,24 +33,46 @@ export class RolesGuard implements CanActivate {
     const req = context.switchToHttp().getRequest();
     const authHeader = req.headers.authorization;
 
+    // console.log('Request Headers:', req.headers);
+
+    if (!authHeader) {
+      throw new UnauthorizedException({
+        message: 'Authorization header is missing',
+      });
+    }
+
     try {
-      const bearer = authHeader.split(' ')[0];
-      const token = authHeader.split(' ')[1];
+      // console.log('Authorization Header:', authHeader);
+      const [bearer, token] = authHeader.split(' ');
+
       if (bearer !== 'Bearer' || !token) {
         throw new UnauthorizedException({
-          message: 'Пользователь не авторизован',
+          message: 'Invalid authorization header format',
         });
       }
 
-      const user = this.jwtService.verify(token, {
-        secret: process.env.JWT_SECRET,
-      });
-      req.user = user;
+      // console.log('JWT Secret:', process.env.JWT_SECRET);
 
-      return requiredRoles.includes(user.role);
+      const user = this.jwtService.verify(token, {
+        secret: process.env.JWT_SECRET || 'secret',
+      });
+
+      req.user = user;
+      // console.log('User:', user);
+
+      const hasRole = requiredRoles.includes(user.role);
+      if (!hasRole) {
+        throw new HttpException(
+          'Forbidden: Insufficient role',
+          HttpStatus.FORBIDDEN,
+        );
+      }
+
+      return hasRole;
     } catch (e) {
+      console.error('Authorization error:', e.message);
       throw new HttpException(
-        'Нет доступа' + ' message: ' + e.message,
+        'Access denied: ' + e.message,
         HttpStatus.FORBIDDEN,
       );
     }

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import * as dotenv from 'dotenv';
 
 interface JwtPayload {
   userId: number;
@@ -7,12 +8,14 @@ interface JwtPayload {
 
 @Injectable()
 export class JwtUtils {
-  constructor(private jwtService: JwtService) {}
+  constructor(private jwtService: JwtService) {
+    dotenv.config();
+  }
 
   parseJwtToken(token: string): JwtPayload {
     try {
       const payload = this.jwtService.verify(token, {
-        secret: process.env.JWT_SECRET,
+        secret: process.env.JWT_SECRET || 'secret',
       });
       return payload as JwtPayload;
     } catch (error) {
