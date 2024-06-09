@@ -49,7 +49,7 @@ export default function AllCoursesPage() {
         {filteredCourses.length} нәтижелер табылды
       </p>
 
-      <div className="grid lg:grid-cols-3 xl:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-8">
+      <div className="grid lg:grid-cols-3 xl:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 gap-8">
         {filteredCourses.map((course: Course) => (
           <CourseCard key={course.id} item={course as Course} />
         ))}

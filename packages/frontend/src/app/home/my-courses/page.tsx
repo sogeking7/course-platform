@@ -27,7 +27,7 @@ export default function MyCoursesPage() {
   return (
     <div>
       <TypographyH1>Менің курстарым</TypographyH1>
-      <div className="grid lg:grid-cols-3 xl:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-8">
+      <div className="grid lg:grid-cols-3 xl:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 gap-8">
         {data.map((course: Course) => (
           <CourseCard
             link={`/course/${course.id}/learning/lecture/default`}

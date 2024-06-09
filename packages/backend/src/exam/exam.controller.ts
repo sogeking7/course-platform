@@ -114,7 +114,7 @@ export class ExamController {
 
   @ApiBearerAuth()
   @UseGuards(RolesGuard)
-  @Roles('ADMIN')
+  @Roles('ADMIN', 'USER')
   @ApiOperation({ summary: 'Get all questions for a specific exam' })
   @ApiResponse({ status: 200, description: 'Questions retrieved successfully' })
   @ApiResponse({ status: 404, description: 'Exam not found' })
@@ -204,7 +204,7 @@ export class ExamController {
   }> {
     const token = request.headers.authorization.replace('Bearer ', '');
     const payload = this.jwtUtils.parseJwtToken(token);
-    const userId = payload.userId;
+    const userId = payload.id;
     return this.examService.checkAnswers(userId, examId, data);
   }
 
@@ -222,7 +222,7 @@ export class ExamController {
   ): Promise<number> {
     const token = request.headers.authorization.replace('Bearer ', '');
     const payload = this.jwtUtils.parseJwtToken(token);
-    const userId = payload.userId;
+    const userId = payload.id;
 
     try {
       const examResult = await this.examService.getResultByUserIdExamId(

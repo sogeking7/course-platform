@@ -71,7 +71,6 @@ export default function LectureIdPage({
             if (i !== sections.length - 1) {
               nextLectureId = sections[i + 1].lectures[0].id;
             } else {
-              console.log("nextLectureId", nextLectureId);
               return null;
             }
           }
@@ -79,7 +78,6 @@ export default function LectureIdPage({
       }
     }
 
-    console.log("nextLectureId", nextLectureId);
     return nextLectureId;
   };
 
@@ -102,7 +100,6 @@ export default function LectureIdPage({
                 sections[i - 1].lectures[sections[i - 1].lectures.length - 1]
                   .id;
             } else {
-              console.log("prevLectureId", prevLectureId);
               return null;
             }
           }
@@ -110,7 +107,6 @@ export default function LectureIdPage({
       }
     }
 
-    console.log("prevLectureId", prevLectureId);
     return prevLectureId;
   };
 
@@ -121,22 +117,15 @@ export default function LectureIdPage({
     ? convertToPreviewLink(lecture.videoUrl)
     : null;
 
-  // const renderVideo = useMemo(
-  //   () => (
-  //     <iframe
-  //       src={videoUrl}
-  //       className={cn("w-full h-full absolute top-0 left-0 right-0 bottom-0")}
-  //       onLoad={() => setVideoLoading(false)}
-  //       // allow="autoplay"
-  //     />
-  //   ),
-  //   [videoUrl],
-  // );
-
   return (
     <>
       <AccordionContents lectureId={lecture?.id} courseId={course_id} />
-      <AccordionSheet lectureId={lecture?.id} courseId={course_id} isOpen={isSheetOpen} setIsOpen={setIsSheetOpen}>
+      <AccordionSheet
+        lectureId={lecture?.id}
+        courseId={course_id}
+        isOpen={isSheetOpen}
+        setIsOpen={setIsSheetOpen}
+      >
         <p>Your content goes here</p>
       </AccordionSheet>
       <div className="md:pl-[calc(345px)] h-full w-full">
@@ -145,7 +134,10 @@ export default function LectureIdPage({
         ) : (
           <div className=" md:p-6 w-full max-w-[1248px] mx-auto">
             <div className=" md:border md:rounded-sm  md:bg-white">
-              <button onClick={() => setIsSheetOpen(true)} className="flex font-semibold items-center md:hidden max-md:px-4 max-md:pt-5 ">
+              <button
+                onClick={() => setIsSheetOpen(true)}
+                className="flex font-semibold items-center md:hidden max-md:px-4 max-md:pt-5 "
+              >
                 <ListCollapse className="mr-2" />
                 Контент
               </button>
@@ -200,7 +192,7 @@ export default function LectureIdPage({
                 {lecture.exam && (
                   <div className="flex justify-end mt-16 w-full">
                     <Link
-                      href={`/course/${course_id}/learning/lecture/${lecture_id}/quiz`}
+                      href={`/course/${course_id}/learning/lecture/${lecture_id || course?.sections[0].lectures[0].id!}/quiz`}
                     >
                       <Button>
                         <BookCheck className="mr-2" size={18} />

@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as dotenv from 'dotenv';
+import { UserRole } from 'src/user/dto/user.dto';
 
 interface JwtPayload {
-  userId: number;
+  id: number;
+  email: string;
+  role: UserRole;
 }
 
 @Injectable()

@@ -19,8 +19,8 @@ export default function UserButton() {
   const { data: session, status } = useSession();
   const user = session?.user;
 
-  console.log("user", user);
-  console.log("session", session);
+  // console.log("user", user);
+  // console.log("session", session);
   if (status === "loading" || !user) {
     return <SignInButton />;
   }

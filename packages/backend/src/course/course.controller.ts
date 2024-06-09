@@ -88,8 +88,10 @@ export class CourseController {
     @Req() request: Request,
   ): Promise<Course | null> {
     const token = request.headers.authorization.replace('Bearer ', '');
+    // console.log('TOKEN', token);
     const payload = this.jwtUtils.parseJwtToken(token);
-    const userId = payload.userId;
+    // console.log('payload', payload);
+    const userId = payload.id!;
     try {
       return await this.courseService.findOneById(userId, id);
     } catch (error) {
