@@ -51,6 +51,7 @@ export default function LoginForm() {
       }
     } else {
       router.push("/");
+      router.refresh();
     }
   };
 
