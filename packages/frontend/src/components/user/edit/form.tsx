@@ -36,7 +36,14 @@ export const UserEditForm = () => {
   const mutation = useMutation({
     mutationFn: (newData: any) => userStore.update(user?.id!, newData),
     onSuccess: (newUserData) => {
-      update(newUserData);
+      console.log("newUserData", newUserData);
+      update({
+        ...session,
+        user: {
+          ...session?.user,
+          profilePictureLink: newUserData.profilePictureLink
+        },
+      });
     },
   });
 
@@ -67,10 +74,10 @@ export const UserEditForm = () => {
           profilePictureLink: user?.profilePictureLink || "",
         }}
         cropShape="round"
-        aspect={4/4}
+        aspect={4 / 4}
         entityType="user"
         onSuccess={(newData: any) => {
-          update(newData);
+          mutation.mutate(newData);
           /* Handle success, e.g., show a message */
         }}
       />
