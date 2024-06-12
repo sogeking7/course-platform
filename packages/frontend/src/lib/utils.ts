@@ -1,3 +1,4 @@
+import { Course } from "@/types";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -15,9 +16,9 @@ export function convertToPreviewLink(url: string): string | null {
   }
 }
 
-export const getFirstLectureId = (course: { sections: { lectures: { id: number }[] }[] }): number | null => {
+export const getFirstLectureId = (course: Course): number | null => {
   for (let section of course.sections) {
-    if (section.lectures.length > 0) {
+    if (section.lectures && section.lectures.length > 0) {
       return section.lectures[0].id;
     }
   }
