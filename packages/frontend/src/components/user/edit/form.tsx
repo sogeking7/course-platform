@@ -40,8 +40,7 @@ export const UserEditForm = () => {
       update({
         ...session,
         user: {
-          ...session?.user,
-          profilePictureLink: newUserData.profilePictureLink
+          ...newUserData,
         },
       });
     },
