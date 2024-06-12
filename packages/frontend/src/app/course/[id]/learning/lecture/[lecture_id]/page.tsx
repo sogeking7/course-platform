@@ -4,7 +4,7 @@ import { AccordionContents } from "@/components/course/accordion-contents";
 import { AccordionSheet } from "@/components/course/accordion-sheet";
 import { LayoutLoader } from "@/components/loader";
 import { Button } from "@/components/ui/button";
-import { calcPercentage, cn, convertToPreviewLink } from "@/lib/utils";
+import { calcPercentage, cn, convertToPreviewLink, getFirstLectureId } from "@/lib/utils";
 import { useCourseStore } from "@/store/course";
 import { useExamStore } from "@/store/exam";
 import { useLectureStore } from "@/store/lecture";
@@ -48,8 +48,11 @@ export default function LectureIdPage({
     queryKey: ["lecture", { id: lecture_id }],
     queryFn: () => {
       if (lecture_id) return lectureStore.getById(lecture_id);
-      else if (course?.sections[0].lectures[0].id)
-        return lectureStore.getById(course?.sections[0].lectures[0].id!);
+      else {
+        const firstLectureId = getFirstLectureId(course!);
+        if (firstLectureId) return lectureStore.getById(firstLectureId);
+      }
+
     },
     enabled: !!course,
   });
@@ -65,7 +68,7 @@ export default function LectureIdPage({
   const nextLecture = (): number | null | undefined => {
     if (!course || courseIsLoading) return;
 
-    let nextLectureId = null;
+    let nextLectureId: number | null | undefined = null;
 
     const sections = course?.sections;
 
@@ -73,14 +76,17 @@ export default function LectureIdPage({
       for (let j = 0; j < sections[i].lectures.length; j++) {
         const thisLectureId = sections[i].lectures[j].id;
         if (lecture_id === thisLectureId) {
-          if (j !== sections[i].lectures.length - 1) {
+          if (j < sections[i].lectures.length - 1) {
             nextLectureId = sections[i].lectures[j + 1].id;
-          } else {
-            if (i !== sections.length - 1) {
-              nextLectureId = sections[i + 1].lectures[0].id;
+          } else if (i < sections.length - 1) {
+            const nextSectionLectures = sections[i + 1]?.lectures;
+            if (nextSectionLectures && nextSectionLectures.length > 0) {
+              nextLectureId = nextSectionLectures[0]?.id || null;
             } else {
               return null;
             }
+          } else {
+            return null;
           }
         }
       }
@@ -100,16 +106,18 @@ export default function LectureIdPage({
       for (let j = 0; j < sections[i].lectures.length; j++) {
         const thisLectureId = sections[i].lectures[j].id;
         if (lecture_id === thisLectureId) {
-          if (j !== 0) {
+          if (j > 0) {
             prevLectureId = sections[i].lectures[j - 1].id;
-          } else {
-            if (i !== 0) {
+          } else if (i > 0) {
+            const previousSectionLectures = sections[i - 1]?.lectures;
+            if (previousSectionLectures && previousSectionLectures.length > 0) {
               prevLectureId =
-                sections[i - 1].lectures[sections[i - 1].lectures.length - 1]
-                  .id;
+                previousSectionLectures[previousSectionLectures.length - 1].id;
             } else {
               return null;
             }
+          } else {
+            return null;
           }
         }
       }
@@ -150,7 +158,7 @@ export default function LectureIdPage({
         setIsOpen={setIsSheetOpen}
       />
       <div className="md:pl-[calc(345px)] h-full w-full">
-        {lectureIsLoading || !lecture  || examResultsLoading? (
+        {lectureIsLoading || !lecture || examResultsLoading ? (
           <LayoutLoader />
         ) : (
           <div className=" md:p-6 w-full max-w-[1248px] mx-auto">
@@ -210,7 +218,7 @@ export default function LectureIdPage({
                     {lecture.content}
                   </ReactMarkdown>
                 </article>
-              {lecture.exam && (
+                {lecture.exam && (
                   <div className="mt-16 w-full">
                     {/* {JSON.stringify(examResults)} */}
                     {examResults && !examResultsLoading && (

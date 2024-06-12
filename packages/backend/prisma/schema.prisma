@@ -25,12 +25,13 @@ enum UserRole {
 }
 
 model Exam {
-  id          Int     @id @default(autoincrement())
+  id          Int           @id @default(autoincrement())
   name        String
   description String
   questions   String
-  lecture     Lecture @relation(fields: [lectureId], references: [id])
-  lectureId   Int     @unique
+  lecture     Lecture       @relation(fields: [lectureId], references: [id], onDelete: Cascade)
+  lectureId   Int           @unique
+  ExamAttempt ExamAttempt[]
 }
 
 model Course {
@@ -62,9 +63,9 @@ model Lecture {
 }
 
 model CourseEnrollment {
-  user     User   @relation(fields: [userId], references: [id])
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId   Int
-  course   Course @relation(fields: [courseId], references: [id])
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
   courseId Int
 
   @@id([userId, courseId])
@@ -73,8 +74,9 @@ model CourseEnrollment {
 model ExamAttempt {
   id         Int   @id @default(autoincrement())
   userId     Int
-  user       User  @relation(fields: [userId], references: [id])
+  user       User  @relation(fields: [userId], references: [id], onDelete: Cascade)
   examId     Int
+  exam       Exam  @relation(fields: [examId], references: [id], onDelete: Cascade)
   examResult Float
 
   @@unique([userId, examId], name: "userId_examId")

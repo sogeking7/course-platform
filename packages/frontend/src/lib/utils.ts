@@ -15,6 +15,16 @@ export function convertToPreviewLink(url: string): string | null {
   }
 }
 
+export const getFirstLectureId = (course: { sections: { lectures: { id: number }[] }[] }): number | null => {
+  for (let section of course.sections) {
+    if (section.lectures.length > 0) {
+      return section.lectures[0].id;
+    }
+  }
+  return null; // Return null if no lectures are found
+};
+
+
 export const calcPercentage = (
   correct_answers: number,
   total_answers: number,
