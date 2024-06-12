@@ -250,7 +250,7 @@ export default function LectureIdPage({
                     {!examResults && !examResultsLoading && (
                       <div className="flex justify-end">
                         <Link
-                          href={`/course/${course_id}/learning/lecture/${lecture_id || course?.sections[0].lectures[0].id!}/quiz`}
+                          href={`/course/${course_id}/learning/lecture/${lecture_id || getFirstLectureId(course!)}/quiz`}
                         >
                           <Button>
                             <BookCheck className="mr-2" size={18} />
