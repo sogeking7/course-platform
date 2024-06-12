@@ -33,10 +33,13 @@ export class LectureService {
   }
 
   private async isSectionExists(sectionId: number) {
+    if (!sectionId) {
+      throw new HttpException(`Section ID is required`, HttpStatus.BAD_REQUEST);
+    }
     const section = await this.prisma.section.findUnique({
       where: { id: sectionId },
     });
-    if (sectionId && !section) {
+    if (!section) {
       throw new HttpException(
         `Section with id ${sectionId} does not exist`,
         HttpStatus.BAD_REQUEST,
@@ -45,10 +48,13 @@ export class LectureService {
   }
 
   private async isExamExists(examId: number) {
+    if (!examId) {
+      throw new HttpException(`Exam ID is required`, HttpStatus.BAD_REQUEST);
+    }
     const exam = await this.prisma.exam.findUnique({
       where: { id: examId },
     });
-    if (examId && !exam) {
+    if (!exam) {
       throw new HttpException(
         `Exam with id ${examId} does not exist`,
         HttpStatus.BAD_REQUEST,
@@ -57,8 +63,8 @@ export class LectureService {
   }
 
   async create(data: LectureCreateDto): Promise<Lecture> {
-    this.isSectionExists(data.sectionId);
-    this.isExamExists(data.examId);
+    await this.isSectionExists(data.sectionId);
+    await this.isExamExists(data.examId);
 
     return await this.prisma.lecture.create({
       data: {
@@ -82,8 +88,8 @@ export class LectureService {
   }
 
   async update(id: number, data: LectureUpdateDto): Promise<Lecture> {
-    this.isSectionExists(data.sectionId);
-    this.isExamExists(data.examId);
+    await this.isSectionExists(data.sectionId);
+    await this.isExamExists(data.examId);
 
     return await this.prisma.lecture.update({
       where: { id },
