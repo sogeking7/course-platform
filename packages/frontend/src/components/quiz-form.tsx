@@ -53,7 +53,7 @@ export const QuizForm = ({ examId, questions }: Props) => {
   const mutation = useMutation({
     mutationFn: (newData: any) => examStore.checkAnswers(examId, newData),
     onSuccess: (res) => {
-      console.log("res", res);
+      // console.log("res", res);
     },
   });
 
@@ -64,7 +64,7 @@ export const QuizForm = ({ examId, questions }: Props) => {
         givenAnswers: [d.selectedOption],
       })),
     };
-    console.log("modifiedData", modifiedData);
+    // console.log("modifiedData", modifiedData);
     mutation.mutate(modifiedData);
   };
 

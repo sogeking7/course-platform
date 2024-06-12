@@ -36,7 +36,7 @@ export default function LoginForm() {
 
     if (auth?.error) {
       const errorStatus = auth.error;
-      console.log(errorStatus);
+      // console.log(errorStatus);
       switch (errorStatus) {
         case "404":
           form.setError("root.serverError", {

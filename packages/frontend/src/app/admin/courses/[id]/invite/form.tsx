@@ -34,6 +34,7 @@ export const AdminCoursesInviteStudentsForm = ({
     handleSubmit,
     setError,
     reset,
+    getValues,
     formState: { errors, isDirty },
   } = useForm<z.infer<typeof inviteStudentToCourseSchema>>({
     resolver: zodResolver(inviteStudentToCourseSchema),
@@ -50,7 +51,7 @@ export const AdminCoursesInviteStudentsForm = ({
       });
     },
     onSuccess: () => {
-      reset();
+      reset(getValues());
       queryClient.invalidateQueries({ queryKey: ["course", { id: courseId }] });
     },
   });
@@ -79,7 +80,7 @@ export const AdminCoursesInviteStudentsForm = ({
         ))}
       </div>
 
-      <Button disabled={!isDirty || mutation.isSuccess} type="submit">
+      <Button disabled={!isDirty} type="submit">
         {mutation.isPending && (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
         )}

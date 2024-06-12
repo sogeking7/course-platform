@@ -66,13 +66,15 @@ export const AdminCourseCreateForm = ({
     onSuccess: (data) => {
       if (mode === "edit") {
         queryClient.setQueryData(["course", { id: data.id }], data);
+        form.reset(form.getValues());
+        return;
       }
       queryClient.invalidateQueries({ queryKey: ["courses"] }), router.back();
     },
   });
 
   const onSubmit = (data: z.infer<typeof createCourseSchema>) => {
-    console.log(data);
+    // console.log(data);
     mutation.mutate(data);
   };
 
@@ -168,10 +170,7 @@ export const AdminCourseCreateForm = ({
             </p>
           )}
           <div className="flex w-full justify-end">
-            <Button
-              disabled={!form.formState.isDirty || mutation.isSuccess}
-              type="submit"
-            >
+            <Button disabled={!form.formState.isDirty} type="submit">
               {mutation.isPending && (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               )}

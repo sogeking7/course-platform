@@ -36,7 +36,7 @@ export const UserEditForm = () => {
   const mutation = useMutation({
     mutationFn: (newData: any) => userStore.update(user?.id!, newData),
     onSuccess: (newUserData) => {
-      console.log("newUserData", newUserData);
+      // console.log("newUserData", newUserData);
       update({
         ...session,
         user: {

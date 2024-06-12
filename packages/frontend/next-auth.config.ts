@@ -26,7 +26,7 @@ export const authOptions: NextAuthOptions = {
             return null;
           }
         } catch (error: any) {
-          console.log(error.response?.data?.statusCode);
+          // console.log(error.response?.data?.statusCode);
           throw new Error(error.response?.data?.statusCode);
         }
       },

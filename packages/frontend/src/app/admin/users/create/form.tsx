@@ -98,7 +98,7 @@ export const AdminUsersCreateForm = () => {
           {errors.root?.serverError.message}
         </p>
       )}
-      <Button disabled={!isDirty || mutation.isSuccess} type="submit">
+      <Button disabled={!isDirty} type="submit">
         {mutation.isPending && (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
         )}
