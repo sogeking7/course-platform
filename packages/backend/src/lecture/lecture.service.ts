@@ -88,8 +88,8 @@ export class LectureService {
   }
 
   async update(id: number, data: LectureUpdateDto): Promise<Lecture> {
-    await this.isSectionExists(data.sectionId);
-    await this.isExamExists(data.examId);
+    // await this.isSectionExists(data.sectionId);
+    // await this.isExamExists(data.examId);
 
     return await this.prisma.lecture.update({
       where: { id },
@@ -97,18 +97,18 @@ export class LectureService {
         name: data.name,
         content: data.content,
         videoUrl: data.videoUrl,
-        section: {
-          connect: {
-            id: data.sectionId,
-          },
-        },
-        ...(data.examId && {
-          exam: {
-            connect: {
-              id: data.examId,
-            },
-          },
-        }),
+        // section: {
+        //   connect: {
+        //     id: data.sectionId,
+        //   },
+        // },
+        // ...(data.examId && {
+        //   exam: {
+        //     connect: {
+        //       id: data.examId,
+        //     },
+        //   },
+        // }),
       },
     });
   }

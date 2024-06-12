@@ -77,7 +77,7 @@ export class LectureController {
   @ApiParam({ name: 'id', description: 'ID of the lecture' })
   @Put(':id')
   async update(
-    @Param('id') id: number,
+    @Param('id', new ParseIntPipe()) id: number,
     @Body() data: LectureUpdateDto,
   ): Promise<Lecture> {
     return await this.lectureService.update(id, data);
