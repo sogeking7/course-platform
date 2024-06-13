@@ -37,7 +37,7 @@ export const LectureManager = (props: Props) => {
         {props.lectures.map((lecture, index) => (
           <AccordionItem key={lecture.id} value={`item-${lecture.id}`}>
             <AccordionTrigger className="w-full bg-white px-3 py-4 border  border-neutral-300">
-              <label className=" flex gap-2 items-center min-w-max">
+              <label className=" flex gap-2 items-center">
                 <File size={14} />
                 <span>Сабақ {index + 1}:</span>
                 <span className=" text-gray-700 ">{lecture.name}</span>

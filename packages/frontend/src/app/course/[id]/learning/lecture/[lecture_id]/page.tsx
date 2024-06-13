@@ -169,7 +169,7 @@ export default function LectureIdPage({
             <div className=" md:border md:rounded-xl md:bg-white">
               <button
                 onClick={() => setIsSheetOpen(true)}
-                className="flex font-semibold items-center md:hidden max-md:px-4 max-md:pt-5 "
+                className="flex hover:underline font-semibold items-center md:hidden max-md:px-4 max-md:pt-5 "
               >
                 <ListCollapse className="mr-2" />
                 Контент

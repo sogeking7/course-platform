@@ -15,7 +15,7 @@ export const HomeHeader = (props: any) => {
           <div className="xl:hidden">
             <MySheetTrigger />
           </div>
-          <div className="ml-3 max-xl:hidden w-[120px] md:w-[140px]">
+          <div className="ml-4 max-xl:hidden w-[120px] md:w-[140px]">
             <Link href="/" className="w-[120px] md:w-[140px]">
               <Image
                 alt="Logo"

@@ -45,7 +45,7 @@ export const Footer = () => {
             <a className="hover:underline cursor-pointer ">Privacy Policy</a>
           </li>
         </ul>
-        <div className="flex gap-4 items-center flex-wrap justify-center">
+        <div className="flex gap-4 items-center max-sm:flex-col justify-center">
           <Logo />
           <span className="text-xs">© 2024 shoqan-edu.devhouse.kz</span>
         </div>

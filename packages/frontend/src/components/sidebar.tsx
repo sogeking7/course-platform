@@ -23,7 +23,7 @@ export const MySheetTrigger = () => {
   return (
     <button
       onClick={() => setIsMySheetOpen(!isMySheetOpen)}
-      className="rounded-xl hover:bg-slate-300 bg-slate-200 text-neutral-700 w-[50px] h-[40px] flex items-center justify-center hover:opacity-100"
+      className="rounded-xl hover:bg-slate-300 bg-slate-200 text-neutral-700 w-[40px] h-[40px] flex items-center justify-center hover:opacity-100"
     >
       {isMySheetOpen ? (
         // <div className="h-[22px] w-[22px] border-neutral-700  rounded-full border flex items-center justify-center">
@@ -46,7 +46,7 @@ export const MySheet = () => {
         setIsMySheetOpen(!isMySheetOpen);
       }}
     >
-      <SheetContent className="w-[285px] h-full bg-white" side={"left"}>
+      <SheetContent className="w-[300px] h-full bg-white" side={"left"}>
         <SheetHeader className="py-3 px-20 !h-[56px] flex items-center border-b border-neutral-300 shadow-sm">
           <Logo />
         </SheetHeader>
@@ -86,18 +86,24 @@ export const SideBar = ({ noText = false }: any) => {
   const role = user?.role;
 
   return (
-    <nav className="my-[2px] h-full bg-white">
-      <ul className="space-y-1">
+    <nav className="my-5 h-full bg-white">
+      <ul className="space-y-2">
         {default_links.map((item) => (
-          <li className="w-full" key={item.title}>
+          <li
+            className={cn(noText ? "px-2" : "px-4", "w-full")}
+            key={item.title}
+          >
             <SideBarButton noText={noText} isSheet item={item} />
           </li>
         ))}
       </ul>
       {role === "USER" && (
-        <ul className="space-y-1 mt-1">
+        <ul className="space-y-1 mt-2">
           {sidebar_links.map((item) => (
-            <li className="w-full" key={item.title}>
+            <li
+              className={cn(noText ? "px-2" : "px-4", "w-full")}
+              key={item.title}
+            >
               <SideBarButton noText={noText} isSheet item={item} />
             </li>
           ))}
@@ -106,9 +112,12 @@ export const SideBar = ({ noText = false }: any) => {
       {role === "ADMIN" && (
         <>
           <hr className="my-2" />
-          <ul className="space-y-1">
+          <ul className="space-y-2">
             {admin_links.map((item) => (
-              <li className="w-full" key={item.title}>
+              <li
+                className={cn(noText ? "px-2" : "px-4", "w-full")}
+                key={item.title}
+              >
                 <SideBarButton noText={noText} isSheet item={item} />
               </li>
             ))}
@@ -129,7 +138,7 @@ export const SideBarSkeleton = () => {
     );
   }
   return (
-    <aside className="min-w-[285px] max-xl:hidden min-h-screen max-h-full"></aside>
+    <aside className="min-w-[300px] max-xl:hidden min-h-screen max-h-full"></aside>
   );
 };
 
@@ -146,7 +155,7 @@ export const SideBarResizable = (props: any) => {
   }
 
   return (
-    <aside className="max-xl:hidden bg-white min-w-[285px] pt-[56px] fixed border-r border-neutral-300 min-h-screen max-h-full ">
+    <aside className="max-xl:hidden bg-white min-w-[300px] pt-[56px] fixed border-r border-neutral-300 min-h-screen max-h-full ">
       <SideBar />
     </aside>
   );
@@ -172,10 +181,11 @@ const SideBarButton = (props: any) => {
               }
             }}
             className={cn(
-              "w-full justify-start  text-base",
-              "py-[15px] pr-6 pl-6 rounded-none gap-3 border-transparent  border-l-[4px]",
+              noText ? "!justify-center" : "justify-start pl-4 pr-2",
+              "!min-w-[50px] w-full rounded-xl   text-base",
+              "py-[15px]  gap-3",
               pathname === item.href
-                ? "bg-neutral-200 border-[#1F2D5A] hover:bg-neutral-200/80 "
+                ? "bg-neutral-200  hover:bg-neutral-200/80 "
                 : "hover:border-neutral-200/50 hover:bg-neutral-200/50",
             )}
             variant={"sidebar"}
