@@ -23,13 +23,13 @@ export const MySheetTrigger = () => {
   return (
     <button
       onClick={() => setIsMySheetOpen(!isMySheetOpen)}
-      className="rounded-xl hover:bg-slate-300 bg-slate-200 text-neutral-700 w-[55px] h-[40px] flex items-center justify-center hover:opacity-100"
+      className="rounded-xl hover:bg-slate-300 bg-slate-200 text-neutral-700 w-[50px] h-[40px] flex items-center justify-center hover:opacity-100"
     >
       {isMySheetOpen ? (
         // <div className="h-[22px] w-[22px] border-neutral-700  rounded-full border flex items-center justify-center">
-          <X size={20} />
-        // </div>
+        <X size={20} />
       ) : (
+        // </div>
         <MenuIcon strokeWidth={2.25} size={20} className="rounded-none" />
       )}
     </button>
@@ -47,7 +47,7 @@ export const MySheet = () => {
       }}
     >
       <SheetContent className="w-[285px] h-full bg-white" side={"left"}>
-        <SheetHeader className="py-3 px-20 !h-[55px] flex items-center border-b border-neutral-300 shadow-sm">
+        <SheetHeader className="py-3 px-20 !h-[56px] flex items-center border-b border-neutral-300 shadow-sm">
           <Logo />
         </SheetHeader>
         <SideBar str />
@@ -66,13 +66,13 @@ export const SideBarTrigger = () => {
   return (
     <button
       onClick={() => setIsSideBarOpen(!isSideBarOpen)}
-      className="rounded-xl hover:bg-slate-300 bg-slate-200 text-neutral-700 w-[55px] h-[40px] flex items-center justify-center "
+      className="rounded-xl hover:bg-slate-300 bg-slate-200 text-neutral-700 w-[56px] h-[40px] flex items-center justify-center "
     >
       {isSideBarOpen ? (
         // <div className="h-[22px] w-[22px] border-neutral-700 rounded-full border flex items-center justify-center">
-          <X size={20} />
-        // </div>
+        <X size={20} />
       ) : (
+        // </div>
         // <CircleX size={20}/>
         <MenuIcon strokeWidth={2.25} size={20} className="rounded-none" />
       )}
@@ -139,14 +139,14 @@ export const SideBarResizable = (props: any) => {
 
   if (!isSideBarOpen || pathname.includes("/lecture")) {
     return (
-      <aside className="max-xl:hidden z-10 bg-white pt-[55px] fixed border-r border-neutral-300 min-h-screen max-h-full ">
+      <aside className="max-xl:hidden z-10 bg-white pt-[56px] fixed border-r border-neutral-300 min-h-screen max-h-full ">
         <SideBar noText />
       </aside>
     );
   }
 
   return (
-    <aside className="max-xl:hidden bg-white min-w-[285px] pt-[55px] fixed border-r border-neutral-300 min-h-screen max-h-full ">
+    <aside className="max-xl:hidden bg-white min-w-[285px] pt-[56px] fixed border-r border-neutral-300 min-h-screen max-h-full ">
       <SideBar />
     </aside>
   );

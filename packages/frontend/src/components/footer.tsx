@@ -20,7 +20,7 @@ const links = [
 export const Footer = () => {
   return (
     <footer className="absolute bottom-0 w-full pt-10 pb-7 border rounded-t-3xl bg-white border-neutral-300">
-      <nav className="container flex flex-col gap-5 justify-center items-center">
+      <nav className="container flex flex-col gap-8 justify-center items-center">
         {/* <ul className="flex gap-6 list-none">
           {links.map((link) => (
             <li key={link.title}>
@@ -34,24 +34,20 @@ export const Footer = () => {
             </li>
           ))}
         </ul> */}
-        <ul className="flex sm:flex-row flex-col items-center gap-6 list-disc text-sm">
+        <ul className="flex sm:flex-row flex-col items-center gap-6 text-sm">
           <li>
-            <a className="hover:underline cursor-pointer font-bold">About</a>
+            <a className="hover:underline cursor-pointer ">About</a>
           </li>
           <li>
-            <a className="hover:underline cursor-pointer font-bold">
-              Terms of Service
-            </a>
+            <a className="hover:underline cursor-pointer ">Terms of Service</a>
           </li>
           <li>
-            <a className="hover:underline cursor-pointer font-bold">
-              Privacy Policy
-            </a>
+            <a className="hover:underline cursor-pointer ">Privacy Policy</a>
           </li>
         </ul>
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-4 items-center flex-wrap justify-center">
           <Logo />
-          <span className="text-xs">© 2024 shoqan-edu.kz</span>
+          <span className="text-xs">© 2024 shoqan-edu.devhouse.kz</span>
         </div>
       </nav>
     </footer>

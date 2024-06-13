@@ -14,9 +14,9 @@ export default function HomeLayout({
       <div className="fixed top-0 w-full bg-white z-50">
         <HomeHeader />
       </div>
-      <main className="w-full overflow-y-auto flex bg-[#F5F5F5]">
+      <main className="w-full overflow-y-auto flex bg-[#F0F2F5]">
         <SideBarSkeleton />
-        <div className="relative pb-[calc(226px+48px)] sm:pb-[calc(138px+48px)] w-full pt-[55px]">
+        <div className="relative pb-[calc(226px+48px)] sm:pb-[calc(138px+48px)] w-full pt-[56px]">
           <MyContainer>{children}</MyContainer>
           <Footer />
         </div>

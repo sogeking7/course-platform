@@ -286,7 +286,7 @@ export const PictureForm = ({
               unoptimized
               width={160}
               height={160}
-              className="w-[160px] border border-[#1f2d5a] h-[160px] rounded-full border"
+              className="w-[160px] border border-[#1f2d5a] h-[160px] rounded-full"
               alt="profile-picture"
               src={
                 entityType === "user"
