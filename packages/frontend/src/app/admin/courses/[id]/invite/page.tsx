@@ -9,6 +9,7 @@ import { AdminUsersDataTable } from "@/app/admin/users/data-table";
 import { columns } from "@/app/admin/users/columns";
 import { GoBackButton } from "@/components/go-back-button";
 import { Bread } from "@/components/bread";
+import { WhiteBox } from "@/components/container";
 
 export default function AdminCourseInviteStudentPage({
   params,
@@ -27,10 +28,11 @@ export default function AdminCourseInviteStudentPage({
     return <LayoutLoader />;
   }
 
-  const users_list = data.users?.map((x: any) => {
-    const y = x.user;
-    return { ...y };
-  }) || [];
+  const users_list =
+    data.users?.map((x: any) => {
+      const y = x.user;
+      return { ...y };
+    }) || [];
 
   const breadcrumbs = [
     { name: "Курстар", path: "/admin/courses" },
@@ -45,14 +47,12 @@ export default function AdminCourseInviteStudentPage({
         <GoBackButton />
         <TypographyH1>Оқушы қосу</TypographyH1>
       </div>
-      <div className="p-5 border bg-white rounded-sm shadow-md">
-        {/* <label>Курс аты:</label>
-        <TypographyH3>{data.name}</TypographyH3> */}
+      <WhiteBox>
         <div className=" flex-col flex gap-6">
           <AdminUsersDataTable columns={columns} data={users_list} />
           <AdminCoursesInviteStudentsForm courseId={data.id} />
         </div>
-      </div>
+      </WhiteBox>
     </>
   );
 }

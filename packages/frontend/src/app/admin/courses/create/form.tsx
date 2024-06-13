@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { PictureForm } from "@/components/picture-form";
+import { WhiteBox } from "@/components/container";
 
 export const AdminCourseCreateForm = ({
   mode = "create",
@@ -79,7 +80,7 @@ export const AdminCourseCreateForm = ({
   };
 
   return (
-    <div className="p-5 bg-white border rounded-sm shadow-md">
+    <WhiteBox>
       <div className="flex justify-between flex-wrap gap-6">
         {mode === "edit" && (
           <PictureForm
@@ -101,19 +102,19 @@ export const AdminCourseCreateForm = ({
           <div className="mb-4 flex gap-4 flex-wrap justify-end">
             <Link href={`/admin/courses/${data?.id!}/curriculum`}>
               <Button variant={"outline"}>
-                <CircleFadingPlus className="mr-2" size={18} />
+                <CircleFadingPlus className="mr-2" size={20} />
                 Курс бағдарламасы
               </Button>
             </Link>
             <Link href={`/admin/courses/${data?.id!}/invite`}>
               <Button variant={"outline"}>
-                <UserRoundPlus className="mr-2" size={18} />
+                <UserRoundPlus className="mr-2" size={20} />
                 Оқушы қосу
               </Button>
             </Link>
             {/* <Link href={`/admin/courses/${data.id}`}>
               <Button variant={"outline"}>
-                <Pencil className="mr-2" size={18} />
+                <Pencil className="mr-2" size={20} />
                 Өңдеу
               </Button>
             </Link> */}
@@ -179,6 +180,6 @@ export const AdminCourseCreateForm = ({
           </div>
         </form>
       </Form>
-    </div>
+    </WhiteBox>
   );
 };

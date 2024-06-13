@@ -120,7 +120,7 @@ export const QuizForm = ({ examId, questions }: Props) => {
                         <FormControl>
                           <RadioGroupItem value={option.value} />
                         </FormControl>
-                        <FormLabel className="font-normal">
+                        <FormLabel className="">
                           {kazakhVariants[optIndex]} {option.value}
                         </FormLabel>
                       </FormItem>

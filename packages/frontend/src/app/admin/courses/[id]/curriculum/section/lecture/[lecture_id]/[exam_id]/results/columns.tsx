@@ -64,15 +64,15 @@ export const columns = (
             <DropdownMenuItem asChild className="">
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button variant={"destructive"} className="w-full">
-                    <Trash size={16} className="mr-2" /> Өшіру
+                  <Button size={"icon"} variant={"destructive"}>
+                    <Trash size={16} /> Өшіру
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
                     <AlertDialogTitle className="flex items-center">
                       <Trash
-                        size={18}
+                        size={20}
                         className="inline-block mr-2 text-destructive"
                       />
                       Result: {data?.firstName!}

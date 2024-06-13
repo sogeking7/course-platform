@@ -106,7 +106,7 @@ export const QuizCreator = ({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="border w-full bg-white border-neutral-300 rounded-sm p-4 space-y-3"
+          className="border w-full bg-white border-neutral-300 rounded-2xl p-4 space-y-3"
         >
           <FormField
             control={form.control}
@@ -170,7 +170,7 @@ export const QuizCreator = ({
                       className="rounded-full min-w-10 "
                       onClick={() => remove(index)}
                     >
-                      <X size={18} />
+                      <X size={20} />
                     </Button>
                   </div>
                 ))}
@@ -186,7 +186,7 @@ export const QuizCreator = ({
                         });
                       }}
                     >
-                      <Plus size={18} className="mr-2" /> Вариант
+                      <Plus size={20} className="mr-2" /> Вариант
                     </Button>
                   )}
                 </div>
@@ -204,15 +204,15 @@ export const QuizCreator = ({
             {mode === "edit" && length && length > 1 && (
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button variant={"destructive"}>
-                    <Trash size={16} className="mr-2" /> Өшіру
+                  <Button size={'icon'} variant={"destructive"}>
+                    <Trash size={16} /> Өшіру
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
                     <AlertDialogTitle className="flex items-center">
                       <Trash
-                        size={18}
+                        size={20}
                         className="inline-block mr-2 text-destructive"
                       />
                       Өшіру: {data?.text!}

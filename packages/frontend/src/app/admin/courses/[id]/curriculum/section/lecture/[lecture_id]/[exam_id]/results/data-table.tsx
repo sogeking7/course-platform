@@ -50,7 +50,7 @@ export const AdminQuizResultsDataTable = <TData, TValue>({
           className="max-w-sm"
         />
       </div>
-      <div className="rounded-md border bg-white ">
+      <div className="rounded-2xl border bg-white ">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

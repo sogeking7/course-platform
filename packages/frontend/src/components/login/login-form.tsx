@@ -66,7 +66,7 @@ export default function LoginForm() {
               <FormItem>
                 <FormLabel>Почта</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input placeholder="Почта" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -79,7 +79,7 @@ export default function LoginForm() {
               <FormItem>
                 <FormLabel>Құпия сөз</FormLabel>
                 <FormControl>
-                  <Input {...field} type="password" />
+                  <Input placeholder="Құпия сөз" {...field} type="password" />
                 </FormControl>
                 <FormMessage />
               </FormItem>

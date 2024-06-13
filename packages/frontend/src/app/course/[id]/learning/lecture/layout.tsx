@@ -14,7 +14,7 @@ export default function LearningLayout({
       </div>
       <main className="w-full overflow-y-auto flex">
         <SideBarSkeleton />
-        <div className="relative w-full pt-[50px] overflow-y-auto md:bg-[#F5F5F5]">
+        <div className="relative w-full pt-[55px] overflow-y-auto md:bg-[#F5F5F5]">
           <div className="flex h-full sm:flex-row flex-col">{children}</div>
         </div>
       </main>

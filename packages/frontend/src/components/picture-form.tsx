@@ -296,11 +296,11 @@ export const PictureForm = ({
             />
           </>
         ) : (
-          <div className="min-w-[240px] max-w-[300px]">
+          <div className="min-w-[240px] max-w-[300px] ">
             <img
               className={cn(
                 cropShape === "round" ? "rounded-full " : "",
-                "w-full h-full border",
+                "w-full h-full border rounded-2xl",
               )}
               src={
                 entityType === "user"

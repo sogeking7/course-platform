@@ -28,22 +28,23 @@ export default function UserButton() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className={cn("w-[]")}>
-          {/* <label className="max-sm:hidden">Жеке профиль</label> */}
-          <Image
-            unoptimized
-            width={35}
-            height={35}
-            className="border border-[#1f2d5a] w-[35px] h-[35px] rounded-full"
-            src={user?.profilePictureLink || "/placeholder.jpg"}
-            alt="user"
-          />
-        </button>
+        <Image
+          unoptimized
+          width={40}
+          height={40}
+          className="border border-[#1f2d5a] w-10 h-10 rounded-full"
+          src={user?.profilePictureLink || "/placeholder.jpg"}
+          alt="user"
+        />
       </DropdownMenuTrigger>
       <DropdownMenuContent side="top">
-        <DropdownMenuLabel className="text-base leading-tight">
-          <p>{user.lastName}</p>
-          <p>{user.firstName}</p>
+        <DropdownMenuLabel>
+          <p className="text-base leading-tight !font-semibold">
+            {user.lastName}
+          </p>
+          <p className="text-base leading-tight !font-semibold">
+            {user.firstName}
+          </p>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         {user?.role === "USER" && (
@@ -80,7 +81,7 @@ export const SignOutButton = () => {
       variant={"ghost"}
       onClick={() => signOut()}
     >
-      <LogOut className="mr-2" size={18} />
+      <LogOut className="mr-2" size={20} />
       Шығу
     </Button>
   );
@@ -92,9 +93,9 @@ export const SignInButton = () => {
       size={"reset"}
       className={cn("py-2.5 px-5")}
       onClick={() => signIn()}
-      variant={"ghost"}
+      // variant={"ghost"}
     >
-      <LogIn className="mr-2" size={18} />
+      <LogIn className="mr-2" size={20} />
       Кіру
     </Button>
   );

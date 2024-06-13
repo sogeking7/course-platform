@@ -34,7 +34,7 @@ export default function AllCoursesPage() {
   return (
     <>
       <TypographyH1>Курстар</TypographyH1>
-      <div className="mb-3 bg-white rounded-md border py-5 px-5 flex gap-4">
+      <div className="mb-3 bg-white rounded-2xl shadow-sm border p-5 flex gap-4">
         <Input
           placeholder="Курс іздеу"
           className="max-w-[460px]"

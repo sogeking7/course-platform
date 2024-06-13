@@ -4,7 +4,7 @@ import logo from "@/../public/shoqan-edu.svg";
 
 export const Logo = () => {
   return (
-    <Link href="/" className="w-[120px] md:w-[130px]">
+    <Link href="/" className="w-[120px] md:w-[140px]">
       <Image
         alt="Logo"
         src={logo}

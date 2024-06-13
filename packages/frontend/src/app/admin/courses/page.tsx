@@ -13,7 +13,7 @@ import { useAxiosAuth } from "@/hooks/useAxiosAuth";
 
 export default function AdminUsersPage() {
   const axios = useAxiosAuth();
-  const courseStore = useCourseStore()
+  const courseStore = useCourseStore();
 
   const { data, isLoading } = useQuery({
     queryKey: ["courses"],
@@ -30,7 +30,7 @@ export default function AdminUsersPage() {
         <TypographyH1>Курстар</TypographyH1>
         <Link href="/admin/courses/create">
           <Button>
-            <Plus className="mr-2" size={18} />
+            <Plus className="mr-2" size={20} />
             Қосу
           </Button>
         </Link>

@@ -8,6 +8,7 @@ import { useExamStore } from "@/store/exam";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AdminQuizResultsDataTable } from "./data-table";
 import { columns } from "./columns";
+import { WhiteBox } from "@/components/container";
 
 export default function AdminLectureQuizResults({
   params,
@@ -82,12 +83,12 @@ export default function AdminLectureQuizResults({
         <GoBackButton />
         <TypographyH1>Results Quiz: Lecture {lectureId}</TypographyH1>
       </div>
-      <div className="border p-5 bg-white rounded-sm">
+      <WhiteBox>
         <AdminQuizResultsDataTable
           columns={columns(mutation.mutate, examId)}
           data={data}
         />
-      </div>
+      </WhiteBox>
     </>
   );
 }

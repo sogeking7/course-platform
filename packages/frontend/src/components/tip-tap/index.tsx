@@ -11,7 +11,11 @@ type Props = {
   placeholder?: string;
   setEditorState: (richText: string) => void;
 };
-export const Tiptap = ({ editorState, setEditorState, placeholder="Толтырыңыз" }: Props) => {
+export const Tiptap = ({
+  editorState,
+  setEditorState,
+  placeholder = "Толтырыңыз",
+}: Props) => {
   const editor = useEditor({
     autofocus: false,
     extensions: [
@@ -45,7 +49,7 @@ export const Tiptap = ({ editorState, setEditorState, placeholder="Толтыр�
 
   if (!editor) {
     return (
-      <div className="p-5 !w-full bg-white border border-neutral-300 rounded-sm">
+      <div className="p-5 !w-full bg-white border border-neutral-300 rounded-xl">
         Жүктелуде...
       </div>
     );
@@ -53,12 +57,12 @@ export const Tiptap = ({ editorState, setEditorState, placeholder="Толтыр�
 
   return (
     <div>
-      <div className="flex justify-between p-1 border-neutral-300 border rounded-t-sm">
+      <div className="flex justify-between p-1 border-neutral-300 border rounded-t-xl">
         {editor && <ToolBar editor={editor} />}
       </div>
       <EditorContent
         placeholder={placeholder}
-        className="border-x border-b border-neutral-300 rounded-b-sm"
+        className="border-x border-b border-neutral-300 rounded-b-xl"
         editor={editor}
       />
     </div>

@@ -7,6 +7,7 @@ import { TypographyH1 } from "@/components/ui/typography";
 import { useCourseStore } from "@/store/course";
 import { useQuery } from "@tanstack/react-query";
 import { CourseSectionManager } from "./section/manager";
+import { WhiteBox } from "@/components/container";
 
 export default function AdminCoursesCurriculum({
   params,
@@ -56,9 +57,9 @@ export default function AdminCoursesCurriculum({
         <GoBackButton />
         <TypographyH1>Курс бағдарламасы</TypographyH1>
       </div>
-      <div className="border shadow-md rounded-sm py-12 px-12 bg-white">
+      <WhiteBox>
         <CourseSectionManager courseId={data.id} sections={data.sections} />
-      </div>
+      </WhiteBox>
     </>
   );
 }

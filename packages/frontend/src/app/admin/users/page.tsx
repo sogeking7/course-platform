@@ -28,7 +28,7 @@ export default function AdminUsersPage() {
         <TypographyH1>Қолданушылар</TypographyH1>
         <Link href="/admin/users/create">
           <Button>
-            <Plus className="mr-2" size={18} /> Қосу
+            <Plus className="mr-2" size={20} /> Қосу
           </Button>
         </Link>
       </div>

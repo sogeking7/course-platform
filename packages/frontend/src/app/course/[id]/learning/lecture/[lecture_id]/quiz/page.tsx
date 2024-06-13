@@ -1,7 +1,7 @@
 "use client";
 
 import { Bread } from "@/components/bread";
-import { MyContainer } from "@/components/container";
+import { MyContainer, WhiteBox } from "@/components/container";
 import { GoBackButton } from "@/components/go-back-button";
 import { LayoutLoader } from "@/components/loader";
 import { QuizForm } from "@/components/quiz-form";
@@ -76,9 +76,7 @@ export default function ClientQuizPage({
             <GoBackButton />
             <TypographyH1>Quiz: {lecture.name}</TypographyH1>
           </div>
-          <div className="border bg-white rounded-sm p-6">
-            0 Cұрақтар
-          </div>
+          <WhiteBox> Cұрақтар</WhiteBox>
         </MyContainer>
       </div>
     );
@@ -92,9 +90,9 @@ export default function ClientQuizPage({
           <GoBackButton />
           <TypographyH1>Quiz: {lecture.name}</TypographyH1>
         </div>
-        <div className="border bg-white rounded-sm p-6">
+        <WhiteBox>
           <QuizForm examId={examId} questions={formattedQuestions} />
-        </div>
+        </WhiteBox>
       </MyContainer>
     </div>
   );

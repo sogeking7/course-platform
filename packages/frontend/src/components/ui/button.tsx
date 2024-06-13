@@ -5,11 +5,12 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center text-base justify-center whitespace-nowrap rounded-sm font-normal ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-0 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center text-base justify-center whitespace-nowrap rounded-xl font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-0 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
-        default: "border border-transparent bg-[#1f2d5a] text-white hover:bg-[#35426a]",
+        default:
+          "border border-transparent bg-[#1f2d5a] text-white hover:bg-[#35426a]",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
@@ -22,10 +23,10 @@ const buttonVariants = cva(
         sidebar: "",
       },
       size: {
-        default: "min-h-10 px-5 py-2",
-        sm: "h-9 rounded-sm px-3",
-        lg: "h-11 rounded-md px-8",
-        icon: "h-10 w-10",
+        default: "h-12 px-6 py-3 ",
+        sm: "h-9 rounded-xl px-3 text-sm",
+        lg: "h-11 rounded-2xl px-8",
+        icon: "h-12 w-12",
         reset: "",
       },
     },

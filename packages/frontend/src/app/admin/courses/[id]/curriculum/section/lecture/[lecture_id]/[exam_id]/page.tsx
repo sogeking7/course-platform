@@ -1,6 +1,7 @@
 "use client";
 
 import { Bread } from "@/components/bread";
+import { WhiteBox } from "@/components/container";
 import { GoBackButton } from "@/components/go-back-button";
 import { LayoutLoader } from "@/components/loader";
 import { QuizCreator } from "@/components/quiz-creator";
@@ -85,7 +86,7 @@ export default function AdminLecturePage({
           </Button>
         </Link>
       </div>
-      <div className="border p-5 bg-white rounded-sm">
+      <WhiteBox>
         <div className="flex flex-col gap-6 mb-6">
           {data.map((question, index) => {
             const modifiedQuestion: z.infer<typeof createQuestionSchema> & {
@@ -110,7 +111,7 @@ export default function AdminLecturePage({
           })}
         </div>
         <QuizCreator examId={examId} lectureId={lectureId} mode="new" />
-      </div>
+      </WhiteBox>
     </>
   );
 }

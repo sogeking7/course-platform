@@ -15,7 +15,7 @@ export const GoBackButton = () => {
       className="text-neutral-800 flex items-center h-9 w-9"
       onClick={handleGoBack}
     >
-      <ArrowLeft className=" inline" size={24} />
+      <ArrowLeft className="inline" strokeWidth={2.5} size={24} />
     </button>
   );
 };

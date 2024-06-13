@@ -169,7 +169,7 @@ const config = {
         },
       }),
       fontFamily: {
-        sans: ["Inter", "sans-serif"],
+        sans: ["Montserrat", "sans-serif"],
       },
       colors: {
         my_cyan: "#048998",

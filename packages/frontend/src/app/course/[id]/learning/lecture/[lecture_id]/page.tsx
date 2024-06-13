@@ -4,7 +4,12 @@ import { AccordionContents } from "@/components/course/accordion-contents";
 import { AccordionSheet } from "@/components/course/accordion-sheet";
 import { LayoutLoader } from "@/components/loader";
 import { Button } from "@/components/ui/button";
-import { calcPercentage, cn, convertToPreviewLink, getFirstLectureId } from "@/lib/utils";
+import {
+  calcPercentage,
+  cn,
+  convertToPreviewLink,
+  getFirstLectureId,
+} from "@/lib/utils";
 import { useCourseStore } from "@/store/course";
 import { useExamStore } from "@/store/exam";
 import { useLectureStore } from "@/store/lecture";
@@ -52,7 +57,6 @@ export default function LectureIdPage({
         const firstLectureId = getFirstLectureId(course!);
         if (firstLectureId) return lectureStore.getById(firstLectureId);
       }
-
     },
     enabled: !!course,
   });
@@ -162,7 +166,7 @@ export default function LectureIdPage({
           <LayoutLoader />
         ) : (
           <div className=" md:p-6 w-full max-w-[1248px] mx-auto">
-            <div className=" md:border md:rounded-sm  md:bg-white">
+            <div className=" md:border md:rounded-xl md:bg-white">
               <button
                 onClick={() => setIsSheetOpen(true)}
                 className="flex font-semibold items-center md:hidden max-md:px-4 max-md:pt-5 "
@@ -253,7 +257,7 @@ export default function LectureIdPage({
                           href={`/course/${course_id}/learning/lecture/${lecture_id || getFirstLectureId(course!)}/quiz`}
                         >
                           <Button>
-                            <BookCheck className="mr-2" size={18} />
+                            <BookCheck className="mr-2" size={20} />
                             Тестілеу бастау
                           </Button>
                         </Link>
@@ -277,7 +281,7 @@ export default function LectureIdPage({
                       href={`/course/${course_id}/learning/lecture/${prevLectureId}`}
                       className="flex items-center flex-start hover:underline"
                     >
-                      <ChevronLeft className="inline-block mr-2" size={18} />
+                      <ChevronLeft className="inline-block mr-2" size={20} />
                       Алдыңғы сабақ
                     </Link>
                   )}
@@ -288,7 +292,7 @@ export default function LectureIdPage({
                       className="flex items-center flex-end hover:underline"
                     >
                       Келесі сабақ
-                      <ChevronRight className="ml-2 inline-block" size={18} />
+                      <ChevronRight className="ml-2 inline-block" size={20} />
                     </Link>
                   )}
                 </div>

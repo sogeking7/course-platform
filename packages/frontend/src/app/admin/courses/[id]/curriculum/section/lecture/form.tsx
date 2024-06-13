@@ -13,7 +13,14 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Tiptap } from "@/components/tip-tap";
-import { BookCheck, ClipboardList, Loader, Loader2, Plus, Trash } from "lucide-react";
+import {
+  BookCheck,
+  ClipboardList,
+  Loader,
+  Loader2,
+  Plus,
+  Trash,
+} from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -147,15 +154,15 @@ export default function LectureForm({
             <>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button variant={"destructive"}>
-                    <Trash size={16} className="mr-2" /> Өшіру
+                  <Button size={"icon"} variant={"destructive"}>
+                    <Trash size={16} />
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
                     <AlertDialogTitle className="flex items-center">
                       <Trash
-                        size={18}
+                        size={20}
                         className="inline-block mr-2 text-destructive"
                       />
                       Quiz: {data?.name!}
@@ -191,7 +198,7 @@ export default function LectureForm({
               <Link
                 href={`/admin/courses/${courseId}/curriculum/section/lecture/${data?.id!}/${data.exam.id}/results`}
               >
-                <Button variant={'outline'}>
+                <Button variant={"outline"}>
                   <ClipboardList size={16} className="mr-2" />
                   Нәтижелер
                 </Button>
@@ -223,7 +230,7 @@ export default function LectureForm({
       )}
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="border bg-white border-neutral-300 rounded-sm p-4 space-y-3"
+        className="border bg-white border-neutral-300 rounded-xl p-4 space-y-4"
       >
         <FormField
           control={form.control}
@@ -280,15 +287,15 @@ export default function LectureForm({
           {mode === "edit" && (
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button variant={"destructive"}>
-                  <Trash size={16} className="mr-2" /> Өшіру
+                <Button size={"icon"} variant={"destructive"}>
+                  <Trash size={16} />
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle className="flex items-center">
                     <Trash
-                      size={18}
+                      size={20}
                       className="inline-block mr-2 text-destructive"
                     />
                     Өшіру: {data?.name!}

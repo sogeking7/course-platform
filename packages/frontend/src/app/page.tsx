@@ -1,3 +1,4 @@
+import { WhiteBox } from "@/components/container";
 import HomeLayout from "./home/layout";
 import { TypographyH1 } from "@/components/ui/typography";
 
@@ -6,7 +7,7 @@ export default function HomePage() {
     <HomeLayout>
       <div>
         <TypographyH1>Басты бет</TypographyH1>
-        <div className="rounded-sm border bg-white p-5">Қош келдініз 👋</div>
+        <WhiteBox>Қош келдініз 👋</WhiteBox>
       </div>
     </HomeLayout>
   );

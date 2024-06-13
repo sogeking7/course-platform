@@ -23,12 +23,12 @@ export const MySheetTrigger = () => {
   return (
     <button
       onClick={() => setIsMySheetOpen(!isMySheetOpen)}
-      className="hover:bg-slate-300 bg-slate-200 text-neutral-700 w-[50px] h-[40px] flex items-center justify-center hover:opacity-100"
+      className="rounded-xl hover:bg-slate-300 bg-slate-200 text-neutral-700 w-[55px] h-[40px] flex items-center justify-center hover:opacity-100"
     >
       {isMySheetOpen ? (
-        <div className="!w-6 !h-6 border-neutral-700  rounded-full border flex items-center justify-center">
-          <X size={16} />
-        </div>
+        // <div className="h-[22px] w-[22px] border-neutral-700  rounded-full border flex items-center justify-center">
+          <X size={20} />
+        // </div>
       ) : (
         <MenuIcon strokeWidth={2.25} size={20} className="rounded-none" />
       )}
@@ -47,7 +47,7 @@ export const MySheet = () => {
       }}
     >
       <SheetContent className="w-[285px] h-full bg-white" side={"left"}>
-        <SheetHeader className="py-3 px-20 !h-[50px] flex items-center border-b border-neutral-300 shadow-sm">
+        <SheetHeader className="py-3 px-20 !h-[55px] flex items-center border-b border-neutral-300 shadow-sm">
           <Logo />
         </SheetHeader>
         <SideBar str />
@@ -66,12 +66,12 @@ export const SideBarTrigger = () => {
   return (
     <button
       onClick={() => setIsSideBarOpen(!isSideBarOpen)}
-      className="hover:bg-slate-300 bg-slate-200 text-neutral-700 w-[50px] h-[40px] flex items-center justify-center "
+      className="rounded-xl hover:bg-slate-300 bg-slate-200 text-neutral-700 w-[55px] h-[40px] flex items-center justify-center "
     >
       {isSideBarOpen ? (
-        <div className="h-[24px] w-[24px] border-neutral-700 rounded-full border flex items-center justify-center">
-          <X size={16} />
-        </div>
+        // <div className="h-[22px] w-[22px] border-neutral-700 rounded-full border flex items-center justify-center">
+          <X size={20} />
+        // </div>
       ) : (
         // <CircleX size={20}/>
         <MenuIcon strokeWidth={2.25} size={20} className="rounded-none" />
@@ -139,14 +139,14 @@ export const SideBarResizable = (props: any) => {
 
   if (!isSideBarOpen || pathname.includes("/lecture")) {
     return (
-      <aside className="max-xl:hidden z-10 bg-white pt-[50px] fixed border-r border-neutral-300 min-h-screen max-h-full ">
+      <aside className="max-xl:hidden z-10 bg-white pt-[55px] fixed border-r border-neutral-300 min-h-screen max-h-full ">
         <SideBar noText />
       </aside>
     );
   }
 
   return (
-    <aside className="max-xl:hidden bg-white min-w-[285px] pt-[50px] fixed border-r border-neutral-300 min-h-screen max-h-full ">
+    <aside className="max-xl:hidden bg-white min-w-[285px] pt-[55px] fixed border-r border-neutral-300 min-h-screen max-h-full ">
       <SideBar />
     </aside>
   );
@@ -172,8 +172,8 @@ const SideBarButton = (props: any) => {
               }
             }}
             className={cn(
-              "w-full justify-start font-normal text-base",
-              "py-[15px] pr-6 pl-6 rounded-none gap-2 border-transparent  border-l-[4px]",
+              "w-full justify-start  text-base",
+              "py-[15px] pr-6 pl-6 rounded-none gap-3 border-transparent  border-l-[4px]",
               pathname === item.href
                 ? "bg-neutral-200 border-[#1F2D5A] hover:bg-neutral-200/80 "
                 : "hover:border-neutral-200/50 hover:bg-neutral-200/50",
@@ -183,7 +183,7 @@ const SideBarButton = (props: any) => {
             asChild
           >
             <Link href={item.href}>
-              <i className="text-neutral-700">{item.icon}</i>
+              <i className="text-neutral-700 h-5">{item.icon}</i>
               {noText ? null : (
                 <label className="text-neutral-800 leading-tight">
                   {item.title}

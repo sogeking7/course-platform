@@ -78,7 +78,7 @@ export const AccordionSheet = ({
                     </AccordionTrigger>
                     <AccordionContent
                       className={cn(
-                        "px-0 text-sm font-normal",
+                        "px-0 text-sm ",
                         index === course.sections.length - 1
                           ? ""
                           : "border-b  border-b-zinc-600",
