@@ -43,4 +43,11 @@ export class AuthController {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
+
+  @ApiOperation({ summary: 'validate' })
+  @ApiResponse({ status: 200, type: String })
+  @Post('check-token')
+  validate(@Body() dto: { token: string }) {
+    return this.authService.validate(dto);
+  }
 }

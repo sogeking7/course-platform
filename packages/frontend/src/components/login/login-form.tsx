@@ -16,7 +16,6 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { loginSchema } from "@/types";
-import { useAuthStore } from "@/store/auth";
 import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
@@ -31,27 +30,25 @@ export default function LoginForm() {
       email: data.email,
       password: data.password,
       redirect: false,
-      callbackUrl: "/",
+      callbackUrl: "/home/all-courses",
     });
-
-    if (auth?.error) {
-      const errorStatus = auth.error;
-      // console.log(errorStatus);
-      switch (errorStatus) {
-        case "404":
-          form.setError("root.serverError", {
-            message: "Қолданушы табылмады",
-          });
-          break;
-        case "401":
-          form.setError("root.serverError", {
-            message: "Қате құпия сөз",
-          });
-          break;
-      }
-    } else {
-      router.push("/");
-      router.refresh();
+    console.log(auth);
+    const errorStatus = auth?.error;
+    // console.log(errorStatus);
+    switch (errorStatus) {
+      case "404":
+        form.setError("root.serverError", {
+          message: "Қолданушы табылмады",
+        });
+        break;
+      case "401":
+        form.setError("root.serverError", {
+          message: "Қате құпия сөз",
+        });
+        break;
+    }
+    if (auth?.ok) {
+      router.push("/home/all-courses");
     }
   };
 

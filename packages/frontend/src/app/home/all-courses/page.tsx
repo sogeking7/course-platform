@@ -34,14 +34,20 @@ export default function AllCoursesPage() {
   return (
     <>
       <TypographyH1>Курстар</TypographyH1>
-      <div className="mb-3 bg-white rounded-2xl shadow-sm border p-5 flex gap-4">
+      <div className="mb-3 md:bg-white rounded-2xl md:shadow-sm md:border md:p-5 flex gap-3 md:gap-4">
         <Input
           placeholder="Курс іздеу"
-          className="max-w-[460px]"
+          className="w-full"
           value={searchQuery}
           onChange={handleSearchChange}
         />
-        <Button>Іздеу</Button>
+        <Button className="max-md:hidden">
+          <Search size={20} className="mr-2 " />
+          Іздеу
+        </Button>
+        <Button size={"icon"} className="md:hidden">
+          <Search size={20} />
+        </Button>
       </div>
       {/*  */}
       <p className="text-neutral-500 mb-4 pl-2 flex items-center text-sm">

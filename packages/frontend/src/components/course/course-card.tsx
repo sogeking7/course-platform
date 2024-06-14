@@ -11,7 +11,7 @@ export const CourseCard = ({
   return (
     <Link
       href={link ? link : `/course/${item.id}`}
-      className=" border bg-white  rounded-xl hover:shadow-[0px_20px_20px_10px_#00000024]"
+      className="border max-w-[608px] w-full bg-white  rounded-xl hover:shadow-[0px_20px_20px_10px_#00000024]"
     >
       {/* <div className="rounded-t-sm h-[200px] bg-neutral-400 w-full" /> */}
       <img

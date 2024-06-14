@@ -268,7 +268,7 @@ export class ExamController {
       // }
       return results;
     } catch (error) {
-      console.log(error.message);
+      // console.log(error.message);
       if (error instanceof HttpException) {
         throw error;
       } else {

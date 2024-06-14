@@ -2,8 +2,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import LoginForm from "@/components/login/login-form";
 import Link from "next/link";
 import Image from "next/image";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const session = await getServerSession();
+  if (session) {
+    redirect("/");
+  }
   return (
     <div className="w-full h-screen flex justify-center  pt-[15vh] bg-[#F0F2F5]">
       <div className="flex flex-col min-w-[360px] items-center gap-12">

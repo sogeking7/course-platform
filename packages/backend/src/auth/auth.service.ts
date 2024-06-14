@@ -1,7 +1,15 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Injectable,
+  HttpException,
+  HttpStatus,
+  ForbiddenException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 @Injectable()
 export class AuthService {
@@ -20,6 +28,19 @@ export class AuthService {
       return result;
     } else {
       return 'wrong-password';
+    }
+  }
+
+  async validate(dto: { token: string }) {
+    const token = dto.token;
+    try {
+      const data = await this.jwtService.verifyAsync(token, {
+        secret: process.env.JWT_SECRET || 'secret',
+      });
+      if (!data) throw new ForbiddenException('Invalid token');
+      return data;
+    } catch (e) {
+      throw new ForbiddenException(e.message);
     }
   }
 

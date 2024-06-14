@@ -18,7 +18,7 @@ dotenv.config();
     forwardRef(() => UserModule),
     JwtModule.register({
       secret: process.env.JWT_SECRET || 'secret',
-      signOptions: { expiresIn: '24h' },
+      signOptions: { expiresIn: '7d' },
     }),
   ],
   providers: [

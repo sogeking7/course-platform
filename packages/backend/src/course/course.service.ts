@@ -47,7 +47,7 @@ export class CourseService {
       },
     });
 
-    console.log('userId', userId);
+    // console.log('userId', userId);
     const userRole = (
       await this.prisma.user.findUnique({ where: { id: userId } })
     ).role;
@@ -104,7 +104,7 @@ export class CourseService {
 
       return course;
     } catch (error) {
-      console.log(error.message);
+      // console.log(error.message);
       throw new HttpException(
         `Error finding course: ${error.message}`,
         HttpStatus.INTERNAL_SERVER_ERROR,
