@@ -74,7 +74,7 @@
 
 @layer base {
   * {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
     @apply border-border;
   }
@@ -103,16 +103,40 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-}
 
-.tiptap.ProseMirror {
-  outline: none,
-}
+  * {
+    scrollbar-color: #b6b6c5 transparent;
+    scrollbar-width: thin;
+  }
 
-.tiptap p.is-editor-empty:first-child::before {
-  color: hsl(var(--muted-foreground));
-  content: attr(data-placeholder);
-  float: left;
-  height: 0;
-  pointer-events: none;
+  ::-webkit-scrollbar {
+    width: 2px;
+    height: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #b6b6c5;
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: #000;
+  }
+
+  .tiptap.ProseMirror {
+    outline: none,
+  }
+
+  .tiptap p.is-editor-empty:first-child::before {
+    color: hsl(var(--muted-foreground));
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+  }
 }

@@ -30,7 +30,7 @@ export const AccordionContents = ({
     : [];
 
   return (
-    <div className="max-md:hidden fixed max-w-[345px] min-w-[345px] pb-10 h-[calc(100vh-56px)] bg-[#23292F] text-slate-50 overflow-scroll ">
+    <div className="max-md:hidden  fixed max-w-[345px] min-w-[345px] pb-10 h-[calc(100vh-56px)] bg-[#23292F] text-slate-50 overflow-y-auto ">
       <button className="p-5 text-left bg-[#23292F] z-10 flex font-bold items-center fixed w-[345px] border-b border-b-zinc-600 text-base">
         <ListCollapse className="mr-2" />
         Контент
@@ -44,7 +44,7 @@ export const AccordionContents = ({
             type="multiple"
             className="w-full relative "
           >
-            {course.sections.map((section, index) => (
+            {[...course.sections,...course.sections,...course.sections,...course.sections,...course.sections,...course.sections,...course.sections,...course.sections,...course.sections,].map((section, index) => (
               <AccordionItem
                 className=""
                 key={section.id}
