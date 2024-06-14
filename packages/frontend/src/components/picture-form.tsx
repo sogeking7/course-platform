@@ -259,7 +259,7 @@ export const PictureForm = ({
               </div>
             </>
           )}
-          <DialogFooter className="flex w-full items-center">
+          <DialogFooter className="flex !flex-row justify-end gap-4 w-full items-center">
             <Button variant={"outline"} onClick={onCancel}>
               Болдырмау
             </Button>

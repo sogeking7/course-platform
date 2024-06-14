@@ -49,7 +49,7 @@ export default function CoursePage({ params }: { params: { id: string } }) {
           <div>
             <h1 className="text-2xl font-bold">
               {/* {data.name} */}
-              Lasdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+              https://drive.google.com/file/d/1uuNg9J2nUZgkI68F_Px2a5YGGU2NSWKh
             </h1>
             <p className="mt-4">{data.description}</p>
           </div>
