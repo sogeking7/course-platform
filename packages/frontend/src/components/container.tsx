@@ -3,5 +3,5 @@ export const MyContainer = ({ children }: { children: React.ReactNode }) => {
 };
 
 export const WhiteBox = ({ children }: { children: React.ReactNode }) => {
-  return <div className="p-6 border bg-white rounded-3xl shadow-sm mb-6">{children}</div>;
+  return <div className="p-4 sm:p-6 border bg-white rounded-3xl shadow-sm mb-6">{children}</div>;
 };

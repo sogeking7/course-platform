@@ -7,7 +7,6 @@ import { useQuery } from "@tanstack/react-query";
 import { TypographyH1, TypographyH3 } from "@/components/ui/typography";
 import { AdminUsersDataTable } from "@/app/admin/users/data-table";
 import { columns } from "@/app/admin/users/columns";
-import { GoBackButton } from "@/components/go-back-button";
 import { Bread } from "@/components/bread";
 import { WhiteBox } from "@/components/container";
 
@@ -34,19 +33,12 @@ export default function AdminCourseInviteStudentPage({
       return { ...y };
     }) || [];
 
-  const breadcrumbs = [
-    { name: "Курстар", path: "/admin/courses" },
-    { name: data.name, path: "/admin/courses/" + id },
-    { name: "Оқушы қосу", path: "/admin/courses/" + id + "/invite" },
-  ];
+  const breadcrumbs = [{ name: ` ${data.name}`, path: "/admin/courses/" + id }];
 
   return (
     <>
       <Bread breadcrumbs={breadcrumbs} />
-      <div className="flex">
-        <GoBackButton />
-        <TypographyH1>Оқушы қосу</TypographyH1>
-      </div>
+      <TypographyH1>Оқушы қосу</TypographyH1>
       <WhiteBox>
         <div className=" flex-col flex gap-6">
           <AdminUsersDataTable columns={columns} data={users_list} />

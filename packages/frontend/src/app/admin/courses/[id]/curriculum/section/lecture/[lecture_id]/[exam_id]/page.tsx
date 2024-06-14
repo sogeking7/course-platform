@@ -2,12 +2,12 @@
 
 import { Bread } from "@/components/bread";
 import { WhiteBox } from "@/components/container";
-import { GoBackButton } from "@/components/go-back-button";
 import { LayoutLoader } from "@/components/loader";
 import { QuizCreator } from "@/components/quiz-creator";
 import { Button } from "@/components/ui/button";
 import { TypographyH1 } from "@/components/ui/typography";
 import { useExamStore } from "@/store/exam";
+import { useLectureStore } from "@/store/lecture";
 import { createQuestionSchema } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { ClipboardList } from "lucide-react";
@@ -28,32 +28,26 @@ export default function AdminLecturePage({
   const examId = Number(params.exam_id);
 
   const examStore = useExamStore();
+  const lectureStore = useLectureStore();
 
   const { data, isSuccess, isLoading } = useQuery({
     queryKey: ["exam", { id: examId }],
     queryFn: () => examStore.getQuestions(examId),
   });
 
-  if (isLoading || !data) {
+  const { data: lecture, isLoading: isLectureLoading } = useQuery({
+    queryKey: ["lecture", { id: lectureId }],
+    queryFn: () => lectureStore.getById(lectureId),
+  });
+
+  if (isLoading || !data || !lecture || isLectureLoading) {
     return <LayoutLoader />;
   }
 
   const breadcrumbs = [
-    { name: "Курстар", path: "/admin/courses" },
-    // { name: data.section?.course?.name!, path: "/admin/courses/" + courseId },
     {
-      name: "Курс бағдарламасы",
+      name: ` ${lecture.name}`,
       path: "/admin/courses/" + courseId + "/curriculum",
-    },
-    {
-      name: `Quiz: Lecture ${lectureId}`,
-      path:
-        "/admin/courses/" +
-        courseId +
-        "/curriculum/section/lecture/" +
-        lectureId +
-        "/" +
-        examId,
     },
   ];
 
@@ -65,10 +59,7 @@ export default function AdminLecturePage({
     <>
       <Bread breadcrumbs={breadcrumbs} />
       <div className="w-full justify-between flex">
-        <div className="flex items-start">
-          <GoBackButton />
-          <TypographyH1>Quiz: Lecture {lectureId}</TypographyH1>
-        </div>
+        <TypographyH1>Quiz</TypographyH1>
         <Link
           href={
             "/admin/courses/" +

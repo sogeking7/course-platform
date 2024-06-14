@@ -86,7 +86,7 @@ export const SideBar = ({ noText = false }: any) => {
   const role = user?.role;
 
   return (
-    <nav className="my-5 h-full bg-white">
+    <nav className="my-5 h-full bg-white transition-none">
       <ul className="space-y-2">
         {default_links.map((item) => (
           <li
@@ -182,7 +182,7 @@ const SideBarButton = (props: any) => {
             }}
             className={cn(
               noText ? "!justify-center" : "justify-start pl-4 pr-2",
-              "!min-w-[50px] w-full rounded-xl   text-base",
+              "!min-w-[50px] w-full !transition-none rounded-xl   text-base",
               "py-[15px]  gap-3",
               pathname === item.href
                 ? "bg-neutral-200  hover:bg-neutral-200/80 "

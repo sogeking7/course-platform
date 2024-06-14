@@ -7,6 +7,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "./ui/breadcrumb";
+import { ChevronLeft } from "lucide-react";
 
 export const Bread = ({
   breadcrumbs,
@@ -21,8 +22,11 @@ export const Bread = ({
       <BreadcrumbList>
         {breadcrumbs.map((breadcrumb, index) => (
           <BreadcrumbItem key={index}>
-            <BreadcrumbLink asChild>
-              <Link href={breadcrumb.path}>{breadcrumb.name}</Link>
+            <BreadcrumbLink asChild className="flex items-center">
+              <Link href={breadcrumb.path}>
+                {!!(index === 0) && <ChevronLeft className="inline size-5" />}
+                {breadcrumb.name}
+              </Link>
             </BreadcrumbLink>
             {index < breadcrumbs.length - 1 && (
               <BreadcrumbSeparator>/</BreadcrumbSeparator>

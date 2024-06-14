@@ -109,7 +109,7 @@
     scrollbar-width: thin;
   }
 
-  ::-webkit-scrollbar {
+  /* ::-webkit-scrollbar {
     width: 2px;
     height: 5px;
   }
@@ -126,7 +126,7 @@
 
   ::-webkit-scrollbar-corner {
     background: #000;
-  }
+  } */
 
   .tiptap.ProseMirror {
     outline: none,

@@ -6,6 +6,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../../next-auth.config";
 import { useAxiosAuth } from "@/hooks/useAxiosAuth";
 import { TokenHandler } from "@/components/TokenHandler";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Shoqan Education",
@@ -27,6 +28,9 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await getServerSession(authOptions);
+  if (!session) {
+    // redirect("/auth/signin");
+  }
 
   return (
     <html lang="en" suppressHydrationWarning>

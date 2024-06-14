@@ -1,7 +1,6 @@
 "use client";
 
 import { Bread } from "@/components/bread";
-import { GoBackButton } from "@/components/go-back-button";
 import { LayoutLoader } from "@/components/loader";
 import { TypographyH1 } from "@/components/ui/typography";
 import { useExamStore } from "@/store/exam";
@@ -9,6 +8,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AdminQuizResultsDataTable } from "./data-table";
 import { columns } from "./columns";
 import { WhiteBox } from "@/components/container";
+import { useLectureStore } from "@/store/lecture";
 
 export default function AdminLectureQuizResults({
   params,
@@ -26,10 +26,16 @@ export default function AdminLectureQuizResults({
   const examId = Number(params.exam_id);
 
   const examStore = useExamStore();
+  const lectureStore = useLectureStore();
 
   const { data, isSuccess, isLoading } = useQuery({
     queryKey: ["exam-all-results", { id: examId }],
     queryFn: () => examStore.getAllResults(examId),
+  });
+
+  const { data: lecture, isLoading: isLectureLoading } = useQuery({
+    queryKey: ["lecture", { id: lectureId }],
+    queryFn: () => lectureStore.getById(lectureId),
   });
 
   const mutation = useMutation({
@@ -42,19 +48,17 @@ export default function AdminLectureQuizResults({
     },
   });
 
-  if (isLoading || !data) {
+  if (isLoading || !data || isLectureLoading || !lecture) {
     return <LayoutLoader />;
   }
 
   const breadcrumbs = [
-    { name: "Курстар", path: "/admin/courses" },
-    // { name: data.section?.course?.name!, path: "/admin/courses/" + courseId },
     {
-      name: "Курс бағдарламасы",
+      name: ` ${lecture.name}`,
       path: "/admin/courses/" + courseId + "/curriculum",
     },
     {
-      name: `Quiz: Lecture ${lectureId}`,
+      name: `Quiz`,
       path:
         "/admin/courses/" +
         courseId +
@@ -63,26 +67,12 @@ export default function AdminLectureQuizResults({
         "/" +
         examId,
     },
-    {
-      name: `Results`,
-      path:
-        "/admin/courses/" +
-        courseId +
-        "/curriculum/section/lecture/" +
-        lectureId +
-        "/" +
-        examId +
-        "/results",
-    },
   ];
 
   return (
     <>
       <Bread breadcrumbs={breadcrumbs} />
-      <div className="flex items-start">
-        <GoBackButton />
-        <TypographyH1>Results Quiz: Lecture {lectureId}</TypographyH1>
-      </div>
+      <TypographyH1>Results</TypographyH1>
       <WhiteBox>
         <AdminQuizResultsDataTable
           columns={columns(mutation.mutate, examId)}

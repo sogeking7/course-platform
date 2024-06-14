@@ -4,7 +4,7 @@ type props = {
 
 export function TypographyH1({ children }: props) {
   return (
-    <h1 className="text-slate-900 tracking-[0.015em] mb-8 lg:mb-6 scroll-m-20 text-2xl md:text-2xl font-semibold  lg:text-3xl">
+    <h1 className="text-slate-900 tracking-[0.015em] mb-6 lg:mb-6 scroll-m-20 text-2xl md:text-2xl font-semibold lg:text-3xl">
       {children}
     </h1>
   );

@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { Course } from "../../types";
 import Link from "next/link";
 
@@ -9,22 +10,22 @@ export const CourseCard = ({
   link?: string;
 }) => {
   return (
-    <Link
-      href={link ? link : `/course/${item.id}`}
-      className="border max-w-[608px] bg-white  rounded-xl hover:shadow-[0px_20px_20px_10px_#00000024]"
-    >
-      {/* <div className="rounded-t-sm h-[200px] bg-neutral-400 w-full" /> */}
-      <img
-        className="border rounded-t-xl"
-        src={item.profilePictureLink || "/placeholder-course.png"}
-      />
-      <div className="min-h-[80.75px] pt-5 pb-4 px-4 border-x border-b rounded-b-xl bg-white">
-        <h1 className="line-clamp-two  font-semibold line-clamp-one">
-          {item.name}
-        </h1>
-        {/* <p className="line-clamp-two text-[#78819c] mt-4 text-sm ">
-          {item.description}
-        </p> */}
+    <Link href={link ? link : `/course/${item.id}`}>
+      <div className="relative flex sm:flex-col-reverse max-sm:flex-row bg-white border-2 p-3 rounded-3xl hover:scale-105 transition-all hover:shadow-[rgba(17,_17,_26,_0.1)_0px_0px_16px]">
+        <p className="py-2 pb-8 h-min sm:pt-4 max-sm:pl-0 max-sm:pr-4 w-full">
+          <h1 className="font-semibold line-clamp-two">{item.name}</h1>
+        </p>
+        <img
+          className={cn(
+            "object-cover",
+            "rounded-2xl max-sm:aspect-square sm:aspect-video",
+            "max-sm:w-[80px] max-sm:h-[80px]",
+          )}
+          src={item.profilePictureLink || "/placeholder-course.png"}
+        />
+        <span className="absolute bottom-3 left-3 text-sm text-neutral-500">
+          Курс
+        </span>
       </div>
     </Link>
   );

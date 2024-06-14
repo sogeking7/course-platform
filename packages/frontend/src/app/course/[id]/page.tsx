@@ -24,18 +24,15 @@ export default function CoursePage({ params }: { params: { id: string } }) {
   const courseStore = useCourseStore();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["course", { id }],
-    queryFn: () => courseStore.findCourseById(id),
+    queryKey: ["course-public", { id }],
+    queryFn: () => courseStore.findPublicCourseById(id),
   });
 
   if (isLoading || !data) {
     return <LayoutLoader />;
   }
 
-  const breadcrumbs = [
-    { name: "Курстар", path: "/home/all-courses" },
-    { name: data.name, path: "/course/" + id },
-  ];
+  const breadcrumbs = [{ name: " Курстар", path: "/home/all-courses" }];
 
   return (
     <HomeLayout>
@@ -46,7 +43,7 @@ export default function CoursePage({ params }: { params: { id: string } }) {
           <div>
             <img
               className="sm:min-w-[240px] border rounded-2xl sm:max-w-[300px]"
-              src={data.profilePictureLink || ""}
+              src={data.profilePictureLink || "/placeholder-course.png"}
             />
           </div>
           <div>
@@ -65,52 +62,57 @@ export default function CoursePage({ params }: { params: { id: string } }) {
           </article>
         </div>
         <TypographyH2>Курс контенты</TypographyH2>
-        <Accordion
-          type="multiple"
-          className="gap-0 border-t-none rounded-xl border-x border-b  flex-col flex"
-          /* @ts-ignore */
-          collapsible={true}
-        >
-          {data.sections.map((section, index) => (
-            <AccordionItem key={section.id} value={`item-${section.id}`}>
-              <AccordionTrigger
-                className={cn(
-                  "w-full bg-white px-5 py-4 border-t ",
-                  index === 0 ? "rounded-t-xl" : "",
-                  index === data.sections.length - 1 ? "rounded-b-xl" : "",
-                )}
-              >
-                <label className=" flex gap-2 items-center min-w-max">
-                  {/* <File size={14} /> */}
-                  {/* <span>sections {index + 1}:</span> */}
-                  <span className="  font-semibold">
-                    {index + 1}. {section.name}
-                  </span>
-                </label>
-              </AccordionTrigger>
-              <AccordionContent className="py-4 px-5 border-t  bg-white">
-                <ul className="flex flex-col gap-4">
-                  {section.lectures.map((lecture, index) => {
-                    const hasVideo = lecture.videoUrl.includes(
-                      "drive.google.com/file/d/",
-                    );
-                    const icon = hasVideo ? (
-                      <MonitorPlay size={14} />
-                    ) : (
-                      <File size={14} />
-                    );
-                    return (
-                      <li key={lecture.id} className="flex items-center gap-4">
-                        {icon}
-                        <label>{lecture.name}</label>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
+        {!!data.sections.length && (
+          <Accordion
+            type="multiple"
+            className="gap-0 border-t-none rounded-xl border-x border-b  flex-col flex"
+            /* @ts-ignore */
+            collapsible={true}
+          >
+            {data.sections.map((section, index) => (
+              <AccordionItem key={section.id} value={`item-${section.id}`}>
+                <AccordionTrigger
+                  className={cn(
+                    "w-full bg-white px-5 py-4 border-t ",
+                    index === 0 ? "rounded-t-xl" : "",
+                    index === data.sections.length - 1 ? "rounded-b-xl" : "",
+                  )}
+                >
+                  <label className=" flex gap-2 items-center min-w-max">
+                    {/* <File size={14} /> */}
+                    {/* <span>sections {index + 1}:</span> */}
+                    <span className="  font-semibold">
+                      {index + 1}. {section.name}
+                    </span>
+                  </label>
+                </AccordionTrigger>
+                <AccordionContent className="py-4 px-5 border-t  bg-white">
+                  <ul className="flex flex-col gap-4">
+                    {section.lectures.map((lecture, index) => {
+                      const hasVideo = lecture.videoUrl.includes(
+                        "drive.google.com/file/d/",
+                      );
+                      const icon = hasVideo ? (
+                        <MonitorPlay size={14} />
+                      ) : (
+                        <File size={14} />
+                      );
+                      return (
+                        <li
+                          key={lecture.id}
+                          className="flex items-center gap-4"
+                        >
+                          {icon}
+                          <label>{lecture.name}</label>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        )}
       </WhiteBox>
     </HomeLayout>
   );

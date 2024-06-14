@@ -41,9 +41,9 @@ export class CourseController {
     private readonly jwtUtils: JwtUtils,
   ) {}
 
-  @ApiBearerAuth()
-  @UseGuards(RolesGuard)
-  @Roles('ADMIN', 'USER')
+  // @ApiBearerAuth()
+  // @UseGuards(RolesGuard)
+  // @Roles('ADMIN', 'USER')
   @ApiOperation({ summary: 'Get all courses' })
   @ApiResponse({
     status: 200,
@@ -93,7 +93,25 @@ export class CourseController {
     // console.log('payload', payload);
     const userId = payload.id!;
     try {
-      return await this.courseService.findOneById(userId, id);
+      return await this.courseService.findOneById(userId, id, false);
+    } catch (error) {
+      throw new HttpException(
+        `Error finding course: ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @ApiOperation({ summary: 'Find a public course by ID' })
+  @ApiResponse({ status: 200, type: Promise<Course | null> })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
+  @ApiParam({ name: 'id', description: 'ID of the course' })
+  @Get('/public/:id')
+  async findPublicOneById(
+    @Param('id', new ParseIntPipe()) id: number,
+  ): Promise<Course | null> {
+    try {
+      return await this.courseService.findOneById(0, id, true);
     } catch (error) {
       throw new HttpException(
         `Error finding course: ${error.message}`,

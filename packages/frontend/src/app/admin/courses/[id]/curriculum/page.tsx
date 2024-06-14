@@ -1,7 +1,6 @@
 "use client";
 
 import { Bread } from "@/components/bread";
-import { GoBackButton } from "@/components/go-back-button";
 import { LayoutLoader } from "@/components/loader";
 import { TypographyH1 } from "@/components/ui/typography";
 import { useCourseStore } from "@/store/course";
@@ -27,11 +26,7 @@ export default function AdminCoursesCurriculum({
     return <LayoutLoader />;
   }
 
-  const breadcrumbs = [
-    { name: "Курстар", path: "/admin/courses" },
-    { name: data.name, path: "/admin/courses/" + id },
-    { name: "Курс бағдарламасы", path: "/admin/courses/" + id + "/curriculum" },
-  ];
+  const breadcrumbs = [{ name: ` ${data.name}`, path: "/admin/courses/" + id }];
 
   const test = {
     sections: [
@@ -53,10 +48,7 @@ export default function AdminCoursesCurriculum({
   return (
     <>
       <Bread breadcrumbs={breadcrumbs} />
-      <div className="flex">
-        <GoBackButton />
-        <TypographyH1>Курс бағдарламасы</TypographyH1>
-      </div>
+      <TypographyH1>Курс бағдарламасы</TypographyH1>
       <WhiteBox>
         <CourseSectionManager courseId={data.id} sections={data.sections} />
       </WhiteBox>

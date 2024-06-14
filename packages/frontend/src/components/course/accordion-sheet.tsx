@@ -42,10 +42,10 @@ export const AccordionSheet = ({
       }}
     >
       <SheetContent
-        className="border-none scroll overflow-y-scroll !w-[320px] h-full bg-[#23292F] text-slate-50"
+        className="!pr-0 !m-0 border-none overflow-auto !w-[320px] h-full bg-[#23292F] text-slate-50"
         side={"left"}
       >
-        <div className="w-full pb-10 relative bg-[#23292F] text-slate-50 overflow-scroll ">
+        <div className="w-full pr-0 pb-10 relative bg-[#23292F] text-slate-50 overflow-y-auto ">
           <div className="p-5 text-left w-[320px] bg-[#23292F] z-10 flex font-bold items-center justify-between fixed  border-b border-b-zinc-600 text-base">
             <div className="flex">
               <ListCollapse className="mr-2" />

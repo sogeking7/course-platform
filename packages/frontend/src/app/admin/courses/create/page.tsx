@@ -1,14 +1,14 @@
 import { TypographyH1 } from "@/components/ui/typography";
-import { GoBackButton } from "@/components/go-back-button";
 import { AdminCourseCreateForm } from "./form";
+import { Bread } from "@/components/bread";
 
 export default async function AdminUsersCreatePage() {
+  const breadcrumbs = [{ name: " Курстар", path: "/admin/courses" }];
+
   return (
     <>
-      <div className="flex items-start">
-        <GoBackButton />
-        <TypographyH1>Жаңа курс</TypographyH1>
-      </div>
+      <Bread breadcrumbs={breadcrumbs} />
+      <TypographyH1>Жаңа курс</TypographyH1>
       <AdminCourseCreateForm mode="create" />
     </>
   );
