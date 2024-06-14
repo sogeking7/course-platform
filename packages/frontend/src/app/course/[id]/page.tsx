@@ -47,7 +47,10 @@ export default function CoursePage({ params }: { params: { id: string } }) {
             />
           </div>
           <div>
-            <h1 className="text-2xl font-bold">{data.name}</h1>
+            <h1 className="text-2xl font-bold">
+              {/* {data.name} */}
+              Lasdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+            </h1>
             <p className="mt-4">{data.description}</p>
           </div>
         </div>
