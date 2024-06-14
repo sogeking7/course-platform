@@ -86,7 +86,7 @@ export const SideBar = ({ noText = false }: any) => {
   const role = user?.role;
 
   return (
-    <nav className="my-5 h-full bg-white transition-none">
+    <nav className="my-4 h-full bg-white transition-none">
       <ul className="space-y-2">
         {default_links.map((item) => (
           <li
