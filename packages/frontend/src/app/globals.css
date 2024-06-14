@@ -76,7 +76,8 @@
   * {
     font-size: 14px;
     font-weight: 500;
-    word-break: break-all;
+    /* word-break: break-all; */
+    overflow-wrap: break-word;
     @apply border-border;
   }
 
