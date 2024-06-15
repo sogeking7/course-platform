@@ -5,17 +5,26 @@ import { columns } from "./columns";
 import { TypographyH1 } from "@/components/ui/typography";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useUserStore } from "@/store/user";
 import { LayoutLoader } from "@/components/loader";
 import { Plus } from "lucide-react";
 
 export default function AdminUsersPage() {
+  const queryClient = useQueryClient();
+
   const userStore = useUserStore();
 
   const { data, isLoading } = useQuery({
     queryKey: ["users"],
     queryFn: () => userStore.getAll(),
+  });
+
+  const mutation = useMutation({
+    mutationFn: (data: { id: number }) => userStore.delete(data.id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
   });
 
   if (isLoading || !data) {
@@ -32,7 +41,7 @@ export default function AdminUsersPage() {
           </Button>
         </Link>
       </div>
-      <AdminUsersDataTable columns={columns} data={data} />
+      <AdminUsersDataTable columns={columns(mutation.mutate)} data={data} />
     </>
   );
 }

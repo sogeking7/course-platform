@@ -9,6 +9,7 @@ type Store = {
   update: (id: number, data: any) => Promise<User>;
   create: (data: any) => Promise<User>;
   getAll: () => Promise<User[]>;
+  delete: (id: number) => Promise<User>;
 };
 
 export const useUserStore = create<Store>()((set) => {
@@ -29,5 +30,6 @@ export const useUserStore = create<Store>()((set) => {
     update: async (id, data) => (await axios.put(`${url}/${id}`, data)).data,
     create: async (data) => (await axios.post(`${url}`, data)).data,
     getAll: async () => (await axios.get(`${url}`)).data,
+    delete: async (id) => (await axios.delete(`${url}/${id}`)).data,
   };
 });
