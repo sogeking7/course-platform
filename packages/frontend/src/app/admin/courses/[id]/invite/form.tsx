@@ -39,6 +39,9 @@ export const AdminCoursesInviteStudentsForm = ({
   } = useForm<z.infer<typeof inviteStudentToCourseSchema>>({
     resolver: zodResolver(inviteStudentToCourseSchema),
     criteriaMode: "all",
+    defaultValues: {
+      email: "",
+    },
   });
 
   const mutation = useMutation({
@@ -52,6 +55,9 @@ export const AdminCoursesInviteStudentsForm = ({
     },
     onSuccess: () => {
       reset(getValues());
+      reset({
+        email: "",
+      });
       queryClient.invalidateQueries({ queryKey: ["course", { id: courseId }] });
     },
   });
@@ -67,12 +73,12 @@ export const AdminCoursesInviteStudentsForm = ({
           <div key={field}>
             <Input placeholder={placeholders[field]} {...register(field)} />
             {errors[field] && (
-              <span className="text-xs text-destructive">
+              <span className="text-sm text-destructive">
                 {errors[field]?.message}
               </span>
             )}
             {errors.root?.serverError.type && (
-              <p className="text-xs text-destructive">
+              <p className="text-sm text-destructive">
                 {errors.root?.serverError.message}
               </p>
             )}

@@ -5,7 +5,7 @@ export default function HomePage() {
   return (
     <>
       <TypographyH1>Админ панель</TypographyH1>
-      <WhiteBox>Қош келдініз 👋</WhiteBox>
+      <WhiteBox>Қош келдіңіз 👋</WhiteBox>
     </>
   );
 }

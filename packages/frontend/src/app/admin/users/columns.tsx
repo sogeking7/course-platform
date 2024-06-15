@@ -1,17 +1,21 @@
-"use client"
+"use client";
 
-import { User } from "@/types"
-import { ColumnDef } from "@tanstack/react-table"
-
+import { User } from "@/types";
+import { ColumnDef } from "@tanstack/react-table";
 
 export const columns: ColumnDef<User>[] = [
   {
-    accessorKey: "firstName",
-    header: "Аты",
-  },
-  {
-    accessorKey: "lastName",
-    header: "Тегі",
+    accessorKey: "fullName",
+    header: "Аты-жөні",
+    cell: ({ row }) => {
+      const { firstName, lastName } = row.original;
+      return (
+        <span>
+          <img src="/graduation-hat.png" className="inline mr-4" width={24} height={24} />
+          {lastName} {firstName}
+        </span>
+      );
+    },
   },
   {
     accessorKey: "email",
@@ -22,7 +26,7 @@ export const columns: ColumnDef<User>[] = [
     header: "Роль",
     cell: ({ getValue }) => {
       const role = getValue<string>();
-      return role === "USER" ? "Оқушы" : "Админ"
-    }
+      return role === "USER" ? "Оқушы" : "Админ";
+    },
   },
-]
+];

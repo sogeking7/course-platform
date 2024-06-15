@@ -84,7 +84,7 @@ export default function LoginForm() {
           />
         </div>
         {form.formState.errors.root?.serverError && (
-          <p className="text-xs text-destructive">
+          <p className="text-sm text-destructive">
             {form.formState.errors.root?.serverError.message}
           </p>
         )}

@@ -7,7 +7,7 @@ export default function HomePage() {
     <HomeLayout>
       <div>
         <TypographyH1>Басты бет</TypographyH1>
-        <WhiteBox>Қош келдініз 👋</WhiteBox>
+        <WhiteBox>Қош келдіңіз 👋</WhiteBox>
       </div>
     </HomeLayout>
   );

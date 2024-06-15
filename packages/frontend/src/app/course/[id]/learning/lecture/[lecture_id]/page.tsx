@@ -27,6 +27,7 @@ import rehypeRaw from "rehype-raw";
 import { LectureQuizResultsTable } from "./quiz/result-table";
 import { columns } from "./quiz/columns";
 import { QuizResult } from "@/types";
+import { MyContainer } from "@/components/container";
 
 export default function LectureIdPage({
   params,
@@ -165,8 +166,8 @@ export default function LectureIdPage({
         {lectureIsLoading || !lecture || examResultsLoading ? (
           <LayoutLoader />
         ) : (
-          <div className=" md:p-6 w-full max-w-[1248px] mx-auto">
-            <div className=" md:border md:rounded-xl md:bg-white">
+          <MyContainer>
+            <div className=" border rounded-xl bg-white">
               <button
                 onClick={() => setIsSheetOpen(true)}
                 className="flex hover:underline font-semibold items-center md:hidden max-md:px-4 max-md:pt-5 "
@@ -298,7 +299,7 @@ export default function LectureIdPage({
                 </div>
               </div>
             </div>
-          </div>
+          </MyContainer>
         )}
       </div>
     </>

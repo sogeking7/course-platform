@@ -318,8 +318,11 @@ export const PictureForm = ({
             type="file"
             {...fileRef}
           />
+          <p className="text-sm text-center mt-1 text-neutral-500">
+            File size must be less than 3MB
+          </p>
           {errors.file && (
-            <span className="text-xs text-destructive">
+            <span className="text-sm text-destructive">
               {/* @ts-ignore */}
               {errors.file.message}
             </span>

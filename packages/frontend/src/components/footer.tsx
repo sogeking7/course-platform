@@ -47,7 +47,7 @@ export const Footer = () => {
         </ul>
         <div className="flex gap-4 items-center max-sm:flex-col justify-center">
           <Logo />
-          <span className="text-xs">© 2024 shoqan-edu.devhouse.kz</span>
+          <span className="text-sm">© 2024 shoqan-edu.devhouse.kz</span>
         </div>
       </nav>
     </footer>

@@ -12,11 +12,11 @@ export default async function LoginPage() {
   }
   return (
     <div className="w-full h-screen flex justify-center  pt-[15vh] bg-[#F0F2F5]">
-      <div className="flex flex-col min-w-[360px] items-center gap-12">
+      <div className="flex flex-col min-w-[320px] items-center gap-12">
         <Link href="/" className="">
           <Image alt="Logo" src="/shoqan-edu.svg" width={230} height={90} />
         </Link>
-        <Card className="w-full sm:w-[360px] md:w-[400px]">
+        <Card className="w-full sm:w-[320px] md:w-[320px]">
           <CardHeader>
             <CardTitle className="text-center">Кіру</CardTitle>
           </CardHeader>

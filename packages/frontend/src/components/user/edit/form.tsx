@@ -89,7 +89,7 @@ export const UserEditForm = () => {
             <div key={field}>
               <Input placeholder={placeholders[field]} {...register(field)} />
               {errors[field] && (
-                <span className="text-xs text-destructive">
+                <span className="text-sm text-destructive">
                   {errors[field]?.message}
                 </span>
               )}

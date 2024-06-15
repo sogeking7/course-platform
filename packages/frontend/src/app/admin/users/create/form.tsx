@@ -86,7 +86,7 @@ export const AdminUsersCreateForm = () => {
               {...register(field)}
             />
             {errors[field] && (
-              <span className="text-xs text-destructive">
+              <span className="text-sm text-destructive">
                 {errors[field]?.message}
               </span>
             )}
@@ -94,7 +94,7 @@ export const AdminUsersCreateForm = () => {
         ))}
       </div>
       {errors.root?.serverError.type === "400" && (
-        <p className="text-xs text-destructive">
+        <p className="text-sm text-destructive">
           {errors.root?.serverError.message}
         </p>
       )}
