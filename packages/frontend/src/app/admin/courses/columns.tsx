@@ -19,6 +19,15 @@ import Link from "next/link";
 
 export const columns: ColumnDef<Course>[] = [
   {
+    id: "icon",
+    header: "#",
+    cell: ({ row }) => {
+      const data = row.original;
+      const image = "/golf-course.png";
+      return <img src={image} className="inline min-w-7 min-h-7" />;
+    },
+  },
+  {
     accessorKey: "name",
     header: "Аты",
   },

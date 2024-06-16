@@ -64,7 +64,11 @@ export const columns = (
       return (
         <div className="w-full flex justify-end">
           <AlertDialog>
-            <AlertDialogTrigger asChild className="w-8">
+            <AlertDialogTrigger
+              disabled={data.role === "ADMIN"}
+              asChild
+              className="w-8"
+            >
               <Button
                 disabled={data.role === "ADMIN"}
                 size={"icon"}
