@@ -21,7 +21,7 @@ export default function AdminUsersPage() {
   });
 
   const mutation = useMutation({
-    mutationFn: (data: { id: number }) => userStore.delete(data.id),
+    mutationFn: (id: number) => userStore.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
     },
@@ -41,7 +41,7 @@ export default function AdminUsersPage() {
           </Button>
         </Link>
       </div>
-      <AdminUsersDataTable columns={columns(mutation.mutate)} data={data} />
+      <AdminUsersDataTable columns={columns(mutation)} data={data} />
     </>
   );
 }

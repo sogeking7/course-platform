@@ -39,8 +39,8 @@ export default function AdminLectureQuizResults({
   });
 
   const mutation = useMutation({
-    mutationFn: (newData: { email: string }) =>
-      examStore.resetResultOfUser(examId, newData.email),
+    mutationFn: (email: string) =>
+      examStore.resetResultOfUser(examId, email),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["exam-all-results", { id: examId }],
@@ -72,7 +72,7 @@ export default function AdminLectureQuizResults({
   return (
     <>
       <Bread breadcrumbs={breadcrumbs} />
-      <TypographyH1>Results</TypographyH1>
+      <TypographyH1>Нәтижелер</TypographyH1>
       <WhiteBox>
         <AdminQuizResultsDataTable columns={columns(mutation)} data={data} />
       </WhiteBox>

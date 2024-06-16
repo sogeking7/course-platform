@@ -211,6 +211,7 @@ export default function LectureIdPage({
                       className={cn(
                         "w-full h-full absolute top-0 left-0 right-0 bottom-0",
                       )}
+                      allowFullScreen
                       onLoad={() => setVideoLoading(false)}
                       // allow="autoplay"
                     />

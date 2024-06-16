@@ -73,36 +73,38 @@ export default function AdminLecturePage({
         >
           <Button>
             <ClipboardList size={16} className="mr-2" />
-            Results
+            Нәтижелер
           </Button>
         </Link>
       </div>
-      <WhiteBox>
-        <div className="flex flex-col gap-6 mb-6">
-          {data.map((question, index) => {
-            const modifiedQuestion: z.infer<typeof createQuestionSchema> & {
-              id: number;
-            } = {
-              ...question,
-              id: parseInt(question.id as string),
-              options: question.options.map((o) => ({
-                value: o,
-                isTrue: question.correctAnswer.includes(o),
-              })),
-            };
-            return (
-              <QuizCreator
-                length={data.length}
-                examId={examId}
-                key={question.id}
-                data={modifiedQuestion}
-                mode="edit"
-              />
-            );
-          })}
-        </div>
+      <div className="sm:p-6 mt-3 sm:border sm:bg-white rounded-3xl sm:shadow-sm mb-6">
+        {!!data.length && (
+          <div className="flex flex-col gap-6 mb-6">
+            {data.map((question, index) => {
+              const modifiedQuestion: z.infer<typeof createQuestionSchema> & {
+                id: number;
+              } = {
+                ...question,
+                id: parseInt(question.id as string),
+                options: question.options.map((o) => ({
+                  value: o,
+                  isTrue: question.correctAnswer.includes(o),
+                })),
+              };
+              return (
+                <QuizCreator
+                  length={data.length}
+                  examId={examId}
+                  key={question.id}
+                  data={modifiedQuestion}
+                  mode="edit"
+                />
+              );
+            })}
+          </div>
+        )}
         <QuizCreator examId={examId} lectureId={lectureId} mode="new" />
-      </WhiteBox>
+      </div>
     </>
   );
 }
