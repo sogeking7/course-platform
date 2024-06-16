@@ -93,7 +93,7 @@ export class CourseController {
     // console.log('payload', payload);
     const userId = payload.id!;
     try {
-      return await this.courseService.findOneById(userId, id, false);
+      return await this.courseService.findOneById(userId, id, true);
     } catch (error) {
       throw new HttpException(
         `Error finding course: ${error.message}`,
@@ -111,7 +111,7 @@ export class CourseController {
     @Param('id', new ParseIntPipe()) id: number,
   ): Promise<Course | null> {
     try {
-      return await this.courseService.findOneById(0, id, true);
+      return await this.courseService.findOneById(0, id, false);
     } catch (error) {
       throw new HttpException(
         `Error finding course: ${error.message}`,

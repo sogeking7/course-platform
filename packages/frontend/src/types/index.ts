@@ -104,11 +104,38 @@ export const createSectionSchema = z.object({
   // description: z.string().trim().min(1, { message: "Қажет" }),
 });
 
-export const createLectureSchema = z.object({
-  name: z.string().trim().min(1, { message: "Қажет" }),
-  content: z.string().trim().min(1, { message: "Қажет" }),
-  videoUrl: z.string().trim().min(1, { message: "Қажет" }),
-});
+export const createLectureSchema = z
+  .object({
+    name: z.string().trim().min(1, { message: "Қажет" }),
+    videoUrl: z.string().trim().optional(),
+    videoUrl_checked: z.boolean().default(false),
+    content: z.string().trim().optional(),
+    content_checked: z.boolean().default(false),
+  })
+  .refine(
+    (data) => {
+      if (data.videoUrl_checked) {
+        return data.videoUrl && data.videoUrl.trim().length > 0;
+      }
+      return true;
+    },
+    {
+      message: "Video URL is required",
+      path: ["videoUrl"],
+    },
+  )
+  .refine(
+    (data) => {
+      if (data.content_checked) {
+        return data.content && data.content.trim().length > 0;
+      }
+      return true;
+    },
+    {
+      message: "Content is required",
+      path: ["content"],
+    },
+  );
 
 const questionSchema = z.object({
   name: z.string().trim().min(1, { message: "Сурақ қажет" }),

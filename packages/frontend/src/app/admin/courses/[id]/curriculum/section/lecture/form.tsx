@@ -8,9 +8,11 @@ import { z } from "zod";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Tiptap } from "@/components/tip-tap";
 import { BookCheck, ClipboardList, Loader2, Plus } from "lucide-react";
@@ -20,6 +22,7 @@ import { cn, convertToPreviewLink } from "@/lib/utils";
 import Link from "next/link";
 import { useExamStore } from "@/store/exam";
 import { MyAlert } from "@/components/my-alert";
+import { Switch } from "@/components/ui/switch";
 
 type Props = {
   sectionId: number;
@@ -48,6 +51,8 @@ export default function LectureForm({
       name: data?.name || "",
       content: data?.content || "",
       videoUrl: data?.videoUrl || "",
+      content_checked: data?.content ? true : false,
+      videoUrl_checked: data?.videoUrl ? true : false,
     },
   });
 
@@ -120,7 +125,10 @@ export default function LectureForm({
   };
 
   const onSubmit = (data: z.infer<typeof createLectureSchema>) => {
-    mutation.mutate(data);
+    const { content_checked, videoUrl_checked, ...edited } = data;
+    edited.content = content_checked ? edited.content : "";
+    edited.videoUrl = videoUrl_checked ? edited.videoUrl : "";
+    mutation.mutate(edited);
   };
 
   const videoUrl = convertToPreviewLink(form.getValues("videoUrl"));
@@ -183,18 +191,6 @@ export default function LectureForm({
       >
         <FormField
           control={form.control}
-          name="videoUrl"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Видеоға сілтеме</FormLabel>
-              <FormControl>
-                <Input placeholder="URL" {...field} />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem>
@@ -207,20 +203,78 @@ export default function LectureForm({
             </FormItem>
           )}
         />
+        <hr className="border-none" />
         <FormField
           control={form.control}
-          name="content"
+          name="content_checked"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Контент</FormLabel>
-              <FormControl>
-                <Tiptap
-                  placeholder={"Контент"}
-                  editorState={field.value}
-                  setEditorState={field.onChange}
+            <div className="border-neutral-300 border rounded-xl p-4 flex flex-col gap-4">
+              <FormItem className="flex flex-row items-center justify-between">
+                <div className="space-y-0.5">
+                  <FormLabel className="text-base">Контент қосу</FormLabel>
+                  <FormDescription>Текст</FormDescription>
+                </div>
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+              </FormItem>
+              {form.getValues("content_checked") && (
+                <FormField
+                  control={form.control}
+                  name="content"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Контент</FormLabel>
+                      <FormControl>
+                        <Tiptap
+                          placeholder={"Контент"}
+                          editorState={field.value || ""}
+                          setEditorState={field.onChange}
+                        />
+                      </FormControl>
+                      {/* <FormMessage /> */}
+                    </FormItem>
+                  )}
                 />
-              </FormControl>
-            </FormItem>
+              )}
+            </div>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="videoUrl_checked"
+          render={({ field }) => (
+            <div className="border-neutral-300 border rounded-xl p-4 flex flex-col gap-4">
+              <FormItem className="flex flex-row items-center justify-between">
+                <div className="space-y-0.5">
+                  <FormLabel className="text-base">Видео қосу</FormLabel>
+                  <FormDescription>Google Drive сілтемесі</FormDescription>
+                </div>
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+              </FormItem>
+              {form.getValues("videoUrl_checked") && (
+                <FormField
+                  control={form.control}
+                  name="videoUrl"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Видеоға сілтеме</FormLabel>
+                      <FormControl>
+                        <Input placeholder="URL" {...field} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              )}
+            </div>
           )}
         />
         <div className="flex justify-end w-full gap-4">

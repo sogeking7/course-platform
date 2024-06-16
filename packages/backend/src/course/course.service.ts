@@ -44,7 +44,7 @@ export class CourseService {
     id: number,
     isPublic: boolean,
   ): Promise<Course | null> {
-    if (!isPublic) {
+    if (isPublic) {
       const courseEnrollment = await this.prisma.courseEnrollment.findFirst({
         where: {
           userId: userId,

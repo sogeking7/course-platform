@@ -97,7 +97,7 @@ export default function CoursePage({ params }: { params: { id: string } }) {
                     <AccordionContent className="py-4 px-5 border-t  bg-white">
                       <ul className="flex flex-col gap-4">
                         {section.lectures.map((lecture, index) => {
-                          const hasVideo = lecture.videoUrl.includes(
+                          const hasVideo = lecture.videoUrl?.includes(
                             "drive.google.com/file/d/",
                           );
                           const icon = hasVideo ? (

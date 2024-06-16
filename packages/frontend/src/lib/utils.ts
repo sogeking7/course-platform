@@ -6,7 +6,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function convertToPreviewLink(url: string): string | null {
+export function convertToPreviewLink(url: string | null | undefined): string | null {
+  if (!url) return null;
   // Check if the URL is a Google Drive link
   if (url.includes("drive.google.com/file/d/")) {
     // Replace '/view?usp=sharing' with '/preview'

@@ -184,7 +184,7 @@ export const AdminCourseCreateForm = ({
                       name="content"
                       render={({ field }) => (
                         <FormItem>
-                          {/* <FormLabel>Контент</FormLabel> */}
+                          <FormLabel>Контент</FormLabel>
                           <FormControl>
                             <Tiptap
                               placeholder={"Контент"}
@@ -192,7 +192,7 @@ export const AdminCourseCreateForm = ({
                               setEditorState={field.onChange}
                             />
                           </FormControl>
-                          <FormMessage />
+                          {/* <FormMessage /> */}
                         </FormItem>
                       )}
                     />
