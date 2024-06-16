@@ -93,14 +93,10 @@ export default function LoginForm() {
           type="submit"
           className="w-full"
         >
-          {form.formState.isSubmitting ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Жүктелуде
-            </>
-          ) : (
-            <>Жіберу</>
+          {form.formState.isSubmitting && (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           )}
+          Жіберу
         </Button>
       </form>
     </Form>

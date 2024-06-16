@@ -7,36 +7,32 @@ import { useMutation } from "@tanstack/react-query";
 import { useUserStore } from "@/store/user";
 import { useSession } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Course, User, editUserSchema } from "@/types";
+import { editUserSchema } from "@/types";
 import { useEffect } from "react";
 import { Loader2 } from "lucide-react";
 import { z } from "zod";
 import { PictureForm } from "@/components/picture-form";
-
-const placeholders = {
-  firstName: "Аты",
-  lastName: "Тегі",
-  email: "Почта",
-};
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 export const UserEditForm = () => {
   const { data: session, update, status } = useSession();
   const user = session?.user;
   const userStore = useUserStore();
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors, isDirty },
-  } = useForm<z.infer<typeof editUserSchema>>({
+  const form = useForm<z.infer<typeof editUserSchema>>({
     resolver: zodResolver(editUserSchema),
   });
 
   const mutation = useMutation({
     mutationFn: (newData: any) => userStore.update(user?.id!, newData),
     onSuccess: (newUserData) => {
-      // console.log("newUserData", newUserData);
       update({
         ...session,
         user: {
@@ -52,13 +48,9 @@ export const UserEditForm = () => {
 
   useEffect(() => {
     if (status === "authenticated") {
-      reset(user);
+      form.reset(user);
     }
-  }, [status, reset, user]);
-
-  // if (status === "unauthenticated") {
-
-  // }
+  }, [status, form.reset, user]);
 
   if (status === "loading") {
     return <div className="">Жүктелуде...</div>;
@@ -75,34 +67,62 @@ export const UserEditForm = () => {
         cropShape="round"
         aspect={4 / 4}
         entityType="user"
-        onSuccess={(newData: any) => {
-          mutation.mutate(newData);
-          /* Handle success, e.g., show a message */
-        }}
+        onSuccess={(newData: any) => mutation.mutate(newData)}
       />
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="gap-5 w-full max-w-[320px] flex flex-col justify-center items-center"
-      >
-        <div className="space-y-3 w-full">
-          {(["firstName", "lastName", "email"] as const).map((field) => (
-            <div key={field}>
-              <Input placeholder={placeholders[field]} {...register(field)} />
-              {errors[field] && (
-                <span className="text-sm text-destructive">
-                  {errors[field]?.message}
-                </span>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="gap-5 w-full max-w-[320px] flex flex-col justify-center items-center"
+        >
+          <div className="space-y-3 w-full">
+            <FormField
+              control={form.control}
+              name="firstName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Аты</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Аты" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
-            </div>
-          ))}
-        </div>
-        <Button disabled={!isDirty} type="submit">
-          {mutation.isPending && (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          )}
-          Сақтау
-        </Button>
-      </form>
+            />
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Тегі</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Тегі" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Почта</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Почта" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <Button disabled={!form.formState.isDirty} type="submit">
+            {form.formState.isSubmitting && (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            Сақтау
+          </Button>
+        </form>
+      </Form>
     </div>
   );
 };

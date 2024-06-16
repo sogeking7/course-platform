@@ -132,7 +132,7 @@ export default function LectureForm({
           {data?.exam ? (
             <>
               <MyAlert
-                name={data?.name!}
+                name={`Quiz: ${data?.name!}`}
                 id={data?.exam?.id!}
                 mutation={mutationDeleteExam}
               />

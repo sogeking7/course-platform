@@ -15,19 +15,18 @@ import { Tiptap } from "@/components/tip-tap";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
-import {
-  CircleFadingPlus,
-  MoreHorizontal,
-  Pencil,
-  UserRoundPlus,
-} from "lucide-react";
+import { CircleFadingPlus, UserRoundPlus } from "lucide-react";
 import Link from "next/link";
 import { PictureForm } from "@/components/picture-form";
 import { WhiteBox } from "@/components/container";
+import { MyAlert } from "@/components/my-alert";
+import { Switch } from "@/components/ui/switch";
 
 export const AdminCourseCreateForm = ({
   mode = "create",
@@ -47,6 +46,7 @@ export const AdminCourseCreateForm = ({
       name: data?.name || "",
       description: data?.description || "",
       content: data?.content || "",
+      content_checked: data?.content ? true : false,
     },
   });
 
@@ -74,9 +74,21 @@ export const AdminCourseCreateForm = ({
     },
   });
 
+  const mutationDelete = useMutation({
+    mutationFn: (id: number) => courseStore.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["courses"] });
+      queryClient.removeQueries({
+        queryKey: ["course", { id: data?.id! }],
+      });
+      router.push("/admin/courses");
+    },
+  });
+
   const onSubmit = (data: z.infer<typeof createCourseSchema>) => {
-    // console.log(data);
-    mutation.mutate(data);
+    const { content_checked, ...edited } = data;
+    edited.content = content_checked ? edited.content : "";
+    mutation.mutate(edited);
   };
 
   return (
@@ -148,20 +160,44 @@ export const AdminCourseCreateForm = ({
                 </FormItem>
               )}
             />
+            <hr className="border-none" />
             <FormField
               control={form.control}
-              name="content"
+              name="content_checked"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Контент</FormLabel>
-                  <FormControl>
-                    <Tiptap
-                      placeholder={"Контент"}
-                      editorState={field.value}
-                      setEditorState={field.onChange}
+                <div className="border-neutral-300 border rounded-xl p-4 flex flex-col gap-4">
+                  <FormItem className="flex flex-row items-center justify-between">
+                    <div className="space-y-0.5">
+                      <FormLabel className="text-base">Контент қосу</FormLabel>
+                      <FormDescription>Текст</FormDescription>
+                    </div>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                  </FormItem>
+                  {form.getValues("content_checked") && (
+                    <FormField
+                      control={form.control}
+                      name="content"
+                      render={({ field }) => (
+                        <FormItem>
+                          {/* <FormLabel>Контент</FormLabel> */}
+                          <FormControl>
+                            <Tiptap
+                              placeholder={"Контент"}
+                              editorState={field.value || ""}
+                              setEditorState={field.onChange}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
-                  </FormControl>
-                </FormItem>
+                  )}
+                </div>
               )}
             />
           </div>
@@ -171,6 +207,13 @@ export const AdminCourseCreateForm = ({
             </p>
           )}
           <div className="flex w-full justify-end gap-4">
+            {mode === "edit" && (
+              <MyAlert
+                name={data?.name!}
+                id={data?.id!}
+                mutation={mutationDelete}
+              />
+            )}
             <Button disabled={!form.formState.isDirty} type="submit">
               {mutation.isPending && (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

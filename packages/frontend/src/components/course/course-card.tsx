@@ -21,7 +21,7 @@ export const CourseCard = ({
             "rounded-2xl max-sm:aspect-square sm:aspect-video",
             "max-sm:w-[80px] max-sm:h-[80px]",
           )}
-          src={item.profilePictureLink || "/placeholder-course.png"}
+          src={item.profilePictureLink || "/placeholder-course.jpg"}
         />
         <span className="absolute bottom-3 left-3 text-sm text-neutral-500">
           Курс

@@ -14,7 +14,9 @@ export const columns = (
     cell: ({ row }) => {
       const data = row.original;
       const image =
-        data.role === "ADMIN" ? "/profile.png" : "/graduation-hat.png";
+        data.role === "ADMIN"
+          ? "/icons/profile.png"
+          : "/icons/graduation-hat.png";
       return <img src={image} className="inline min-w-7 min-h-7" />;
     },
   },
@@ -43,8 +45,14 @@ export const columns = (
     cell: ({ row }) => {
       if (!mutation) return null;
       const data = row.original;
+      if (data.role === "ADMIN") return null;
       return (
-        <MyAlert name={data?.firstName!} id={data.id} mutation={mutation} />
+        <MyAlert
+          size="icon"
+          name={data?.firstName!}
+          id={data.id}
+          mutation={mutation}
+        />
       );
     },
   },

@@ -5,7 +5,7 @@ export type User = z.infer<typeof createUserSchema> & {
   password?: string;
   profilePictureLink?: string;
   access_token?: string;
-  accessToken?: string
+  accessToken?: string;
   role?: UserRole;
 };
 
@@ -164,11 +164,25 @@ export const createExamSchema = z.object({
   lectureId: z.number(),
 });
 
-export const createCourseSchema = z.object({
-  name: z.string().trim().min(1, { message: "Қажет" }),
-  description: z.string().trim().min(1, { message: "Қажет" }),
-  content: z.string().trim().min(1, { message: "Қажет" }),
-});
+export const createCourseSchema = z
+  .object({
+    name: z.string().trim().min(1, { message: "Қажет" }),
+    description: z.string().trim().min(1, { message: "Қажет" }),
+    content: z.string().trim().optional(),
+    content_checked: z.boolean().default(false),
+  })
+  .refine(
+    (data) => {
+      if (data.content_checked) {
+        return data.content && data.content.trim().length > 0;
+      }
+      return true;
+    },
+    {
+      message: "Content is required",
+      path: ["content"],
+    },
+  );
 
 export const editUserSchema = z.object({
   firstName: z.string().trim().min(1, { message: "Қажет" }),

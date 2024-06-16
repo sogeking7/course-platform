@@ -29,7 +29,12 @@ export const columns = (
     cell: ({ row }) => {
       const data = row.original;
       return (
-        <MyAlert name={data?.firstName!} id={data?.email} mutation={mutation} />
+        <MyAlert
+          size="icon"
+          name={data?.firstName!}
+          id={data?.email}
+          mutation={mutation}
+        />
       );
     },
   },

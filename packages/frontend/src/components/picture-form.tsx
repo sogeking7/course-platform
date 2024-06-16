@@ -291,7 +291,7 @@ export const PictureForm = ({
               src={
                 entityType === "user"
                   ? entityData.profilePictureLink || "/placeholder.jpg"
-                  : entityData.coursePictureLink || "/placeholder-course.png"
+                  : entityData.coursePictureLink || "/placeholder-course.jpg"
               }
             />
           </>
@@ -305,7 +305,7 @@ export const PictureForm = ({
               src={
                 entityType === "user"
                   ? entityData.profilePictureLink || "/placeholder.jpg"
-                  : entityData.coursePictureLink || "/placeholder-course.png"
+                  : entityData.coursePictureLink || "/placeholder-course.jpg"
               }
               loading="lazy"
               alt="cropped-image"
