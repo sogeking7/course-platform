@@ -1,5 +1,6 @@
 import { Instagram, Phone } from "lucide-react";
 import { Logo } from "./logo";
+import Link from "next/link";
 
 const links = [
   // {
@@ -36,18 +37,21 @@ export const Footer = () => {
         </ul> */}
         <ul className="flex sm:flex-row flex-col items-center gap-6 text-sm">
           <li>
-            <a className="hover:underline cursor-pointer ">About</a>
+            <Link href="/about" className="hover:underline cursor-pointer ">
+              Біз туралы
+            </Link>
           </li>
           <li>
-            <a className="hover:underline cursor-pointer ">Terms of Service</a>
-          </li>
-          <li>
-            <a className="hover:underline cursor-pointer ">Privacy Policy</a>
+            <Link href="/privacy" className="hover:underline cursor-pointer ">
+              Құпиялылық саясаты
+            </Link>
           </li>
         </ul>
         <div className="flex gap-4 items-center max-sm:flex-col justify-center">
           <Logo />
-          <span className="text-sm">© 2024 shoqan-edu.devhouse.kz</span>
+          <span className="text-sm">
+            Copyright © 2024 shoqan-edu.kz. Барлық құқықтар қорғалған.
+          </span>
         </div>
       </nav>
     </footer>

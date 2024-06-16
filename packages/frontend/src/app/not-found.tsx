@@ -3,6 +3,11 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/logo";
 import NotFoundImage from "@/../public/not-found.svg";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: '404'
+}
 
 export default function NotFound() {
   return (

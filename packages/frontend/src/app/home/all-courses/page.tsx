@@ -1,13 +1,16 @@
-"use server";
-
 import { TypographyH1 } from "@/components/ui/typography";
 import { LayoutLoader } from "@/components/loader";
 import { AllCoursesList } from "./list";
 import { Suspense } from "react";
-import axios from "@/lib/axios";
+import { axiosPublic } from "@/lib/axios";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Курстар",
+};
 
 export default async function AllCoursesPage() {
-  const data = (await axios.get(`/course`)).data;
+  const data = (await axiosPublic.get(`/course`)).data;
 
   return (
     <>

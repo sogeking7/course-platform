@@ -9,6 +9,13 @@ export default axios.create({
   },
 });
 
+export const axiosPublic = axios.create({
+  baseURL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
 export const axiosAuth = axios.create({
   baseURL,
   headers: {
