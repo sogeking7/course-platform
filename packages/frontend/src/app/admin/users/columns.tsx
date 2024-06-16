@@ -20,25 +20,25 @@ import {
 import { UseMutateFunction } from "@tanstack/react-query";
 
 export const columns = (
-  mutate: UseMutateFunction<any, Error, { id: number }, unknown>,
+  mutate?: UseMutateFunction<any, Error, { id: number }, unknown>,
 ): ColumnDef<User>[] => [
   {
-    accessorKey: "fullName",
-    header: "Аты-жөні",
+    id: "icon",
+    header: "#",
     cell: ({ row }) => {
-      const { firstName, lastName } = row.original;
-      return (
-        <span>
-          <img
-            src="/graduation-hat.png"
-            className="inline mr-4"
-            width={24}
-            height={24}
-          />
-          {lastName} {firstName}
-        </span>
-      );
+      const data = row.original;
+      const image =
+        data.role === "ADMIN" ? "/profile.png" : "/graduation-hat.png";
+      return <img src={image} className="inline min-w-7 min-h-7" />;
     },
+  },
+  {
+    accessorKey: "firstName",
+    header: "Аты",
+  },
+  {
+    accessorKey: "lastName",
+    header: "Жөні",
   },
   {
     accessorKey: "email",
@@ -56,7 +56,7 @@ export const columns = (
     id: "actions",
     cell: ({ row }) => {
       const data = row.original;
-
+      if (!mutate) return null;
       const handleDeleteUser = (id: number) => {
         mutate({ id });
       };
@@ -66,6 +66,7 @@ export const columns = (
           <AlertDialog>
             <AlertDialogTrigger asChild className="w-8">
               <Button
+                disabled={data.role === "ADMIN"}
                 size={"icon"}
                 className="min-w-8 min-h-8"
                 variant={"destructive"}
@@ -80,7 +81,7 @@ export const columns = (
                     size={20}
                     className="inline-block mr-2 text-destructive"
                   />
-                  Result: {data?.firstName!}
+                  Өшіру: {data?.firstName!}
                   {/* Сіз мүлдем сенімдісіз бе? */}
                 </AlertDialogTitle>
                 <AlertDialogDescription>

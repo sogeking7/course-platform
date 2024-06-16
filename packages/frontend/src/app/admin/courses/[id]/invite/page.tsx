@@ -41,7 +41,7 @@ export default function AdminCourseInviteStudentPage({
       <TypographyH1>Оқушы қосу</TypographyH1>
       <WhiteBox>
         <div className=" flex-col flex gap-6">
-          <AdminUsersDataTable columns={columns} data={users_list} />
+          <AdminUsersDataTable columns={columns()} data={users_list} />
           <AdminCoursesInviteStudentsForm courseId={data.id} />
         </div>
       </WhiteBox>
