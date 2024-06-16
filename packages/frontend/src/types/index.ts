@@ -120,7 +120,7 @@ export const createLectureSchema = z
       return true;
     },
     {
-      message: "Video URL is required",
+      message: "Бейне URL мекенжайы қажет",
       path: ["videoUrl"],
     },
   )
@@ -132,7 +132,7 @@ export const createLectureSchema = z
       return true;
     },
     {
-      message: "Content is required",
+      message: "Мазмұн қажет",
       path: ["content"],
     },
   );
@@ -150,7 +150,7 @@ const questionSchema = z.object({
 });
 
 const optionSchema = z.object({
-  value: z.string().trim().min(1, { message: "Option cannot be empty" }),
+  value: z.string().trim().min(1, { message: "Опция бос болмауы керек" }),
   isTrue: z.boolean().default(false),
 });
 
@@ -158,16 +158,16 @@ const baseQuestionSchema = z.object({
   text: z.string().trim().min(1, { message: "Қажет" }),
   options: z
     .array(optionSchema)
-    .min(2, { message: "At least two options are required" })
-    .max(5, { message: "Maximum 5 options can be added" })
+    .min(2, { message: "Кем дегенде екі опция қажет" })
+    .max(5, { message: "Ең көбі 5 опция қосуға болады" })
     .refine(
       (options) => options.filter((option) => option.isTrue).length === 1,
-      { message: "Only one option must be true" },
+      { message: "Тек бір нұсқа ақиқат болуы керек" },
     )
     .refine(
       (options) =>
         new Set(options.map((option) => option.value)).size === options.length,
-      { message: "Option names must be unique" },
+      { message: "Опция атаулары бірегей болуы керек" },
     ),
   isMultipleChoice: z.boolean().default(false),
   points: z.number().nonnegative().min(1).max(100),

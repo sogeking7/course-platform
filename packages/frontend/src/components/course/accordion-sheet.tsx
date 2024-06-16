@@ -49,7 +49,7 @@ export const AccordionSheet = ({
           <div className="p-5 text-left w-[320px] bg-[#23292F] z-10 flex font-bold items-center justify-between fixed  border-b border-b-zinc-600 text-base">
             <div className="flex items-center font-semibold">
               <ListCollapse className="mr-2" />
-              Контент
+              Мазмұн
             </div>
             <button
               className="h-[24px] w-[24px] border-slate-50 rounded-full border flex items-center justify-center"

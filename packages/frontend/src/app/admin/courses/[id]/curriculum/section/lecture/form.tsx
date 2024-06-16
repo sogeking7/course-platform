@@ -136,7 +136,7 @@ export default function LectureForm({
   return (
     <Form {...form}>
       {mode === "edit" && (
-        <div className="w-full justify-end flex mb-6 gap-4">
+        <div className="w-full justify-end max-sm:flex-wrap flex mb-6 gap-4">
           {data?.exam ? (
             <>
               <MyAlert
@@ -211,7 +211,7 @@ export default function LectureForm({
             <div className="border-neutral-300 border rounded-xl p-4 flex flex-col gap-4">
               <FormItem className="flex flex-row items-center justify-between">
                 <div className="space-y-0.5">
-                  <FormLabel className="text-base">Контент қосу</FormLabel>
+                  <FormLabel className="text-base">Мазмұн қосу</FormLabel>
                   <FormDescription>Текст</FormDescription>
                 </div>
                 <FormControl>
@@ -227,10 +227,10 @@ export default function LectureForm({
                   name="content"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Контент</FormLabel>
+                      <FormLabel>Мазмұн</FormLabel>
                       <FormControl>
                         <Tiptap
-                          placeholder={"Контент"}
+                          placeholder={"Мазмұн"}
                           editorState={field.value || ""}
                           setEditorState={field.onChange}
                         />
@@ -277,7 +277,7 @@ export default function LectureForm({
             </div>
           )}
         />
-        <div className="flex justify-end w-full gap-4">
+        <div className="flex justify-end max-sm:flex-wrap  w-full gap-4">
           {mode === "new" && (
             <Button
               type="button"

@@ -168,7 +168,7 @@ export const AdminCourseCreateForm = ({
                 <div className="border-neutral-300 border rounded-xl p-4 flex flex-col gap-4">
                   <FormItem className="flex flex-row items-center justify-between">
                     <div className="space-y-0.5">
-                      <FormLabel className="text-base">Контент қосу</FormLabel>
+                      <FormLabel className="text-base">Мазмұн қосу</FormLabel>
                       <FormDescription>Текст</FormDescription>
                     </div>
                     <FormControl>
@@ -184,10 +184,10 @@ export const AdminCourseCreateForm = ({
                       name="content"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Контент</FormLabel>
+                          <FormLabel>Мазмұн</FormLabel>
                           <FormControl>
                             <Tiptap
-                              placeholder={"Контент"}
+                              placeholder={"Мазмұн"}
                               editorState={field.value || ""}
                               setEditorState={field.onChange}
                             />

@@ -36,14 +36,14 @@ export const LectureManager = (props: Props) => {
       >
         {props.lectures.map((lecture, index) => (
           <AccordionItem key={lecture.id} value={`item-${lecture.id}`}>
-            <AccordionTrigger className="w-full bg-white px-3 py-4 border  border-neutral-300">
+            <AccordionTrigger className="w-full bg-white px-3 py-4 border data-[state=closed]:rounded-xl data-[state=open]:rounded-t-xl border-neutral-300">
               <label className=" flex gap-2 items-center">
-                <File size={14} />
+                <File size={14} className="min-w-[14px] min-h-[14px]" />
                 <span>Сабақ {index + 1}:</span>
                 <span className=" text-gray-700 ">{lecture.name}</span>
               </label>
             </AccordionTrigger>
-            <AccordionContent className="p-5 border-neutral-300 border-t-none bg-white border-x border-b">
+            <AccordionContent className="p-5 rounded-b-xl border-neutral-300 border-t-none bg-white border-x border-b">
               <Form
                 onEditSave={() => closeAccordionItem(`item-${lecture.id}`)}
                 sectionId={props.sectionId}

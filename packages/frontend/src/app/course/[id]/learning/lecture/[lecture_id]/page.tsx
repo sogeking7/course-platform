@@ -173,7 +173,7 @@ export default function LectureIdPage({
                 className="flex hover:underline font-semibold items-center md:hidden max-md:px-4 max-md:pt-5 "
               >
                 <ListCollapse className="mr-2" />
-                Контент
+                Мазмұн
               </button>
               <div className="border-b pb-4 px-4 pt-7 md:pb-5 md:px-5 md:pt-5">
                 <h1 className="text-slate-900 tracking-[0.015em] scroll-m-20 text-base  lg:text-lg font-semibold">

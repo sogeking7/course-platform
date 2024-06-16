@@ -152,7 +152,6 @@ export const QuizCreator = ({
                       type="button"
                       variant="ghost"
                       size={"icon"}
-                      className="rounded-full min-w-10 "
                       onClick={() => remove(index)}
                     >
                       <X size={20} />

@@ -38,13 +38,13 @@ export const CourseSectionManager = (props: Props) => {
         return (
           <li
             key={section.id}
-            className="p-6 bg-neutral-100 rounded-2xl border border-neutral-300"
+            className="p-4 sm:p-6 bg-white sm:bg-neutral-100 rounded-2xl border border-neutral-300"
           >
             {!edits.find((x) => section.id === x) && (
-              <div className="flex w-full justify-between items-center">
-                <label className="block font-bold min-w-max">
-                  Модуль {index + 1}:
-                  <span className="ml-2 text-gray-700 ">{section.name}</span>
+              <div className="flex w-full justify-end max-sm:flex-wrap gap-4 items-center">
+                <label className="block font-bold w-full">
+                  Модуль {index + 1}:{" "}
+                  <span className=" text-gray-700 ">{section.name}</span>
                 </label>
                 <div className="flex gap-2">
                   <Button

@@ -68,7 +68,7 @@ export default function CoursePage({ params }: { params: { id: string } }) {
           )}
           {!!data.sections.length && (
             <>
-              <TypographyH2>Курс контенты</TypographyH2>
+              <TypographyH2>Курс мазмұны</TypographyH2>
               <Accordion
                 type="multiple"
                 className="gap-0 border-t-none rounded-xl border-x border-b  flex-col flex"
