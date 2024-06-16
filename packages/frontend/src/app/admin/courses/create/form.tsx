@@ -170,7 +170,7 @@ export const AdminCourseCreateForm = ({
               {form.formState.errors.root?.serverError.message}
             </p>
           )}
-          <div className="flex w-full justify-end">
+          <div className="flex w-full justify-end gap-4">
             <Button disabled={!form.formState.isDirty} type="submit">
               {mutation.isPending && (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

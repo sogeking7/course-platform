@@ -1,35 +1,20 @@
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Question, createQuestionSchema } from "@/types";
+import { createQuestionSchema } from "@/types";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Loader2, Plus, Trash, X } from "lucide-react";
-import { Switch } from "@/components/ui/switch";
+import { Plus, X } from "lucide-react";
 import { useExamStore } from "@/store/exam";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-// Your imports...
+import { MyAlert } from "./my-alert";
 
 export const QuizCreator = ({
   lectureId,
@@ -190,8 +175,6 @@ export const QuizCreator = ({
                     </Button>
                   )}
                 </div>
-                {/* <FormMessage /> */}
-                {/* {JSON.stringify(form.formState.errors)} */}
                 {form.formState.errors.options?.root?.message && (
                   <p className="text-sm text-destructive">
                     {form.formState.errors.options?.root?.message}
@@ -202,41 +185,11 @@ export const QuizCreator = ({
           />
           <div className="w-full justify-end flex gap-4">
             {mode === "edit" && length && length > 1 && (
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button size={'icon'} variant={"destructive"}>
-                    <Trash size={16} /> Өшіру
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle className="flex items-center">
-                      <Trash
-                        size={20}
-                        className="inline-block mr-2 text-destructive"
-                      />
-                      Өшіру: {data?.text!}
-                      {/* Сіз мүлдем сенімдісіз бе? */}
-                    </AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Бұл әрекетті қайтару мүмкін емес. Бұл сіздің есептік
-                      жазбаңызды біржола жояды және деректеріңізді біздің
-                      серверлерден жояды.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Болдырмау</AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={() => mutationDelete.mutate(data?.id!)}
-                    >
-                      {mutationDelete.isPending && (
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      )}
-                      Жалғастыру
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
+              <MyAlert
+                mutation={mutationDelete}
+                name={data?.text!}
+                id={data?.id!}
+              />
             )}
             {/* {mode === "new" && (
               <Button variant={"ghost"} onClick={() => form.reset()}>

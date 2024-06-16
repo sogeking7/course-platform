@@ -2,25 +2,11 @@
 
 import { ExamResult } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
-
-import { Button } from "@/components/ui/button";
-import { Trash } from "lucide-react";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { UseMutateFunction } from "@tanstack/react-query";
+import { MyAlert } from "@/components/my-alert";
+import { UseMutationResult } from "@tanstack/react-query";
 
 export const columns = (
-  mutate: UseMutateFunction<any, Error, { email: string }, unknown>,
-  examId: number,
+  mutation: UseMutationResult<any, Error, string, unknown>,
 ): ColumnDef<ExamResult>[] => [
   {
     accessorKey: "firstName",
@@ -42,44 +28,8 @@ export const columns = (
     id: "actions",
     cell: ({ row }) => {
       const data = row.original;
-
-      const handleDeleteResult = (email: string) => {
-        mutate({ email });
-      };
-
       return (
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button size={"icon"} variant={"destructive"}>
-              <Trash size={16} />
-            </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle className="flex items-center">
-                <Trash
-                  size={20}
-                  className="inline-block mr-2 text-destructive"
-                />
-                Result: {data?.firstName!}
-                {/* Сіз мүлдем сенімдісіз бе? */}
-              </AlertDialogTitle>
-              <AlertDialogDescription>
-                Бұл әрекетті қайтару мүмкін емес. Бұл сіздің есептік жазбаңызды
-                біржола жояды және деректеріңізді біздің серверлерден жояды.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Болдырмау</AlertDialogCancel>
-              <AlertDialogAction onClick={() => handleDeleteResult(data.email)}>
-                {/* {mutationDeleteExam.isPending && (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              )} */}
-                Жалғастыру
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+        <MyAlert name={data?.firstName!} id={data?.email} mutation={mutation} />
       );
     },
   },

@@ -45,17 +45,19 @@ export const AdminCoursesDataTable = <TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center py-4 gap-4 text-center">
         <Input
           placeholder="Аты"
-          value={
-            (table.getColumn("name")?.getFilterValue() as string) ?? ""
-          }
+          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
           }
           className="w-full sm:max-w-sm"
         />
+        <div>
+          <span className="text-neutral-500">Барлығы:</span>{" "}
+          <b>{table.getFilteredRowModel().rows.length}</b>
+        </div>
       </div>
       <div className="rounded-2xl border bg-white">
         <Table>

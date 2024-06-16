@@ -43,7 +43,11 @@ export const columns: ColumnDef<Course>[] = [
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size={"icon"} variant="ghost" className="!min-h-8 !min-w-8 p-0">
+            <Button
+              size={"icon"}
+              variant="ghost"
+              className="!min-h-8 !min-w-8 p-0"
+            >
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>

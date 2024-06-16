@@ -46,7 +46,7 @@ export const AdminUsersDataTable = <TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center py-4 gap-4">
         <Input
           placeholder="Аты"
           value={
@@ -57,6 +57,10 @@ export const AdminUsersDataTable = <TData, TValue>({
           }
           className="w-full sm:max-w-sm"
         />
+        <div>
+          <span className="text-neutral-500">Барлығы:</span>{" "}
+          <b>{table.getFilteredRowModel().rows.length}</b>
+        </div>
       </div>
       <div className="rounded-2xl border bg-white">
         <Table>

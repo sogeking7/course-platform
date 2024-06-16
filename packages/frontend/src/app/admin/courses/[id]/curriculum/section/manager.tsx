@@ -3,22 +3,12 @@
 import React, { useState } from "react";
 import Form from "./form";
 import { Button } from "@/components/ui/button";
-import { Loader2, Pencil, Plus, Trash } from "lucide-react";
+import { Pencil, Plus } from "lucide-react";
 import { LectureManager } from "./lecture/manager";
 import { Section } from "@/types";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSectionStore } from "@/store/section";
+import { MyAlert } from "@/components/my-alert";
 
 type Props = {
   courseId: number;
@@ -31,8 +21,6 @@ export const CourseSectionManager = (props: Props) => {
 
   const [mode, setMode] = useState<"edit" | "default" | "new">("default");
   const [edits, setEdits] = useState<number[]>([]);
-
-  const handleDelete = () => {};
 
   const mutationDelete = useMutation({
     mutationFn: (id: number) => sectionStore.delete(id),
@@ -65,47 +53,11 @@ export const CourseSectionManager = (props: Props) => {
                   >
                     <Pencil size={16} />
                   </Button>
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button
-                        size={"icon"}
-                        variant={"destructive"}
-                        onClick={handleDelete}
-                      >
-                        <Trash size={16} />
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle className="flex items-center">
-                          <Trash
-                            size={20}
-                            className="inline-block mr-2 text-destructive"
-                          />
-                          Өшіру: {section.name}
-                          {/* Сіз мүлдем сенімдісіз бе? */}
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          Бұл әрекетті қайтару мүмкін емес. Бұл сіздің есептік
-                          жазбаңызды біржола жояды және деректеріңізді біздің
-                          серверлерден жояды.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel onClick={() => setMode("default")}>
-                          Болдырмау
-                        </AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={() => mutationDelete.mutate(section.id)}
-                        >
-                          {mutationDelete.isPending && (
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          )}
-                          Жалғастыру
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
+                  <MyAlert
+                    name={section.name}
+                    id={section.id}
+                    mutation={mutationDelete}
+                  />
                 </div>
               </div>
             )}

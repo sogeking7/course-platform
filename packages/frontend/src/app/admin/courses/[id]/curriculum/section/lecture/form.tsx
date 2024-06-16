@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Exam, Lecture, createExamSchema, createLectureSchema } from "@/types";
+import { Lecture, createExamSchema, createLectureSchema } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -13,30 +13,13 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Tiptap } from "@/components/tip-tap";
-import {
-  BookCheck,
-  ClipboardList,
-  Loader,
-  Loader2,
-  Plus,
-  Trash,
-} from "lucide-react";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import { BookCheck, ClipboardList, Loader2, Plus } from "lucide-react";
 import { useLectureStore } from "@/store/lecture";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { cn, convertToPreviewLink } from "@/lib/utils";
 import Link from "next/link";
 import { useExamStore } from "@/store/exam";
+import { MyAlert } from "@/components/my-alert";
 
 type Props = {
   sectionId: number;
@@ -99,7 +82,7 @@ export default function LectureForm({
   });
 
   const mutationDelete = useMutation({
-    mutationFn: () => lectureStore.delete(data?.id!),
+    mutationFn: (id: number) => lectureStore.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["course", { id: courseId }],
@@ -118,7 +101,7 @@ export default function LectureForm({
   });
 
   const mutationDeleteExam = useMutation({
-    mutationFn: (id: any) => examStore.delete(id),
+    mutationFn: (id: number) => examStore.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["course", { id: courseId }],
@@ -136,10 +119,6 @@ export default function LectureForm({
     mutationCreateExam.mutate(newExam);
   };
 
-  const handleDeleteExam = (id: number) => {
-    mutationDeleteExam.mutate(id);
-  };
-
   const onSubmit = (data: z.infer<typeof createLectureSchema>) => {
     mutation.mutate(data);
   };
@@ -152,41 +131,11 @@ export default function LectureForm({
         <div className="w-full justify-end flex mb-6 gap-4">
           {data?.exam ? (
             <>
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button size={"icon"} variant={"destructive"}>
-                    <Trash size={16} />
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle className="flex items-center">
-                      <Trash
-                        size={20}
-                        className="inline-block mr-2 text-destructive"
-                      />
-                      Quiz: {data?.name!}
-                      {/* Сіз мүлдем сенімдісіз бе? */}
-                    </AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Бұл әрекетті қайтару мүмкін емес. Бұл сіздің есептік
-                      жазбаңызды біржола жояды және деректеріңізді біздің
-                      серверлерден жояды.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Болдырмау</AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={() => handleDeleteExam(data?.exam?.id!)}
-                    >
-                      {mutationDeleteExam.isPending && (
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      )}
-                      Жалғастыру
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
+              <MyAlert
+                name={data?.name!}
+                id={data?.exam?.id!}
+                mutation={mutationDeleteExam}
+              />
               <Link
                 href={`/admin/courses/${courseId}/curriculum/section/lecture/${data?.id!}/${data.exam.id}`}
               >
@@ -285,41 +234,11 @@ export default function LectureForm({
             </Button>
           )}
           {mode === "edit" && (
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button size={"icon"} variant={"destructive"}>
-                  <Trash size={16} />
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle className="flex items-center">
-                    <Trash
-                      size={20}
-                      className="inline-block mr-2 text-destructive"
-                    />
-                    Өшіру: {data?.name!}
-                    {/* Сіз мүлдем сенімдісіз бе? */}
-                  </AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Бұл әрекетті қайтару мүмкін емес. Бұл сіздің есептік
-                    жазбаңызды біржола жояды және деректеріңізді біздің
-                    серверлерден жояды.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel onClick={() => setOpen("default")}>
-                    Болдырмау
-                  </AlertDialogCancel>
-                  <AlertDialogAction onClick={() => mutationDelete.mutate()}>
-                    {mutationDelete.isPending && (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    )}
-                    Жалғастыру
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+            <MyAlert
+              name={data?.name!}
+              id={data?.id!}
+              mutation={mutationDelete}
+            />
           )}
           <Button disabled={!form.formState.isDirty} type="submit">
             {mutation.isPending && (

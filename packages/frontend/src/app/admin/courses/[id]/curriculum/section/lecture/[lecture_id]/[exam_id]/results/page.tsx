@@ -74,10 +74,7 @@ export default function AdminLectureQuizResults({
       <Bread breadcrumbs={breadcrumbs} />
       <TypographyH1>Results</TypographyH1>
       <WhiteBox>
-        <AdminQuizResultsDataTable
-          columns={columns(mutation.mutate, examId)}
-          data={data}
-        />
+        <AdminQuizResultsDataTable columns={columns(mutation)} data={data} />
       </WhiteBox>
     </>
   );
