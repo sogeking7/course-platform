@@ -26,7 +26,7 @@ export const AccordionSheet = ({
 }: any) => {
   const courseStore = useCourseStore();
   const { data: course, isLoading: courseIsLoading } = useQuery({
-    queryKey: ["accordion", { id: courseId }],
+    queryKey: ["course", { id: courseId }],
     queryFn: () => courseStore.findCourseById(courseId),
   });
 

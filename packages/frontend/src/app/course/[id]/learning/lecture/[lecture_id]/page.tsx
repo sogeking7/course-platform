@@ -46,7 +46,7 @@ export default function LectureIdPage({
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   const { data: course, isLoading: courseIsLoading } = useQuery({
-    queryKey: ["accordion", { id: course_id }],
+    queryKey: ["course", { id: course_id }],
     queryFn: () => courseStore.findCourseById(course_id),
   });
 

@@ -5,7 +5,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'shoqan-api.devhouse.kz',
+        hostname: 'api.shoqan-edu.kz',
         port: '',
       },
     ],

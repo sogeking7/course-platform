@@ -8,11 +8,30 @@ import { TokenHandler } from "@/components/TokenHandler";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.shoqan-edu.kz"),
+  keywords: [
+    "shoqan",
+    "shoqan-edu",
+    "shoqan education",
+    "shoqan platform",
+    "learning",
+    "shoqan kz",
+  ],
   title: {
     default: "Shoqan Education",
-    template: "%s - Shoqan Education"
+    template: "%s - Shoqan Education",
   },
-  description: "Shoqan-edu.kz-тек қана еліміздің емес,әлем бойынша ең үздік мектептерге түсуге арналған керемет дайындық үлгісін ұсынады!🌍📚",
+  openGraph: {
+    title: "Shoqan Education",
+    description:
+      "Shoqan-edu.kz-тек қана еліміздің емес,әлем бойынша ең үздік мектептерге түсуге арналған керемет дайындық үлгісін ұсынады!🌍📚",
+    type: "website",
+    locale: "kk_KZ",
+    url: "https://www.shoqan-edu.kz",
+    siteName: "ShoqanEdu",
+  },
+  description:
+    "Shoqan-edu.kz-тек қана еліміздің емес,әлем бойынша ең үздік мектептерге түсуге арналған керемет дайындық үлгісін ұсынады!🌍📚",
   verification: {
     google: "kUeM3WNtUXMoBtgpz2HAknDwHEkJVK1DtE46N8dO7w",
   },
@@ -40,8 +59,8 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           > */}
-            {children}
-            <TokenHandler />
+          {children}
+          <TokenHandler />
           {/* </ThemeProvider> */}
         </Providers>
       </body>

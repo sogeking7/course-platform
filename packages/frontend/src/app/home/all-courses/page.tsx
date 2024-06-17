@@ -4,13 +4,14 @@ import { AllCoursesList } from "./list";
 import { Suspense } from "react";
 import { axiosPublic } from "@/lib/axios";
 import { Metadata } from "next";
+import { Course } from "@/types";
 
 export const metadata: Metadata = {
   title: "Курстар",
 };
 
 export default async function AllCoursesPage() {
-  const data = (await axiosPublic.get(`/course`)).data;
+  const data: Course[] = (await axiosPublic.get(`/course`)).data;
 
   return (
     <>
