@@ -17,6 +17,8 @@ model User {
   role               UserRole           @default(USER)
   courses            CourseEnrollment[]
   ExamAttempt        ExamAttempt[]
+  createdAt          DateTime           @default(now())
+  editedAt           DateTime           @updatedAt
 }
 
 enum UserRole {
@@ -32,6 +34,8 @@ model Exam {
   lecture     Lecture       @relation(fields: [lectureId], references: [id], onDelete: Cascade)
   lectureId   Int           @unique
   ExamAttempt ExamAttempt[]
+  createdAt   DateTime      @default(now())
+  editedAt    DateTime      @updatedAt
 }
 
 model Course {
@@ -42,42 +46,52 @@ model Course {
   profilePictureLink String?
   sections           Section[]
   users              CourseEnrollment[]
+  createdAt          DateTime           @default(now())
+  editedAt           DateTime           @updatedAt
 }
 
 model Section {
-  id       Int       @id @default(autoincrement())
-  name     String
-  course   Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  courseId Int
-  lectures Lecture[]
+  id        Int       @id @default(autoincrement())
+  name      String
+  course    Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId  Int
+  lectures  Lecture[]
+  createdAt DateTime  @default(now())
+  editedAt  DateTime  @updatedAt
 }
 
 model Lecture {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String
   content   String
   videoUrl  String
-  section   Section @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  section   Section  @relation(fields: [sectionId], references: [id], onDelete: Cascade)
   sectionId Int
   exam      Exam?
+  createdAt DateTime @default(now())
+  editedAt  DateTime @updatedAt
 }
 
 model CourseEnrollment {
-  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId   Int
-  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  courseId Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId  Int
+  createdAt DateTime @default(now())
+  editedAt  DateTime @updatedAt
 
   @@id([userId, courseId])
 }
 
 model ExamAttempt {
-  id         Int   @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   userId     Int
-  user       User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   examId     Int
-  exam       Exam  @relation(fields: [examId], references: [id], onDelete: Cascade)
+  exam       Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
   examResult Float
+  createdAt  DateTime @default(now())
+  editedAt   DateTime @updatedAt
 
   @@unique([userId, examId], name: "userId_examId")
 }
