@@ -72,10 +72,7 @@ export default function ClientQuizPage({
       <div className="w-full h-full">
         <MyContainer>
           <Bread breadcrumbs={breadcrumbs} />
-          <div className="flex items-start">
-            <GoBackButton />
-            <TypographyH1>Quiz: {lecture.name}</TypographyH1>
-          </div>
+          <TypographyH1>Quiz: {lecture.name}</TypographyH1>
           <WhiteBox> Cұрақтар</WhiteBox>
         </MyContainer>
       </div>
@@ -86,10 +83,7 @@ export default function ClientQuizPage({
     <div className="w-full h-full">
       <MyContainer>
         <Bread breadcrumbs={breadcrumbs} />
-        <div className="flex items-start">
-          <GoBackButton />
-          <TypographyH1>Quiz: {lecture.name}</TypographyH1>
-        </div>
+        <TypographyH1>Quiz: {lecture.name}</TypographyH1>
         <WhiteBox>
           <QuizForm examId={examId} questions={formattedQuestions} />
         </WhiteBox>

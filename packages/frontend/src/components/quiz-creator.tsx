@@ -15,6 +15,7 @@ import { Plus, X } from "lucide-react";
 import { useExamStore } from "@/store/exam";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MyAlert } from "./my-alert";
+import { Textarea } from "./ui/textarea";
 
 export const QuizCreator = ({
   lectureId,
@@ -98,29 +99,13 @@ export const QuizCreator = ({
             name="text"
             render={({ field }) => (
               <FormItem>
-                {/* <FormLabel>Question</FormLabel> */}
                 <FormControl>
-                  <Input placeholder="Сурақ" {...field} />
+                  <Textarea placeholder="Сурақ" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          {/* <FormField
-            control={form.control}
-            name="isMultipleChoice"
-            render={({ field }) => (
-              <FormItem className="flex flex-row items-center justify-end gap-4">
-                <FormLabel>Multiple choice</FormLabel>
-                <FormControl className="!mt-0">
-                  <Switch
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          /> */}
           <FormField
             control={form.control}
             name="options"

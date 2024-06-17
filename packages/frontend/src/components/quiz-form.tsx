@@ -102,7 +102,7 @@ export const QuizForm = ({ examId, questions }: Props) => {
             name={`questions.${index}.selectedOption`}
             render={({ field }) => (
               <FormItem className="space-y-4">
-                <FormLabel className="text-base">
+                <FormLabel className="text-base whitespace-normal">
                   {index + 1 + ".  " + question.text}
                 </FormLabel>
                 <FormDescription>Біреуін таңдаңыз:</FormDescription>
