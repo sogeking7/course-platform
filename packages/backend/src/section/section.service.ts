@@ -63,20 +63,18 @@ export class SectionService {
     }
   }
 
-  async findAll(userId: number): Promise<any[]> {
+  async findAll(userId: number, courseId: number): Promise<any[]> {
     const sections = await this.prisma.section.findMany({
+      where: { courseId },
       orderBy: { id: 'asc' },
     });
 
-    const courseIds = [...new Set(sections.map((section) => section.courseId))];
+    const previousSectionAverages = await this.calculateAllPreviousSectionAverages(userId, courseId);
 
-    const previousSectionAverages =
-      await this.calculateAllPreviousSectionAverages(userId, courseIds);
-
-    const sectionsWithLockStatus = sections.map((section) => {
+    // Calculate lock status for each section
+    const sectionsWithLockStatus = sections.map(section => {
       const previousSectionAverage = previousSectionAverages[section.id];
-      const isLocked =
-        previousSectionAverage === undefined || previousSectionAverage < 70;
+      const isLocked = previousSectionAverage === undefined || previousSectionAverage < 70;
 
       return { ...section, isLocked };
     });
@@ -130,30 +128,18 @@ export class SectionService {
     return averageScore;
   }
 
-  private async calculateAllPreviousSectionAverages(
-    userId: number,
-    courseIds: number[],
-  ): Promise<Record<number, number>> {
+  private async calculateAllPreviousSectionAverages(userId: number, courseId: number): Promise<Record<number, number>> {
     const sections = await this.prisma.section.findMany({
-      where: {
-        courseId: {
-          in: courseIds,
-        },
-      },
+      where: { courseId },
       orderBy: { id: 'asc' },
     });
 
     const previousSectionScores: Record<number, number> = {};
 
-    await Promise.all(
-      sections.map(async (section) => {
-        const averageScore = await this.calculateAverageExamScore(
-          userId,
-          section.id,
-        );
-        previousSectionScores[section.id] = averageScore;
-      }),
-    );
+    await Promise.all(sections.map(async section => {
+      const averageScore = await this.calculateAverageExamScore(userId, section.id);
+      previousSectionScores[section.id] = averageScore;
+    }));
 
     return previousSectionScores;
   }

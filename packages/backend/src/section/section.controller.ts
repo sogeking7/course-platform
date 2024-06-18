@@ -66,13 +66,14 @@ export class SectionController {
   @ApiOperation({ summary: 'Find a all sections' })
   @ApiResponse({ status: 200, type: Promise<any[]> })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
-  @Get('')
-  async findAll(@Req() request: Request): Promise<any[]> {
+  @ApiParam({ name: 'id', description: 'ID of the course' })
+  @Get('all/:courseId')
+  async findAll(@Param('courseId', new ParseIntPipe()) courseId: number, @Req() request: Request): Promise<any[]> {
     const token = request.headers.authorization.replace('Bearer ', '');
     const payload = this.jwtUtils.parseJwtToken(token);
     const userId = payload.id!;
     try {
-      return await this.sectionService.findAll(userId);
+      return await this.sectionService.findAll(userId, courseId);
     } catch (error) {
       throw new HttpException(
         `Error finding section: ${error.message}`,
