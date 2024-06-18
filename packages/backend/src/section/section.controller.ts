@@ -68,7 +68,10 @@ export class SectionController {
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   @ApiParam({ name: 'id', description: 'ID of the course' })
   @Get('all/:courseId')
-  async findAll(@Param('courseId', new ParseIntPipe()) courseId: number, @Req() request: Request): Promise<any[]> {
+  async findAll(
+    @Param('courseId', new ParseIntPipe()) courseId: number,
+    @Req() request: Request,
+  ): Promise<any[]> {
     const token = request.headers.authorization.replace('Bearer ', '');
     const payload = this.jwtUtils.parseJwtToken(token);
     const userId = payload.id!;
