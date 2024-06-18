@@ -63,16 +63,16 @@ export class SectionService {
     }
   }
 
-  async findAll(userId: number): Promise<any[]> {
+  async findAll(userId: number, courseId: number): Promise<any[]> {
     const sections = await this.prisma.section.findMany({
+      where: { courseId },
       orderBy: { id: 'asc' },
     });
 
-    const courseIds = [...new Set(sections.map((section) => section.courseId))];
-
     const previousSectionAverages =
-      await this.calculateAllPreviousSectionAverages(userId, courseIds);
+      await this.calculateAllPreviousSectionAverages(userId, courseId);
 
+    // Calculate lock status for each section
     const sectionsWithLockStatus = sections.map((section) => {
       const previousSectionAverage = previousSectionAverages[section.id];
       const isLocked =
@@ -101,7 +101,7 @@ export class SectionService {
     });
 
     if (lecturesWithExams.length === 0) {
-      return null;
+      return 100;
     }
 
     const examIds = lecturesWithExams
@@ -118,7 +118,7 @@ export class SectionService {
     });
 
     if (examAttempts.length === 0) {
-      return null;
+      return 100;
     }
 
     const totalScore = examAttempts.reduce(
@@ -132,14 +132,10 @@ export class SectionService {
 
   private async calculateAllPreviousSectionAverages(
     userId: number,
-    courseIds: number[],
+    courseId: number,
   ): Promise<Record<number, number>> {
     const sections = await this.prisma.section.findMany({
-      where: {
-        courseId: {
-          in: courseIds,
-        },
-      },
+      where: { courseId },
       orderBy: { id: 'asc' },
     });
 
