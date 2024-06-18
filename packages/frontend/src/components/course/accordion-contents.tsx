@@ -21,7 +21,7 @@ export const AccordionContents = ({
 }) => {
   const courseStore = useCourseStore();
   const { data: course, isLoading: courseIsLoading } = useQuery({
-    queryKey: ["courseu", { id: courseId }],
+    queryKey: ["course", { id: courseId }],
     queryFn: () => courseStore.findCourseById(courseId),
   });
 
@@ -80,7 +80,9 @@ export const AccordionContents = ({
                               : "border-l-transparent",
                           )}
                         >
-                          <div className="w-[11px] h-[11px] rounded-full border mr-3 relative top-[3px]"></div>
+                          {!!lecture.exam?.id && (
+                            <div className="w-[11px] h-[11px] rounded-full border mr-3 relative top-[3px]"></div>
+                          )}
                           {lecture.name}
                         </li>
                       </Link>

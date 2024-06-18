@@ -219,7 +219,7 @@ export class ExamController {
   async getResultByUserIdExamId(
     @Param('examId', new ParseIntPipe()) examId: number,
     @Req() request: Request,
-  ): Promise<number> {
+  ): Promise<{ result: number }> {
     const token = request.headers.authorization.replace('Bearer ', '');
     const payload = this.jwtUtils.parseJwtToken(token);
     const userId = payload.id;
@@ -232,7 +232,7 @@ export class ExamController {
       // if (!examResult) {
       //   throw new HttpException('Attempt not found', HttpStatus.NOT_FOUND);
       // }
-      return examResult;
+      return { result: examResult };
     } catch (error) {
       if (error instanceof HttpException) {
         throw error;

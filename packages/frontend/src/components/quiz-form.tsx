@@ -31,17 +31,12 @@ type Props = {
 
 export const QuizForm = ({ examId, questions }: Props) => {
   const router = useRouter();
-
-  const handleGoBack = () => {
-    router.back();
-  };
-
   const examStore = useExamStore();
 
   const form = useForm({
     resolver: zodResolver(QuizFormSchema),
     defaultValues: {
-      questions: questions,
+      questions,
     },
   });
 
@@ -52,9 +47,6 @@ export const QuizForm = ({ examId, questions }: Props) => {
 
   const mutation = useMutation({
     mutationFn: (newData: any) => examStore.checkAnswers(examId, newData),
-    onSuccess: (res) => {
-      // console.log("res", res);
-    },
   });
 
   const onSubmit = (data: z.infer<typeof QuizFormSchema>) => {
@@ -64,34 +56,38 @@ export const QuizForm = ({ examId, questions }: Props) => {
         givenAnswers: [d.selectedOption],
       })),
     };
-    // console.log("modifiedData", modifiedData);
     mutation.mutate(modifiedData);
   };
 
   if (mutation.data) {
-    const x = calcPercentage(mutation.data.totalPoints, fields.length);
-    const r: QuizResult = {
-      grade: x,
+    const totalPoints = questions.reduce(
+      (sum, question) => sum + question.points,
+      0,
+    );
+    const percentage = calcPercentage(mutation.data.totalPoints, totalPoints);
+    const result: QuizResult = {
+      grade: percentage,
       points: mutation.data.totalPoints,
       state: "Аяқталды",
     };
 
     const modColumns = [...columns];
-    modColumns[1].header = `Балл / ${fields.length.toFixed(2)}`;
+    modColumns[1].header = `Балл / ${totalPoints.toFixed(2)}`;
     modColumns[2].header = `Баға / ${Number(100).toFixed(2)}%`;
 
     return (
       <div>
         <TypographyH1>Нәтиже</TypographyH1>
-        <LectureQuizResultsTable columns={modColumns} data={[r]} />
+        <LectureQuizResultsTable columns={modColumns} data={[result]} />
         <div className="flex w-full mt-6 justify-end">
-          <Button onClick={handleGoBack} variant={"outline"}>
+          <Button onClick={router.back} variant={"outline"}>
             Артқа қайту
           </Button>
         </div>
       </div>
     );
   }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-12">
@@ -109,8 +105,8 @@ export const QuizForm = ({ examId, questions }: Props) => {
                 <FormControl>
                   <RadioGroup
                     onValueChange={field.onChange}
-                    value={field.value} // Ensure the value is controlled
-                    className="flex flex-col space-y-3"
+                    value={field.value}
+                    className="flex flex-col space-y-2"
                   >
                     {question.options.map((option, optIndex) => (
                       <FormItem
@@ -120,7 +116,7 @@ export const QuizForm = ({ examId, questions }: Props) => {
                         <FormControl>
                           <RadioGroupItem value={option.value} />
                         </FormControl>
-                        <FormLabel className="">
+                        <FormLabel className="text-base">
                           {kazakhVariants[optIndex]} {option.value}
                         </FormLabel>
                       </FormItem>
@@ -132,7 +128,6 @@ export const QuizForm = ({ examId, questions }: Props) => {
             )}
           />
         ))}
-        {/* {JSON.stringify(form.formState.errors)} */}
         <div className="w-full flex justify-end gap-4">
           {!mutation.data && <Button type="submit">Аяқтау</Button>}
         </div>

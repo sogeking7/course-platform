@@ -43,7 +43,9 @@ export const AdminQuizResultsDataTable = <TData, TValue>({
       <div className="flex items-center py-4">
         <Input
           placeholder="Аты"
-          value={(table.getColumn("firstName")?.getFilterValue() as string) ?? ""}
+          value={
+            (table.getColumn("firstName")?.getFilterValue() as string) ?? ""
+          }
           onChange={(event) =>
             table.getColumn("firstName")?.setFilterValue(event.target.value)
           }
@@ -58,7 +60,9 @@ export const AdminQuizResultsDataTable = <TData, TValue>({
                 {headerGroup.headers.map((header) => {
                   return (
                     <>
-                      {header.column.columnDef.id === "actions" ? (
+                      {["actions", "icon"].includes(
+                        header.column.columnDef.id!,
+                      ) ? (
                         <TableHead
                           key={header.id}
                           className="w-[0px]"

@@ -9,6 +9,18 @@ export const columns = (
   mutation: UseMutationResult<any, Error, string, unknown>,
 ): ColumnDef<ExamResult>[] => [
   {
+    id: "icon",
+    header: "#",
+    cell: ({ row }) => {
+      const data = row.original;
+      const image =
+        data.role === "ADMIN"
+          ? "/icons/profile.png"
+          : "/icons/graduation-hat.png";
+      return <img src={image} className="inline min-w-7 min-h-7" />;
+    },
+  },
+  {
     accessorKey: "firstName",
     header: "Аты",
   },
@@ -21,8 +33,20 @@ export const columns = (
     header: "Почта",
   },
   {
-    accessorKey: "examResult",
+    accessorKey: "points",
     header: "Балл",
+    cell: ({ getValue }) => {
+      const points = getValue<number>();
+      return `${points?.toFixed(2)}`;
+    },
+  },
+  {
+    accessorKey: "grade",
+    header: "Баға",
+    cell: ({ getValue }) => {
+      const grade = getValue<number>();
+      return `${grade?.toFixed(2)}%`;
+    },
   },
   {
     id: "actions",

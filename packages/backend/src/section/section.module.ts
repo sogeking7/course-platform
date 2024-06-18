@@ -3,7 +3,7 @@ import { SectionController } from './section.controller';
 import { SectionService } from './section.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthModule } from '../auth/auth.module';
-import { JwtUtils } from '../auth/jwt.utils';
+import { JwtUtils } from 'src/auth/jwt.utils';
 
 @Module({
   controllers: [SectionController],

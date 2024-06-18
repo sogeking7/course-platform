@@ -9,6 +9,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Plus, X } from "lucide-react";
@@ -81,7 +82,7 @@ export const QuizCreator = ({
       options: data.options.map((o) => o.value),
       correctAnswer: [data.options.find((x) => x.isTrue)?.value!],
     };
-    // console.log(modifiedData);
+    // console.log(modifieQuizFormSchemadData);
     mutation.mutate(modifiedData);
   };
 
@@ -94,18 +95,42 @@ export const QuizCreator = ({
           onSubmit={form.handleSubmit(onSubmit)}
           className="border w-full bg-white border-neutral-300 rounded-2xl p-4 space-y-3"
         >
-          <FormField
-            control={form.control}
-            name="text"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Textarea placeholder="Сурақ" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="w-full flex gap-4">
+            <FormField
+              control={form.control}
+              name="text"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Сурақ</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="Сурақ" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="points"
+              render={({ field }) => (
+                <FormItem className="w-[100px]">
+                  <FormLabel>Балл</FormLabel>
+                  <FormControl>
+                    <Input
+                      onKeyPress={(event) => {
+                        if (!/[0-9]/.test(event.key)) {
+                          event.preventDefault();
+                        }
+                      }}
+                      placeholder="Балл"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
           <FormField
             control={form.control}
             name="options"
@@ -175,11 +200,6 @@ export const QuizCreator = ({
                 id={data?.id!}
               />
             )}
-            {/* {mode === "new" && (
-              <Button variant={"ghost"} onClick={() => form.reset()}>
-                Болдырмау
-              </Button>
-            )} */}
             <Button
               type="submit"
               disabled={mode === "new" ? false : !form.formState.isDirty}

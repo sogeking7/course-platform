@@ -23,6 +23,9 @@ export class ExamService {
     try {
       return await this.prisma.exam.findUnique({
         where: { id },
+        include: {
+          ExamAttempt: true,
+        },
       });
     } catch (error) {
       throw new HttpException(
@@ -283,13 +286,7 @@ export class ExamService {
     const examAttempts = await this.prisma.examAttempt.findMany({
       where: { examId },
       include: {
-        user: {
-          select: {
-            firstName: true,
-            lastName: true,
-            email: true,
-          },
-        },
+        user: true,
       },
     });
 

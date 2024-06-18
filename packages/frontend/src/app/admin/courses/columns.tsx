@@ -22,7 +22,7 @@ export const columns: ColumnDef<Course>[] = [
     id: "icon",
     header: "#",
     cell: () => {
-      const image = "/icons/golf-course.png";
+      const image = "/icons/course.png";
       return <img src={image} className="inline min-w-7 min-h-7" />;
     },
   },

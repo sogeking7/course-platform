@@ -9,6 +9,8 @@ import { AdminQuizResultsDataTable } from "./data-table";
 import { columns } from "./columns";
 import { WhiteBox } from "@/components/container";
 import { useLectureStore } from "@/store/lecture";
+import { calcPercentage } from "@/lib/utils";
+import { ExamResult } from "@/types";
 
 export default function AdminLectureQuizResults({
   params,
@@ -33,14 +35,18 @@ export default function AdminLectureQuizResults({
     queryFn: () => examStore.getAllResults(examId),
   });
 
+  const { data: exam, isLoading: isExamLoading } = useQuery({
+    queryKey: ["exam", { id: examId }],
+    queryFn: () => examStore.getQuestions(examId),
+  });
+
   const { data: lecture, isLoading: isLectureLoading } = useQuery({
     queryKey: ["lecture", { id: lectureId }],
     queryFn: () => lectureStore.getById(lectureId),
   });
 
   const mutation = useMutation({
-    mutationFn: (email: string) =>
-      examStore.resetResultOfUser(examId, email),
+    mutationFn: (email: string) => examStore.resetResultOfUser(examId, email),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["exam-all-results", { id: examId }],
@@ -69,12 +75,26 @@ export default function AdminLectureQuizResults({
     },
   ];
 
+  const totalPoints = exam
+    ? exam.reduce((sum, question) => sum + question.points, 0)
+    : null;
+
+  const modColumns = [...columns(mutation)];
+  modColumns[4].header = `Балл / ${totalPoints?.toFixed(2)}`;
+  modColumns[5].header = `Баға / ${Number(100).toFixed(2)}%`;
+
+  const modifiedData = data.map((x: ExamResult) => ({
+    ...x,
+    grade: calcPercentage(x.examResult, totalPoints || 0),
+    points: x.examResult,
+  }));
+
   return (
     <>
       <Bread breadcrumbs={breadcrumbs} />
       <TypographyH1>Нәтижелер</TypographyH1>
       <WhiteBox>
-        <AdminQuizResultsDataTable columns={columns(mutation)} data={data} />
+        <AdminQuizResultsDataTable columns={modColumns} data={modifiedData} />
       </WhiteBox>
     </>
   );

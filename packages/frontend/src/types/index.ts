@@ -89,10 +89,7 @@ export type QuizResult = {
   points: number;
 };
 
-export type ExamResult = {
-  firstName: string;
-  lastName: string;
-  email: string;
+export type ExamResult = User & {
   examResult: number;
 };
 export const inviteStudentToCourseSchema = z.object({
@@ -170,7 +167,10 @@ const baseQuestionSchema = z.object({
       { message: "Опция атаулары бірегей болуы керек" },
     ),
   isMultipleChoice: z.boolean().default(false),
-  points: z.number().nonnegative().min(1).max(100),
+  points: z.preprocess(
+    (val) => parseInt(val as string, 10),
+    z.number().min(0).max(100, "Минимум 100"),
+  ),
 });
 
 export const createQuestionSchema = baseQuestionSchema.extend({});

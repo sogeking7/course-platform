@@ -26,7 +26,7 @@ import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import { LectureQuizResultsTable } from "./quiz/result-table";
 import { columns } from "./quiz/columns";
-import { QuizResult } from "@/types";
+import { Question, QuizResult } from "@/types";
 import { MyContainer } from "@/components/container";
 
 export default function LectureIdPage({
@@ -138,20 +138,17 @@ export default function LectureIdPage({
     ? convertToPreviewLink(lecture.videoUrl)
     : null;
 
-  // const x = calcPercentage(
-  //   examResults,
-  //   JSON.parse(lecture?.exam?.questions as string).length,
-  // );
+  let points = 0;
+  if (lecture && lecture.exam) {
+    let sum = 0;
+    const questions: Question[] = JSON.parse(lecture.exam.questions);
 
-  // const r: QuizResult = {
-  //   grade: x,
-  //   points: examResults,
-  //   state: "Аяқталды",
-  // };
+    for (let x of questions) {
+      sum += x.points;
+    }
 
-  // const modColumns = [...columns];
-  // modColumns[1].header = `Балл / ${JSON.parse(lecture?.exam?.questions as string).length.toFixed(2)}`;
-  // modColumns[2].header = `Баға / ${Number(100).toFixed(2)}%`;
+    points = sum;
+  }
 
   return (
     <>
@@ -226,14 +223,13 @@ export default function LectureIdPage({
                 </article>
                 {lecture.exam && (
                   <div className="mt-16 w-full">
-                    {/* {JSON.stringify(examResults)} */}
-                    {examResults && !examResultsLoading && (
+                    {examResults.result !== null ? (
                       <LectureQuizResultsTable
                         columns={[
                           { ...columns[0] },
                           {
                             ...columns[1],
-                            header: `Балл / ${JSON.parse(lecture?.exam?.questions as string).length.toFixed(2)}`,
+                            header: `Балл / ${points.toFixed(2)}`,
                           },
                           {
                             ...columns[2],
@@ -243,27 +239,27 @@ export default function LectureIdPage({
                         data={[
                           {
                             grade: calcPercentage(
-                              examResults || 1,
-                              JSON.parse(lecture?.exam?.questions as string)
-                                .length,
+                              examResults.result || 1,
+                              points,
                             ),
-                            points: examResults || 1,
+                            points: examResults.result || 1,
                             state: "Аяқталды",
                           },
                         ]}
                       />
-                    )}
-                    {!examResults && !examResultsLoading && (
-                      <div className="flex justify-end">
-                        <Link
-                          href={`/course/${course_id}/learning/lecture/${lecture_id || getFirstLectureId(course!)}/quiz`}
-                        >
-                          <Button>
-                            <BookCheck className="mr-2" size={20} />
-                            Тестілеу бастау
-                          </Button>
-                        </Link>
-                      </div>
+                    ) : (
+                      !!JSON.parse(lecture.exam.questions).length && (
+                        <div className="flex justify-end">
+                          <Link
+                            href={`/course/${course_id}/learning/lecture/${lecture_id || getFirstLectureId(course!)}/quiz`}
+                          >
+                            <Button>
+                              <BookCheck className="mr-2" size={20} />
+                              Тестілеу бастау
+                            </Button>
+                          </Link>
+                        </div>
+                      )
                     )}
                   </div>
                 )}
