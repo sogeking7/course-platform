@@ -64,7 +64,7 @@ export class SectionController {
   @UseGuards(RolesGuard)
   @Roles('ADMIN', 'USER')
   @ApiOperation({ summary: 'Find a all sections' })
-  @ApiResponse({ status: 200, type: Promise<Section | null> })
+  @ApiResponse({ status: 200, type: Promise<any[]> })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   @Get(':id')
   async findAll(@Req() request: Request): Promise<any[]> {
