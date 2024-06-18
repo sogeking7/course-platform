@@ -7,17 +7,155 @@ import { SectionCreateDto, SectionUpdateDto } from './dto/section.dto';
 export class SectionService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findOneById(id: number): Promise<Section | null> {
+  async findOneById(
+    userId: number,
+    sectionId: number,
+  ): Promise<Section | null> {
     try {
-      return await this.prisma.section.findUnique({
-        where: { id },
+      const sections = await this.prisma.section.findMany({
+        where: {
+          OR: [
+            { id: sectionId },
+            {
+              courseId: (
+                await this.prisma.section.findUnique({
+                  where: { id: sectionId },
+                })
+              ).courseId,
+              id: { lt: sectionId },
+            },
+          ],
+        },
+        orderBy: { id: 'desc' },
+        take: 2,
       });
+
+      const currentSection = sections.find(
+        (section) => section.id === sectionId,
+      );
+      const previousSection = sections.find(
+        (section) => section.id !== sectionId,
+      );
+
+      if (!currentSection) {
+        throw new HttpException(
+          `Section with id ${sectionId} not found`,
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
+      if (!previousSection) {
+        return currentSection;
+      }
+
+      const averageScore = await this.calculateAverageExamScore(
+        userId,
+        previousSection.id,
+      );
+      return averageScore !== null && averageScore >= 70
+        ? currentSection
+        : null;
     } catch (error) {
       throw new HttpException(
         `Error finding section: ${error.message}`,
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+  }
+
+  async findAll(userId: number): Promise<any[]> {
+    const sections = await this.prisma.section.findMany({
+      orderBy: { id: 'asc' },
+    });
+
+    const courseIds = [...new Set(sections.map((section) => section.courseId))];
+
+    const previousSectionAverages =
+      await this.calculateAllPreviousSectionAverages(userId, courseIds);
+
+    const sectionsWithLockStatus = sections.map((section) => {
+      const previousSectionAverage = previousSectionAverages[section.id];
+      const isLocked =
+        previousSectionAverage === undefined || previousSectionAverage < 70;
+
+      return { ...section, isLocked };
+    });
+
+    return sectionsWithLockStatus;
+  }
+
+  private async calculateAverageExamScore(
+    userId: number,
+    sectionId: number,
+  ): Promise<number | null> {
+    const lecturesWithExams = await this.prisma.lecture.findMany({
+      where: {
+        sectionId: sectionId,
+        exam: {
+          isNot: null,
+        },
+      },
+      include: {
+        exam: true,
+      },
+    });
+
+    if (lecturesWithExams.length === 0) {
+      return null;
+    }
+
+    const examIds = lecturesWithExams
+      .map((lecture) => lecture.exam?.id)
+      .filter(Boolean);
+
+    const examAttempts = await this.prisma.examAttempt.findMany({
+      where: {
+        userId: userId,
+        examId: {
+          in: examIds as number[],
+        },
+      },
+    });
+
+    if (examAttempts.length === 0) {
+      return null;
+    }
+
+    const totalScore = examAttempts.reduce(
+      (sum, attempt) => sum + attempt.examResult,
+      0,
+    );
+    const averageScore = totalScore / examAttempts.length;
+
+    return averageScore;
+  }
+
+  private async calculateAllPreviousSectionAverages(
+    userId: number,
+    courseIds: number[],
+  ): Promise<Record<number, number>> {
+    const sections = await this.prisma.section.findMany({
+      where: {
+        courseId: {
+          in: courseIds,
+        },
+      },
+      orderBy: { id: 'asc' },
+    });
+
+    const previousSectionScores: Record<number, number> = {};
+
+    await Promise.all(
+      sections.map(async (section) => {
+        const averageScore = await this.calculateAverageExamScore(
+          userId,
+          section.id,
+        );
+        previousSectionScores[section.id] = averageScore;
+      }),
+    );
+
+    return previousSectionScores;
   }
 
   async create(data: SectionCreateDto): Promise<Section> {

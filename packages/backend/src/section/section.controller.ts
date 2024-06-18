@@ -10,6 +10,7 @@ import {
   HttpStatus,
   ParseIntPipe,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { Section } from '@prisma/client';
 import { SectionService } from './section.service';
@@ -21,13 +22,18 @@ import {
   ApiParam,
   ApiBearerAuth,
 } from '@nestjs/swagger';
+import { Request } from 'express';
 import { RolesGuard } from '../auth/role/roles.guard';
 import { Roles } from '../auth/role/roles.decorator';
+import { JwtUtils } from '../auth/jwt.utils';
 
 @ApiTags('Section')
 @Controller('section')
 export class SectionController {
-  constructor(private readonly sectionService: SectionService) {}
+  constructor(
+    private readonly sectionService: SectionService,
+    private readonly jwtUtils: JwtUtils,
+  ) {}
 
   @ApiBearerAuth()
   @UseGuards(RolesGuard)
@@ -39,9 +45,34 @@ export class SectionController {
   @Get(':id')
   async findOneById(
     @Param('id', new ParseIntPipe()) id: number,
+    @Req() request: Request,
   ): Promise<Section | null> {
+    const token = request.headers.authorization.replace('Bearer ', '');
+    const payload = this.jwtUtils.parseJwtToken(token);
+    const userId = payload.id!;
     try {
-      return await this.sectionService.findOneById(id);
+      return await this.sectionService.findOneById(userId, id);
+    } catch (error) {
+      throw new HttpException(
+        `Error finding section: ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN', 'USER')
+  @ApiOperation({ summary: 'Find a all sections' })
+  @ApiResponse({ status: 200, type: Promise<any[]> })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
+  @Get(':id')
+  async findAll(@Req() request: Request): Promise<any[]> {
+    const token = request.headers.authorization.replace('Bearer ', '');
+    const payload = this.jwtUtils.parseJwtToken(token);
+    const userId = payload.id!;
+    try {
+      return await this.sectionService.findAll(userId);
     } catch (error) {
       throw new HttpException(
         `Error finding section: ${error.message}`,
