@@ -66,7 +66,7 @@ export class SectionController {
   @ApiOperation({ summary: 'Find a all sections' })
   @ApiResponse({ status: 200, type: Promise<any[]> })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
-  @Get(':id')
+  @Get('')
   async findAll(@Req() request: Request): Promise<any[]> {
     const token = request.headers.authorization.replace('Bearer ', '');
     const payload = this.jwtUtils.parseJwtToken(token);

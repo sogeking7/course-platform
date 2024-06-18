@@ -8,7 +8,6 @@ import { AuthModule } from '../auth/auth.module';
 @Module({
   controllers: [ExamController],
   providers: [ExamService, PrismaService, JwtUtils],
-  exports: [JwtUtils],
   imports: [forwardRef(() => AuthModule)],
 })
 export class ExamModule {}
