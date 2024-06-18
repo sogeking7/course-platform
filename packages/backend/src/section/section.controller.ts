@@ -66,7 +66,7 @@ export class SectionController {
   @ApiOperation({ summary: 'Find a all sections' })
   @ApiResponse({ status: 200, type: Promise<any[]> })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
-  @ApiParam({ name: 'id', description: 'ID of the course' })
+  @ApiParam({ name: 'courseId', description: 'ID of the course' })
   @Get('all/:courseId')
   async findAll(
     @Param('courseId', new ParseIntPipe()) courseId: number,

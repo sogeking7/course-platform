@@ -101,7 +101,7 @@ export class SectionService {
     });
 
     if (lecturesWithExams.length === 0) {
-      return null;
+      return 100;
     }
 
     const examIds = lecturesWithExams
@@ -118,7 +118,7 @@ export class SectionService {
     });
 
     if (examAttempts.length === 0) {
-      return null;
+      return 100;
     }
 
     const totalScore = examAttempts.reduce(
