@@ -10,7 +10,7 @@ import {
   HttpStatus,
   ParseIntPipe,
   UseGuards,
-  Req
+  Req,
 } from '@nestjs/common';
 import { Section } from '@prisma/client';
 import { SectionService } from './section.service';
@@ -30,7 +30,10 @@ import { JwtUtils } from '../auth/jwt.utils';
 @ApiTags('Section')
 @Controller('section')
 export class SectionController {
-  constructor(private readonly sectionService: SectionService, private readonly jwtUtils: JwtUtils) {}
+  constructor(
+    private readonly sectionService: SectionService,
+    private readonly jwtUtils: JwtUtils,
+  ) {}
 
   @ApiBearerAuth()
   @UseGuards(RolesGuard)
@@ -64,9 +67,7 @@ export class SectionController {
   @ApiResponse({ status: 200, type: Promise<Section | null> })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   @Get(':id')
-  async findAll(
-    @Req() request: Request,
-  ): Promise<any[]> {
+  async findAll(@Req() request: Request): Promise<any[]> {
     const token = request.headers.authorization.replace('Bearer ', '');
     const payload = this.jwtUtils.parseJwtToken(token);
     const userId = payload.id!;
