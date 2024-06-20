@@ -8,25 +8,31 @@ import {
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 import { useCourseStore } from "@/store/course";
+import { useSectionStore } from "@/store/section";
 import { useQuery } from "@tanstack/react-query";
-import { ListCollapse } from "lucide-react";
+import { ListCollapse, Lock } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export const AccordionContents = ({
   lectureId,
   courseId,
 }: {
-  lectureId?: number;
+  lectureId?: number | null;
   courseId: number;
 }) => {
-  const courseStore = useCourseStore();
-  const { data: course, isLoading: courseIsLoading } = useQuery({
-    queryKey: ["course", { id: courseId }],
-    queryFn: () => courseStore.findCourseById(courseId),
+  const router = useRouter();
+
+  // const courseStore = useCourseStore();
+  const sectionStore = useSectionStore();
+
+  const { data: sections, isLoading: sectionsIsLoading } = useQuery({
+    queryKey: ["sections", { id: courseId }],
+    queryFn: () => sectionStore.getAll(courseId),
   });
 
-  const defaultValue = course
-    ? [...course.sections.map((x) => `section-${x.id}`)]
+  const defaultValue = sections
+    ? [...sections.map((x) => `section-${x.id}`)]
     : [];
 
   return (
@@ -36,7 +42,7 @@ export const AccordionContents = ({
         Мазмұн
       </button>
       <div className="pt-[60px] min-h-[calc(100% - 60px)] z-[5]">
-        {courseIsLoading || !course ? (
+        {sectionsIsLoading || !sections ? (
           <div className="p-5">Жүктелуде...</div>
         ) : (
           <Accordion
@@ -44,51 +50,67 @@ export const AccordionContents = ({
             type="multiple"
             className="w-full relative "
           >
-            {course.sections.map((section, index) => (
+            {sections.map((section, index) => (
               <AccordionItem
                 className=""
                 key={section.id}
                 value={`section-${section.id}`}
               >
-                <AccordionTrigger className="pl-[25px] py-5 border-b border-zinc-600 text-left text-sm font-semibold">
-                  {index + 1}. {section.name}
+                <AccordionTrigger className="pl-[20px] py-5 border-b border-zinc-600 text-left text-sm font-semibold">
+                  <a className="flex items-center">
+                    {!!section.isLocked && <Lock size={12} className="mr-3" />}
+                    {index + 1}. {section.name}
+                  </a>
                 </AccordionTrigger>
+                {/* {!!!section.isLocked && ( */}
                 <AccordionContent
                   className={cn(
                     "px-0 text-sm ",
-                    index === course.sections.length - 1
+                    index === sections.length - 1
                       ? ""
                       : "border-b  border-b-zinc-600",
                   )}
                 >
                   <ul>
                     {section.lectures.map((lecture, jndex) => (
-                      <Link
+                      <button
                         key={lecture.id}
-                        href={`/course/${courseId}/learning/lecture/${lecture.id}`}
+                        onClick={() => {
+                          if (!section.isLocked) { 
+                            router.push(`/course/${courseId}/learning/lecture/${lecture.id}`)
+                          }
+                        }}
                         className={cn(
-                          "cursor-pointer",
+                          "w-full",
+                          section.isLocked
+                            ? "cursor-not-allowed"
+                            : "cursor-pointer",
                           lectureId === lecture.id ? "bg-red-500" : "",
                         )}
                       >
                         <li
                           className={cn(
                             "border-l-4 text-sm",
-                            "pt-2 pb-5 pl-4 pr-5 hover:underline flex cursor-pointer",
+                            "pt-3 pb-5 pl-4 pr-5 hover:underline flex",
                             lectureId === lecture.id
                               ? "bg-[#030405] border-l-white"
                               : "border-l-transparent",
+                            "flex items-center",
                           )}
                         >
-                          {!!lecture.exam?.id && (
-                            <div className="w-[11px] h-[11px] rounded-full border mr-3 relative top-[3px]"></div>
+                          {!!(lecture.exam?.id && !section.isLocked) && (
+                            <div className="w-[11px] h-[11px] rounded-full border mr-3 relative top-[0px]"></div>
+                          )}
+                          {!!section.isLocked && (
+                            <Lock size={12} className="mr-2" />
                           )}
                           {lecture.name}
                         </li>
-                      </Link>
+                      </button>
                     ))}
                   </ul>
                 </AccordionContent>
+                {/* )} */}
               </AccordionItem>
             ))}
           </Accordion>

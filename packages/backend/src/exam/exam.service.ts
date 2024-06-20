@@ -272,10 +272,10 @@ export class ExamService {
     const result = await this.prisma.examAttempt.findUnique({
       where: { userId_examId: { userId, examId } },
     });
-    if (!result?.examResult) {
-      return null;
+    if (result?.examResult !== null && result?.examResult !== undefined) {
+      return result.examResult;
     }
-    return result.examResult || null;
+    return null;
   }
 
   async getAllResultsByExamId(

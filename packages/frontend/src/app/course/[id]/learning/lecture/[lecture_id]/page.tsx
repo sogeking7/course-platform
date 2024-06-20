@@ -9,6 +9,8 @@ import {
   cn,
   convertToPreviewLink,
   getFirstLectureId,
+  nextLecture,
+  prevLecture,
 } from "@/lib/utils";
 import { useCourseStore } from "@/store/course";
 import { useExamStore } from "@/store/exam";
@@ -21,13 +23,14 @@ import {
   ListCollapse,
 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import { LectureQuizResultsTable } from "./quiz/result-table";
 import { columns } from "./quiz/columns";
-import { Question, QuizResult } from "@/types";
+import { Question } from "@/types";
 import { MyContainer } from "@/components/container";
+import { useSectionStore } from "@/store/section";
 
 export default function LectureIdPage({
   params,
@@ -41,13 +44,23 @@ export default function LectureIdPage({
   const lectureStore = useLectureStore();
   const courseStore = useCourseStore();
   const examStore = useExamStore();
+  const sectionsStore = useSectionStore();
 
   const [videoLoading, setVideoLoading] = useState(true);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
+  const [lectureId, setLectureId] = useState<number | null>(lecture_id);
+  const [prevLectureId, setPrevLectureId] = useState<number | null>(null);
+  const [nextLectureId, setNextLectureId] = useState<number | null>(null);
+
   const { data: course, isLoading: courseIsLoading } = useQuery({
     queryKey: ["course", { id: course_id }],
     queryFn: () => courseStore.findCourseById(course_id),
+  });
+
+  const { data: sections, isLoading: sectionsIsLoading } = useQuery({
+    queryKey: ["sections", { id: course_id }],
+    queryFn: () => sectionsStore.getAll(course_id),
   });
 
   const { data: lecture, isLoading: lectureIsLoading } = useQuery({
@@ -55,84 +68,32 @@ export default function LectureIdPage({
     queryFn: () => {
       if (lecture_id) return lectureStore.getById(lecture_id);
       else {
-        const firstLectureId = getFirstLectureId(course!);
+        const firstLectureId = getFirstLectureId(sections!);
+        setLectureId(firstLectureId);
         if (firstLectureId) return lectureStore.getById(firstLectureId);
       }
     },
-    enabled: !!course,
+    enabled: !!sections,
   });
-
-  const examId = lecture?.exam?.id;
 
   const { data: examResults, isLoading: examResultsLoading } = useQuery({
-    queryKey: ["exam-results", { id: examId }],
-    queryFn: () => examStore.getUserResults(examId!),
-    enabled: !!examId,
+    queryKey: ["exam-results", { id: lecture?.exam?.id }],
+    queryFn: () => {
+      if (lecture?.exam?.id) {
+        return examStore.getUserResults(lecture.exam.id);
+      }
+    },
+    enabled: !!lecture,
   });
 
-  const nextLecture = (): number | null | undefined => {
-    if (!course || courseIsLoading) return;
-
-    let nextLectureId: number | null | undefined = null;
-
-    const sections = course?.sections;
-
-    for (let i = 0; i < sections.length; i++) {
-      for (let j = 0; j < sections[i].lectures.length; j++) {
-        const thisLectureId = sections[i].lectures[j].id;
-        if (lecture_id === thisLectureId) {
-          if (j < sections[i].lectures.length - 1) {
-            nextLectureId = sections[i].lectures[j + 1].id;
-          } else if (i < sections.length - 1) {
-            const nextSectionLectures = sections[i + 1]?.lectures;
-            if (nextSectionLectures && nextSectionLectures.length > 0) {
-              nextLectureId = nextSectionLectures[0]?.id || null;
-            } else {
-              return null;
-            }
-          } else {
-            return null;
-          }
-        }
-      }
+  useEffect(() => {
+    if (sections && lectureId) {
+      const prevLectureId = prevLecture(lectureId, sections);
+      const nextLectureId = nextLecture(lectureId, sections);
+      setPrevLectureId(prevLectureId);
+      setNextLectureId(nextLectureId);
     }
-
-    return nextLectureId;
-  };
-
-  const prevLecture = (): number | null | undefined => {
-    if (!course || courseIsLoading) return;
-
-    let prevLectureId = null;
-
-    const sections = course?.sections;
-
-    for (let i = 0; i < sections.length; i++) {
-      for (let j = 0; j < sections[i].lectures.length; j++) {
-        const thisLectureId = sections[i].lectures[j].id;
-        if (lecture_id === thisLectureId) {
-          if (j > 0) {
-            prevLectureId = sections[i].lectures[j - 1].id;
-          } else if (i > 0) {
-            const previousSectionLectures = sections[i - 1]?.lectures;
-            if (previousSectionLectures && previousSectionLectures.length > 0) {
-              prevLectureId =
-                previousSectionLectures[previousSectionLectures.length - 1].id;
-            } else {
-              return null;
-            }
-          } else {
-            return null;
-          }
-        }
-      }
-    }
-
-    return prevLectureId;
-  };
-
-  const prevLectureId = prevLecture();
-  const nextLectureId = nextLecture();
+  }, [sections, lectureId]);
 
   const videoUrl = lecture?.videoUrl
     ? convertToPreviewLink(lecture.videoUrl)
@@ -239,10 +200,10 @@ export default function LectureIdPage({
                         data={[
                           {
                             grade: calcPercentage(
-                              examResults.result || 1,
+                              examResults.result,
                               points,
                             ),
-                            points: examResults.result || 1,
+                            points: examResults.result,
                             state: "Аяқталды",
                           },
                         ]}
@@ -251,7 +212,7 @@ export default function LectureIdPage({
                       !!JSON.parse(lecture.exam.questions).length && (
                         <div className="flex justify-end">
                           <Link
-                            href={`/course/${course_id}/learning/lecture/${lecture_id || getFirstLectureId(course!)}/quiz`}
+                            href={`/course/${course_id}/learning/lecture/${lecture_id || getFirstLectureId(sections!)}/quiz`}
                           >
                             <Button>
                               <BookCheck className="mr-2" size={20} />

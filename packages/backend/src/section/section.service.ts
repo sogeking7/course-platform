@@ -66,18 +66,30 @@ export class SectionService {
   async findAll(userId: number, courseId: number): Promise<any[]> {
     const sections = await this.prisma.section.findMany({
       where: { courseId },
+      include: {
+        lectures: {
+          include: {
+            exam: {
+              select: {
+                id: true,
+              },
+            },
+          },
+        },
+      },
       orderBy: { id: 'asc' },
     });
 
     const previousSectionAverages =
       await this.calculateAllPreviousSectionAverages(userId, courseId);
-
+    console.log('previousSectionAverages: ', previousSectionAverages);
     // Calculate lock status for each section
-    const sectionsWithLockStatus = sections.map((section) => {
+    const sectionsWithLockStatus = sections.map((section, id) => {
       const previousSectionAverage = previousSectionAverages[section.id];
-      const isLocked =
-        previousSectionAverage === undefined || previousSectionAverage < 70;
-
+      let isLocked = !previousSectionAverage || previousSectionAverage < 70;
+      if (!id) {
+        isLocked = false;
+      }
       return { ...section, isLocked };
     });
 
@@ -100,6 +112,11 @@ export class SectionService {
       },
     });
 
+    console.log(
+      'lecturesWithExams' + ' sectionId: ' + sectionId,
+      lecturesWithExams,
+    );
+
     if (lecturesWithExams.length === 0) {
       return 100;
     }
@@ -107,6 +124,17 @@ export class SectionService {
     const examIds = lecturesWithExams
       .map((lecture) => lecture.exam?.id)
       .filter(Boolean);
+
+    const examPoints = lecturesWithExams.reduce((sumi, lecture) => {
+      const questions = JSON.parse(lecture.exam.questions);
+      const points = questions.reduce(
+        (sumj, question) => sumj + question.points,
+        0,
+      );
+      return sumi + points;
+    }, 0);
+
+    console.log('examIds' + ' sectionId: ', examIds);
 
     const examAttempts = await this.prisma.examAttempt.findMany({
       where: {
@@ -118,16 +146,20 @@ export class SectionService {
     });
 
     if (examAttempts.length === 0) {
-      return 100;
+      return 0;
     }
 
     const totalScore = examAttempts.reduce(
       (sum, attempt) => sum + attempt.examResult,
       0,
     );
-    const averageScore = totalScore / examAttempts.length;
+    const averageScore = totalScore;
 
-    return averageScore;
+    console.log('totalScore', totalScore);
+    console.log('examPoints', examPoints);
+    console.log('length', examAttempts.length);
+
+    return (averageScore * 100) / examPoints;
   }
 
   private async calculateAllPreviousSectionAverages(

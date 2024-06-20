@@ -50,6 +50,7 @@ export type Section = z.infer<typeof createSectionSchema> & {
   course?: Course;
   courseId?: number;
   lectures: Lecture[];
+  isLocked?: Boolean
 };
 
 export type Lecture = z.infer<typeof createLectureSchema> & {
