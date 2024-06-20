@@ -313,8 +313,11 @@ export class ExamService {
     });
   }
 
-  async inviteUsers(examId: number, data: InviteUsersDto): Promise<{ message: string }> {
-    const emails = data.emails.map(userEmail => userEmail.email);
+  async inviteUsers(
+    examId: number,
+    data: InviteUsersDto,
+  ): Promise<{ message: string }> {
+    const emails = data.emails.map((userEmail) => userEmail.email);
 
     const users = await this.prisma.user.findMany({
       where: {
@@ -356,7 +359,7 @@ export class ExamService {
             userId,
           },
         },
-      }
+      },
     });
   }
 }
