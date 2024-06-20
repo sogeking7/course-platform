@@ -11,6 +11,7 @@ import {
   ExamCheckDto,
   ExamCreateDto,
   ExamUpdateDto,
+  InviteUsersDto,
   QuestionCreateDto,
   QuestionUpdateDto,
 } from './dto/exam.dto';
@@ -24,7 +25,7 @@ export class ExamService {
       return await this.prisma.exam.findUnique({
         where: { id },
         include: {
-          ExamAttempt: true,
+          examAttempt: true,
         },
       });
     } catch (error) {
@@ -309,6 +310,56 @@ export class ExamService {
 
     return await this.prisma.examAttempt.delete({
       where: { userId_examId: { userId, examId } },
+    });
+  }
+
+  async inviteUsers(
+    examId: number,
+    data: InviteUsersDto,
+  ): Promise<{ message: string }> {
+    const emails = data.emails.map((userEmail) => userEmail.email);
+
+    const users = await this.prisma.user.findMany({
+      where: {
+        email: {
+          in: emails,
+        },
+      },
+      select: {
+        id: true,
+        email: true,
+      },
+    });
+
+    const userMap = new Map(users.map((user) => [user.email, user.id]));
+
+    await this.prisma.$transaction(async (tx) => {
+      for (const email of emails) {
+        const userId = userMap.get(email);
+        if (userId === undefined) {
+          throw new NotFoundException(`User with email ${email} not found`);
+        }
+        await tx.invitedExam.create({
+          data: {
+            examId,
+            userId,
+          },
+        });
+      }
+    });
+
+    return { message: `${users.length} users invited to exam ${examId}` };
+  }
+
+  async getInvitedExams(userId: number): Promise<Exam[]> {
+    return await this.prisma.exam.findMany({
+      where: {
+        invitedExam: {
+          some: {
+            userId,
+          },
+        },
+      },
     });
   }
 }

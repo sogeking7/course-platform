@@ -19,6 +19,7 @@ import {
   ExamCheckDto,
   ExamCreateDto,
   ExamUpdateDto,
+  InviteUsersDto,
   QuestionCreateDto,
   QuestionUpdateDto,
 } from './dto/exam.dto';
@@ -294,5 +295,33 @@ export class ExamController {
     @Param('userEmail') userEmail: string,
   ): Promise<ExamAttempt> {
     return await this.examService.resetResult(examId, userEmail);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
+  @ApiOperation({ summary: 'Invite user to the exam' })
+  @ApiResponse({ status: 200, description: 'Invited successfully' })
+  @ApiResponse({ status: 404, description: 'Users not found' })
+  @ApiParam({ name: 'examId', required: true, description: 'ID of the exam' })
+  @Post(':examId/invite')
+  async inviteUsers(
+    @Param('examId', new ParseIntPipe()) examId: number,
+    @Body() data: InviteUsersDto,
+  ): Promise<{ message: string }> {
+    return await this.examService.inviteUsers(examId, data);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @ApiOperation({ summary: 'Get invited exam' })
+  @ApiResponse({ status: 200, description: 'Got successfully' })
+  @ApiResponse({ status: 404, description: 'Exams not found' })
+  @Get('invite')
+  async getInvitedExams(@Req() request: Request): Promise<Exam[]> {
+    const token = request.headers.authorization.replace('Bearer ', '');
+    const payload = this.jwtUtils.parseJwtToken(token);
+    const userId = payload.id;
+    return await this.examService.getInvitedExams(userId);
   }
 }

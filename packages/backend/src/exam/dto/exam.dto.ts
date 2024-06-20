@@ -6,6 +6,7 @@ import {
   IsArray,
   IsBoolean,
   IsNumber,
+  IsEmail,
 } from 'class-validator';
 
 export class ExamCreateDto {
@@ -126,4 +127,15 @@ export class ExamAnswerDto {
   @ApiProperty()
   @IsArray()
   givenAnswers: number[];
+}
+
+export class UserEmail {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
+}
+
+export class InviteUsersDto {
+  emails: UserEmail[];
 }
