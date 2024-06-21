@@ -80,18 +80,36 @@ export class SectionService {
       orderBy: { id: 'asc' },
     });
 
-    const previousSectionAverages =
-      await this.calculateAllPreviousSectionAverages(userId, courseId);
-    console.log('previousSectionAverages: ', previousSectionAverages);
-    // Calculate lock status for each section
-    const sectionsWithLockStatus = sections.map((section, id) => {
-      const previousSectionAverage = previousSectionAverages[section.id];
-      let isLocked = !previousSectionAverage || previousSectionAverage < 70;
-      if (!id) {
-        isLocked = false;
-      }
-      return { ...section, isLocked };
-    });
+    const sectionsWithLockStatus = await Promise.all(
+      sections.map(async (section, index) => {
+        const averageScore = index
+          ? await this.calculateAverageExamScore(userId, sections[index - 1].id)
+          : 100;
+        const isLocked = averageScore === null || averageScore < 70;
+
+        const lecturesWithExamStatus = await Promise.all(
+          section.lectures.map(async (lecture) => {
+            const examAttempts = await this.prisma.examAttempt.findMany({
+              where: {
+                userId,
+                examId: lecture.exam?.id,
+              },
+            });
+            const isExamPassed = examAttempts.some(
+              (attempt) => attempt.examResult !== null,
+            );
+            return { ...lecture, isExamPassed };
+          }),
+        );
+
+        return {
+          ...section,
+          isLocked,
+          averageScore,
+          lectures: lecturesWithExamStatus,
+        };
+      }),
+    );
 
     return sectionsWithLockStatus;
   }
@@ -112,10 +130,10 @@ export class SectionService {
       },
     });
 
-    console.log(
-      'lecturesWithExams' + ' sectionId: ' + sectionId,
-      lecturesWithExams,
-    );
+    // console.log(
+    //   'lecturesWithExams' + ' sectionId: ' + sectionId,
+    //   lecturesWithExams,
+    // );
 
     if (lecturesWithExams.length === 0) {
       return 100;
@@ -134,7 +152,7 @@ export class SectionService {
       return sumi + points;
     }, 0);
 
-    console.log('examIds' + ' sectionId: ', examIds);
+    // console.log('examIds' + ' sectionId: ', examIds);
 
     const examAttempts = await this.prisma.examAttempt.findMany({
       where: {
@@ -155,9 +173,9 @@ export class SectionService {
     );
     const averageScore = totalScore;
 
-    console.log('totalScore', totalScore);
-    console.log('examPoints', examPoints);
-    console.log('length', examAttempts.length);
+    // console.log('totalScore', totalScore);
+    // console.log('examPoints', examPoints);
+    // console.log('length', examAttempts.length);
 
     return (averageScore * 100) / examPoints;
   }

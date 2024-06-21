@@ -16,7 +16,8 @@ import {
   SheetContent,
   SheetOverlay,
 } from "@/components/ui/sheet";
-import { ListCollapse, X } from "lucide-react";
+import { CircleCheckBig, ListCollapse, X } from "lucide-react";
+import { useSectionStore } from "@/store/section";
 
 export const AccordionSheet = ({
   isOpen,
@@ -24,14 +25,15 @@ export const AccordionSheet = ({
   lectureId,
   courseId,
 }: any) => {
-  const courseStore = useCourseStore();
-  const { data: course, isLoading: courseIsLoading } = useQuery({
-    queryKey: ["course", { id: courseId }],
-    queryFn: () => courseStore.findCourseById(courseId),
+  const sectionStore = useSectionStore();
+
+  const { data: sections, isLoading: sectionsIsLoading } = useQuery({
+    queryKey: ["sections", { id: courseId }],
+    queryFn: () => sectionStore.getAll(courseId),
   });
 
-  const defaultValue = course
-    ? [...course.sections.map((x) => `section-${x.id}`)]
+  const defaultValue = sections
+    ? [...sections.map((x) => `section-${x.id}`)]
     : [];
 
   return (
@@ -59,7 +61,7 @@ export const AccordionSheet = ({
             </button>
           </div>
           <div className="pt-[60px] min-h-[calc(100% - 60px)] z-[5]">
-            {courseIsLoading || !course ? (
+            {sectionsIsLoading || !sections ? (
               <div className="p-5">Жүктелуде...</div>
             ) : (
               <Accordion
@@ -67,19 +69,19 @@ export const AccordionSheet = ({
                 type="multiple"
                 className="w-full relative "
               >
-                {course.sections.map((section, index) => (
+                {sections.map((section, index) => (
                   <AccordionItem
                     className=""
                     key={section.id}
                     value={`section-${section.id}`}
                   >
-                    <AccordionTrigger className="pl-[25px] py-5 border-b border-zinc-600 text-left text-sm font-semibold">
+                    <AccordionTrigger className="pl-[20px] py-5 border-b border-zinc-600 text-left text-sm font-semibold">
                       {index + 1}. {section.name}
                     </AccordionTrigger>
                     <AccordionContent
                       className={cn(
                         "px-0 text-sm ",
-                        index === course.sections.length - 1
+                        index === sections.length - 1
                           ? ""
                           : "border-b  border-b-zinc-600",
                       )}
@@ -97,13 +99,25 @@ export const AccordionSheet = ({
                             <li
                               className={cn(
                                 "border-l-4 text-sm",
-                                "pt-2 pb-5 pl-4 pr-5 hover:underline flex cursor-pointer",
+                                "pt-3 pb-5 pl-4 pr-5 hover:underline flex",
                                 lectureId === lecture.id
                                   ? "bg-[#030405] border-l-white"
                                   : "border-l-transparent",
+                                "flex items-center",
                               )}
                             >
-                              <div className="w-[11px] h-[11px] rounded-full border mr-3 relative top-[3px]"></div>
+                              {!!(
+                                !lecture.isExamPassed && lecture.exam?.id
+                              ) && (
+                                <div className="w-[11px] h-[11px] rounded-full border mr-3 relative top-[0px]"></div>
+                              )}
+                              {!!(lecture.isExamPassed && lecture.exam?.id) && (
+                                <CircleCheckBig
+                                  strokeWidth={2.5}
+                                  className="mr-2 text-green-400"
+                                  size={14}
+                                />
+                              )}
                               {lecture.name}
                             </li>
                           </Link>

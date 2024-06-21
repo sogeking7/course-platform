@@ -52,7 +52,7 @@ export class CourseService {
         },
       });
 
-      console.log('userId', userId);
+      // console.log('userId', userId);
       const userRole = (
         await this.prisma.user.findUnique({ where: { id: userId } })
       ).role;

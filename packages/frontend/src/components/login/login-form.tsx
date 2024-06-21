@@ -32,7 +32,7 @@ export default function LoginForm() {
       redirect: false,
       callbackUrl: "/home/all-courses",
     });
-    console.log(auth);
+    // console.log(auth);
     const errorStatus = auth?.error;
     // console.log(errorStatus);
     switch (errorStatus) {

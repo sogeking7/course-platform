@@ -230,7 +230,7 @@ export class ExamController {
         userId,
         examId,
       );
-      console.log('examResult', examResult);
+      // console.log('examResult', examResult);
       // if (!examResult) {
       //   throw new HttpException('Attempt not found', HttpStatus.NOT_FOUND);
       // }

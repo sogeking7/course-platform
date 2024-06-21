@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import { useCourseStore } from "@/store/course";
 import { useSectionStore } from "@/store/section";
 import { useQuery } from "@tanstack/react-query";
-import { ListCollapse, Lock } from "lucide-react";
+import { CircleCheckBig, ListCollapse, Lock } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -58,8 +58,25 @@ export const AccordionContents = ({
               >
                 <AccordionTrigger className="pl-[20px] py-5 border-b border-zinc-600 text-left text-sm font-semibold">
                   <a className="flex items-center">
-                    {!!section.isLocked && <Lock size={12} className="mr-3" />}
-                    {index + 1}. {section.name}
+                    {/* {!!section.isLocked && <Lock size={12} className="mr-3" />} */}
+                    {`${index + 1}. ${section.name}`}
+                    {/* {!section.isLocked && (
+                      <span>
+                        
+                        <b
+                          className={cn(
+                            !!(section.averageScore! >= 70) && "text-green-500",
+                            !!(
+                              section.averageScore! >= 50 &&
+                              section.averageScore! < 70
+                            ) && "text-yellow-500",
+                            !!(section.averageScore! < 50) && "text-red-500",
+                          )}
+                        >
+                          {" - " + section.averageScore?.toFixed(2) + "%"}
+                        </b>
+                      </span>
+                    )} */}
                   </a>
                 </AccordionTrigger>
                 {/* {!!!section.isLocked && ( */}
@@ -76,15 +93,21 @@ export const AccordionContents = ({
                       <button
                         key={lecture.id}
                         onClick={() => {
-                          if (!section.isLocked) { 
-                            router.push(`/course/${courseId}/learning/lecture/${lecture.id}`)
-                          }
+                          // if (!section.isLocked) {
+                          //   router.push(
+                          //     `/course/${courseId}/learning/lecture/${lecture.id}`,
+                          //   );
+                          // }
+                          router.push(
+                            `/course/${courseId}/learning/lecture/${lecture.id}`,
+                          );
                         }}
                         className={cn(
                           "w-full",
-                          section.isLocked
-                            ? "cursor-not-allowed"
-                            : "cursor-pointer",
+                          // section.isLocked
+                          //   ? "cursor-not-allowed"
+                          //   : "cursor-pointer",
+                          "cursor-pointer",
                           lectureId === lecture.id ? "bg-red-500" : "",
                         )}
                       >
@@ -98,12 +121,19 @@ export const AccordionContents = ({
                             "flex items-center",
                           )}
                         >
-                          {!!(lecture.exam?.id && !section.isLocked) && (
+                          {!!(!lecture.isExamPassed && lecture.exam?.id) && (
                             <div className="w-[11px] h-[11px] rounded-full border mr-3 relative top-[0px]"></div>
                           )}
-                          {!!section.isLocked && (
-                            <Lock size={12} className="mr-2" />
+                          {!!(lecture.isExamPassed && lecture.exam?.id) && (
+                            <CircleCheckBig
+                              strokeWidth={2.5}
+                              className="mr-2 text-green-400"
+                              size={14}
+                            />
                           )}
+                          {/* {!!section.isLocked && (
+                            <Lock size={12} className="mr-2" />
+                          )} */}
                           {lecture.name}
                         </li>
                       </button>
