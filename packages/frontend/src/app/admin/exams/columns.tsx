@@ -9,7 +9,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, Pencil, UserRoundPlus } from "lucide-react";
+import {
+  ClipboardList,
+  MoreHorizontal,
+  Pencil,
+  UserRoundPlus,
+} from "lucide-react";
 import Link from "next/link";
 import Moment from "react-moment";
 import "moment/locale/kk";
@@ -81,6 +86,12 @@ export const columns: ColumnDef<Exam>[] = [
               <Link href={`/admin/exams/edit/${id}`}>
                 <Pencil className="mr-2" size={20} />
                 Өңдеу
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href={`/admin/exams/results/${id}`}>
+                <ClipboardList className="mr-2" size={20} />
+                Нәтижелер
               </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>

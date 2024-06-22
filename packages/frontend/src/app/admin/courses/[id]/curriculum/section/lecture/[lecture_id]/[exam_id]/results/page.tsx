@@ -93,9 +93,9 @@ export default function AdminLectureQuizResults({
     <>
       <Bread breadcrumbs={breadcrumbs} />
       <TypographyH1>Нәтижелер</TypographyH1>
-      <WhiteBox>
+      {/* <WhiteBox> */}
         <AdminQuizResultsDataTable columns={modColumns} data={modifiedData} />
-      </WhiteBox>
+      {/* </WhiteBox> */}
     </>
   );
 }

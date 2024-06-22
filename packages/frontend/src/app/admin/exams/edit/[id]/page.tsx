@@ -44,7 +44,7 @@ export default function AdminsExamsEditPage({
       <Bread breadcrumbs={breadcrumbs} />
       <div className="w-full justify-between flex">
         <TypographyH1>{data.name}</TypographyH1>
-        <Link href={"/admin/courses/results" + id}>
+        <Link href={"/admin/exams/results/" + id}>
           <Button>
             <ClipboardList size={16} className="mr-2" />
             Нәтижелер

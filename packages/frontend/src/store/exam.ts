@@ -20,7 +20,10 @@ type Store = {
   getUserResults: (examId: number) => Promise<any>;
   getAllResults: (examId: number) => Promise<any>;
   resetResultOfUser: (examId: number, userEmail: string) => Promise<any>;
-  inviteUser: (data: any) => Promise<any>;
+  inviteUser: (
+    id: number,
+    data: { emails: { email: string }[] },
+  ) => Promise<any>;
   getInvitedExams: (userId: number) => Promise<any>;
 };
 
@@ -50,7 +53,8 @@ export const useExamStore = create<Store>()((set) => {
       (await axios.get(`${url}/${examId}/get-result`)).data,
     resetResultOfUser: async (examId, userEmail) =>
       (await axios.delete(`${url}/${examId}/reset-result/${userEmail}`)).data,
-    inviteUser: async (data) => (await axios.post(`${url}/invite`), data).data,
+    inviteUser: async (id, data) =>
+      (await axios.post(`${url}/${id}/invite`,data)).data,
     getInvitedExams: async () => (await axios.get(`${url}/invite`)).data,
   };
 });

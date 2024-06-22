@@ -26,13 +26,6 @@ export class ExamService {
         where: {
           lectureId: null,
         },
-        include: {
-          // Include any related models you want here, if necessary
-          // examAttempt: true,
-          // invitedExam: true,
-        },
-
-        // include: {},
       });
     } catch (error) {
       throw new HttpException(
@@ -48,6 +41,7 @@ export class ExamService {
         where: { id },
         include: {
           examAttempt: true,
+          invitedExam: true,
         },
       });
     } catch (error) {
@@ -220,7 +214,7 @@ export class ExamService {
 
     // Check if the user has already attempted this exam
     const existingAttempt = await this.prisma.examAttempt.findUnique({
-      where: { userId_examId: { userId, examId } },
+      where: { userId_examId_unique: { userId, examId } },
     });
 
     if (existingAttempt) {
@@ -293,7 +287,7 @@ export class ExamService {
     examId: number,
   ): Promise<number | null> {
     const result = await this.prisma.examAttempt.findUnique({
-      where: { userId_examId: { userId, examId } },
+      where: { userId_examId_unique: { userId, examId } },
     });
     if (result?.examResult !== null && result?.examResult !== undefined) {
       return result.examResult;
@@ -331,7 +325,7 @@ export class ExamService {
     const userId = user.id;
 
     return await this.prisma.examAttempt.delete({
-      where: { userId_examId: { userId, examId } },
+      where: { userId_examId_unique: { userId, examId } },
     });
   }
 
@@ -339,6 +333,7 @@ export class ExamService {
     examId: number,
     data: InviteUsersDto,
   ): Promise<{ message: string }> {
+    console.log('email', data);
     const emails = data.emails.map((userEmail) => userEmail.email);
 
     const users = await this.prisma.user.findMany({

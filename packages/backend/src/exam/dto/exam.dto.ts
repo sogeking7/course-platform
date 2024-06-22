@@ -142,6 +142,6 @@ export class InviteUsersDto {
   @ApiProperty({ type: [UserEmail] })
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => UserEmail)
+  // @Type(() => UserEmail)
   emails: UserEmail[];
 }

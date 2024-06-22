@@ -80,6 +80,7 @@ export type Exam = z.infer<typeof createExamSchema> & {
   lecture?: Lecture;
   createdAt: string;
   editedAt: string;
+  InvitedExam?: InvitedExam[];
 };
 
 export type Question = {
@@ -106,6 +107,15 @@ export type QuizResult = {
   grade: number;
   state: string;
   points: number;
+  createdAt: string;
+  editedAt: string;
+};
+
+export type InvitedExam = {
+  user?: User;
+  userId?: number;
+  exam?: Exam;
+  examId: number;
   createdAt: string;
   editedAt: string;
 };
