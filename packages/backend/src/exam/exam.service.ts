@@ -20,6 +20,28 @@ import {
 export class ExamService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async getAllExams(): Promise<Exam[]> {
+    try {
+      return await this.prisma.exam.findMany({
+        where: {
+          lectureId: null,
+        },
+        include: {
+          // Include any related models you want here, if necessary
+          // examAttempt: true,
+          // invitedExam: true,
+        },
+
+        // include: {},
+      });
+    } catch (error) {
+      throw new HttpException(
+        `Error finding exam: ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
   async findOneById(id: number): Promise<Exam | null> {
     try {
       return await this.prisma.exam.findUnique({
@@ -49,7 +71,7 @@ export class ExamService {
   }
 
   async create(data: ExamCreateDto): Promise<Exam> {
-    this.isLectureExists(data.lectureId);
+    if (data.lectureId) this.isLectureExists(data.lectureId);
 
     return await this.prisma.exam.create({
       data: {
@@ -68,7 +90,7 @@ export class ExamService {
   }
 
   async update(id: number, data: ExamUpdateDto): Promise<Exam> {
-    this.isLectureExists();
+    if (data.lectureId) this.isLectureExists();
 
     const conflictingExam = await this.prisma.exam.findUnique({
       where: { lectureId: data.lectureId },

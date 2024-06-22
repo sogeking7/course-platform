@@ -58,10 +58,10 @@ export const QuizCreator = ({
     },
     onSuccess: () => {
       if (mode === "edit") {
-        queryClient.invalidateQueries({ queryKey: ["exam", { id: examId! }] });
+        queryClient.invalidateQueries({ queryKey: ["exam-questions", { id: examId! }] });
         form.reset(form.getValues());
       } else {
-        queryClient.invalidateQueries({ queryKey: ["exam", { id: examId! }] });
+        queryClient.invalidateQueries({ queryKey: ["exam-questions", { id: examId! }] });
         form.reset();
       }
     },
@@ -71,7 +71,7 @@ export const QuizCreator = ({
     mutationFn: (id: number) => examStore.deleteQuestion(examId!, id),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["exam", { id: examId! }],
+        queryKey: ["exam-questions", { id: examId! }],
       });
     },
   });

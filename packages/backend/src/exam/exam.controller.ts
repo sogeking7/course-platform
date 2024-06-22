@@ -45,6 +45,24 @@ export class ExamController {
 
   @ApiBearerAuth()
   @UseGuards(RolesGuard)
+  @Roles('ADMIN')
+  @ApiOperation({ summary: 'Get all exams' })
+  @ApiResponse({ status: 200, type: Promise<Exam | null> })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
+  @Get()
+  async getAllExams(): Promise<Exam[] | null> {
+    try {
+      return await this.examService.getAllExams();
+    } catch (error) {
+      throw new HttpException(
+        `Error getting all exams: ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
   @Roles('ADMIN', 'USER')
   @ApiOperation({ summary: 'Find a exam by ID' })
   @ApiResponse({ status: 200, type: Promise<Exam | null> })

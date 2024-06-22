@@ -7,6 +7,8 @@ export type User = z.infer<typeof createUserSchema> & {
   access_token?: string;
   accessToken?: string;
   role?: UserRole;
+  createdAt: string;
+  editedAt: string;
 };
 
 export enum UserRole {
@@ -29,6 +31,8 @@ export type Module = {
   description: string;
   course_id: number | null;
   profile_image: string;
+  createdAt: string;
+  editedAt: string;
 };
 
 type CourseEnrollment = {
@@ -36,6 +40,8 @@ type CourseEnrollment = {
   courseId?: number;
   user?: User;
   userId?: number;
+  createdAt: string;
+  editedAt: string;
 };
 
 export type Course = z.infer<typeof createCourseSchema> & {
@@ -43,6 +49,8 @@ export type Course = z.infer<typeof createCourseSchema> & {
   sections: Section[];
   users?: CourseEnrollment[];
   profilePictureLink?: string;
+  createdAt: string;
+  editedAt: string;
 };
 
 export type Section = z.infer<typeof createSectionSchema> & {
@@ -52,6 +60,8 @@ export type Section = z.infer<typeof createSectionSchema> & {
   lectures: Lecture[];
   isLocked?: Boolean;
   averageScore?: number;
+  createdAt: string;
+  editedAt: string;
 };
 
 export type Lecture = z.infer<typeof createLectureSchema> & {
@@ -61,13 +71,15 @@ export type Lecture = z.infer<typeof createLectureSchema> & {
   exam?: Exam;
   examId?: number;
   isExamPassed?: Boolean;
+  createdAt: string;
+  editedAt: string;
 };
 
 export type Exam = z.infer<typeof createExamSchema> & {
   id: number;
   lecture?: Lecture;
-  // lectureId?: number;
-  // questions: string;
+  createdAt: string;
+  editedAt: string;
 };
 
 export type Question = {
@@ -77,6 +89,8 @@ export type Question = {
   correctAnswer: string[];
   isMultipleChoice: boolean;
   points: number;
+  createdAt: string;
+  editedAt: string;
 };
 
 export type Topic = {
@@ -84,12 +98,16 @@ export type Topic = {
   name: string;
   description: string;
   text_material: string;
+  createdAt: string;
+  editedAt: string;
 };
 
 export type QuizResult = {
   grade: number;
   state: string;
   points: number;
+  createdAt: string;
+  editedAt: string;
 };
 
 export type ExamResult = User & {

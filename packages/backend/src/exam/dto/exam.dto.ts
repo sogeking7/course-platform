@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsNotEmpty,
   IsString,
@@ -7,6 +8,7 @@ import {
   IsBoolean,
   IsNumber,
   IsEmail,
+  ValidateNested,
 } from 'class-validator';
 
 export class ExamCreateDto {
@@ -137,5 +139,9 @@ export class UserEmail {
 }
 
 export class InviteUsersDto {
+  @ApiProperty({ type: [UserEmail] })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => UserEmail)
   emails: UserEmail[];
 }

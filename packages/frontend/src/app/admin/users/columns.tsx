@@ -4,6 +4,8 @@ import { User } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { UseMutationResult } from "@tanstack/react-query";
 import { MyAlert } from "@/components/my-alert";
+import Moment from "react-moment";
+import "moment/locale/kk";
 
 export const columns = (
   mutation?: UseMutationResult<any, Error, number, unknown>,
@@ -38,6 +40,22 @@ export const columns = (
     cell: ({ getValue }) => {
       const role = getValue<string>();
       return role === "USER" ? "Оқушы" : "Админ";
+    },
+  },
+  {
+    header: "Құрылған күні",
+    accessorKey: "createdAt",
+    cell: ({ row }) => {
+      const date = row.original.createdAt;
+      return <Moment locale="kk" format="DD-MM-YYYY" date={date} />;
+    },
+  },
+  {
+    header: "Өңделген күні",
+    accessorKey: "editedAt",
+    cell: ({ row }) => {
+      const date = row.original.editedAt;
+      return <Moment locale="kk" date={date} fromNow />;
     },
   },
   {

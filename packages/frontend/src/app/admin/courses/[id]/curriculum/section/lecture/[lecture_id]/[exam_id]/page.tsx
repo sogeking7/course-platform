@@ -31,7 +31,7 @@ export default function AdminLecturePage({
   const lectureStore = useLectureStore();
 
   const { data, isSuccess, isLoading } = useQuery({
-    queryKey: ["exam", { id: examId }],
+    queryKey: ["exam-questions", { id: examId }],
     queryFn: () => examStore.getQuestions(examId),
   });
 

@@ -97,7 +97,7 @@ export default function LectureForm({
   });
 
   const mutationCreateExam = useMutation({
-    mutationFn: (newData: any) => examStore.create(data?.id!, newData),
+    mutationFn: (newData: any) => examStore.create(newData),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["course", { id: courseId }],

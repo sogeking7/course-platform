@@ -1,31 +1,25 @@
 "use client";
 
-import { Course } from "@/types";
+import { Exam } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
-import {
-  CircleFadingPlus,
-  MoreHorizontal,
-  Pencil,
-  UserRoundPlus,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { MoreHorizontal, Pencil, UserRoundPlus } from "lucide-react";
 import Link from "next/link";
 import Moment from "react-moment";
 import "moment/locale/kk";
 
-export const columns: ColumnDef<Course>[] = [
+export const columns: ColumnDef<Exam>[] = [
   {
     id: "icon",
     header: "#",
-    cell: () => {
-      const image = "/icons/course.png";
-      return <img src={image} className="inline min-w-7 min-h-7" />;
+    cell: ({ row }) => {
+      return <img src="/icons/test.png" className="inline min-w-7 min-h-7" />;
     },
   },
   {
@@ -34,14 +28,22 @@ export const columns: ColumnDef<Course>[] = [
   },
   {
     accessorKey: "description",
-    header: "Сипаттамасы",
+    header: "Жөні",
+  },
+  {
+    accessorKey: "questions",
+    header: "Сұрақтар саны",
+    cell: ({ row }) => {
+      const questionsCont = JSON.parse(row.original.questions).length;
+      return questionsCont;
+    },
   },
   {
     header: "Құрылған күні",
     accessorKey: "createdAt",
     cell: ({ row }) => {
       const date = row.original.createdAt;
-      return <Moment locale="kk" format="DD-MM-YYYY" date={date} />;
+      return <Moment format="DD-MM-YYYY" date={date} />;
     },
   },
   {
@@ -55,7 +57,7 @@ export const columns: ColumnDef<Course>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const course = row.original;
+      const id = row.original.id;
 
       return (
         <DropdownMenu>
@@ -69,36 +71,21 @@ export const columns: ColumnDef<Course>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            {/* <DropdownMenuLabel>Actions</DropdownMenuLabel> */}
             <DropdownMenuItem asChild>
-              <Link href={`/admin/courses/${course.id}/curriculum`}>
-                <CircleFadingPlus className="mr-2" size={20} />
-                Курс бағдарламасы
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href={`/admin/courses/${course.id}/invite`}>
+              <Link href={`/admin/exams/invite/${id}`}>
                 <UserRoundPlus className="mr-2" size={20} />
                 Оқушы қосу
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href={`/admin/courses/${course.id}`}>
+              <Link href={`/admin/exams/edit/${id}`}>
                 <Pencil className="mr-2" size={20} />
                 Өңдеу
               </Link>
             </DropdownMenuItem>
-
-            {/* <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem> */}
           </DropdownMenuContent>
         </DropdownMenu>
       );
     },
   },
-  // {
-  //   accessorKey: "description",
-  //   header: "Cипаттамасы",
-  // },
 ];

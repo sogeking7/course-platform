@@ -5,8 +5,8 @@ import { create } from "zustand";
 type Store = {
   delete: (id: number) => Promise<Exam>;
   update: (id: number, data: any) => Promise<Exam>;
-  create: (lectureId: number, data: any) => Promise<Exam>;
-  getAll: () => Promise<any>;
+  create: (data: any) => Promise<Exam>;
+  getAll: () => Promise<Exam[]>;
   getById: (id: number) => Promise<Exam>;
   getQuestions: (examId: number) => Promise<Question[]>;
   addQuestion: (examId: number, data: any) => Promise<any>;
@@ -20,6 +20,8 @@ type Store = {
   getUserResults: (examId: number) => Promise<any>;
   getAllResults: (examId: number) => Promise<any>;
   resetResultOfUser: (examId: number, userEmail: string) => Promise<any>;
+  inviteUser: (data: any) => Promise<any>;
+  getInvitedExams: (userId: number) => Promise<any>;
 };
 
 export const useExamStore = create<Store>()((set) => {
@@ -28,8 +30,7 @@ export const useExamStore = create<Store>()((set) => {
   return {
     delete: async (id) => (await axios.delete(`${url}/${id}`)).data,
     update: async (id, data) => (await axios.put(`${url}/${id}`, data)).data,
-    create: async (lectureId, data) =>
-      (await axios.post(`${url}`, { lectureId, ...data })).data,
+    create: async (data) => (await axios.post(`${url}`, data)).data,
     getAll: async () => (await axios.get(`${url}`)).data,
     getById: async (id) => (await axios.get(`${url}/${id}`)).data,
     getQuestions: async (examId) =>
@@ -49,5 +50,7 @@ export const useExamStore = create<Store>()((set) => {
       (await axios.get(`${url}/${examId}/get-result`)).data,
     resetResultOfUser: async (examId, userEmail) =>
       (await axios.delete(`${url}/${examId}/reset-result/${userEmail}`)).data,
+    inviteUser: async (data) => (await axios.post(`${url}/invite`), data).data,
+    getInvitedExams: async () => (await axios.get(`${url}/invite`)).data,
   };
 });

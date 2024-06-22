@@ -1,8 +1,10 @@
 import {
+  Award,
   BookOpen,
   Home,
   LayoutDashboard,
   LibraryBig,
+  Trophy,
   Users,
   UsersRound,
 } from "lucide-react";
@@ -26,6 +28,11 @@ export const sidebar_links = [
     href: "/home/my-courses",
     icon: <BookOpen size={20} />,
   },
+  {
+    title: "Емтихандар",
+    href: "/home/my-exams",
+    icon: <Trophy size={20} />,
+  },
   // {
   //   title: "Байқау тесті",
   //   href: "#",
@@ -48,6 +55,11 @@ export const admin_links = [
     title: "Курстар",
     href: "/admin/courses",
     icon: <LibraryBig size={20} />,
+  },
+  {
+    title: "Емтихандар",
+    href: "/admin/exams",
+    icon: <Trophy size={20} />,
   },
   // {
   //   title: "Менің курстарым",
