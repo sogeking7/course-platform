@@ -338,9 +338,8 @@ export class ExamService {
     examId: number,
     data: InviteUsersDto,
   ): Promise<{ message: string }> {
-    if (
-      (await this.prisma.exam.findUnique({ where: { id: examId } })) === null
-    ) {
+    const exam = await this.prisma.exam.findUnique({ where: { id: examId } });
+    if (!exam) {
       throw new HttpException(
         `Exam with id ${examId} does not exist`,
         HttpStatus.NOT_FOUND,
@@ -372,12 +371,13 @@ export class ExamService {
             HttpStatus.NOT_FOUND,
           );
         }
-        await tx.invitedExam.create({
-          data: {
-            examId,
-            userId,
-          },
+
+        const existingInvite = await tx.invitedExam.findFirst({
+          where: { examId, userId },
         });
+        if (!existingInvite) {
+          await tx.invitedExam.create({ data: { examId, userId } });
+        }
       }
     });
 
