@@ -348,7 +348,6 @@ export class ExamService {
     }
 
     const emails = data.emails.map((userEmail) => userEmail.email);
-    console.log('email', data);
 
     const users = await this.prisma.user.findMany({
       where: {
