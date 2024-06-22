@@ -1,10 +1,4 @@
-import {
-  Injectable,
-  HttpException,
-  HttpStatus,
-  NotFoundException,
-  NotImplementedException,
-} from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { Prisma, Exam, ExamAttempt } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import {
@@ -156,7 +150,10 @@ export class ExamService {
       (q) => q.id === questionId.toString(),
     );
     if (questionIndex === -1) {
-      throw new NotFoundException(`Question with ID ${questionId} not found`);
+      throw new HttpException(
+        `Question with ID ${questionId} not found`,
+        HttpStatus.NOT_FOUND,
+      );
     }
 
     const updatedQuestion = {
@@ -187,7 +184,10 @@ export class ExamService {
       (q) => q.id === questionId.toString(),
     );
     if (questionIndex === -1) {
-      throw new NotFoundException(`Question with ID ${questionId} not found`);
+      throw new HttpException(
+        `Question with ID ${questionId} not found`,
+        HttpStatus.NOT_FOUND,
+      );
     }
 
     questions.splice(questionIndex, 1);
@@ -218,8 +218,9 @@ export class ExamService {
     });
 
     if (existingAttempt) {
-      throw new NotImplementedException(
-        `User ${userId} has already attempted exam ${examId}`,
+      throw new HttpException(
+        `You have already attempted this exam`,
+        HttpStatus.BAD_REQUEST,
       );
     }
 
@@ -229,8 +230,9 @@ export class ExamService {
         (q) => q.id === answer.questionId.toString(),
       );
       if (!question) {
-        throw new NotFoundException(
+        throw new HttpException(
           `Question with ID ${answer.questionId} not found`,
+          HttpStatus.NOT_FOUND,
         );
       }
 
@@ -319,7 +321,10 @@ export class ExamService {
     const user = await this.prisma.user.findUnique({ where: { email } });
 
     if (!user) {
-      throw new NotFoundException(`User with email ${email} not found`);
+      throw new HttpException(
+        `User with email ${email} not found`,
+        HttpStatus.NOT_FOUND,
+      );
     }
 
     const userId = user.id;
@@ -333,7 +338,15 @@ export class ExamService {
     examId: number,
     data: InviteUsersDto,
   ): Promise<{ message: string }> {
-    console.log('email', data);
+    if (
+      (await this.prisma.exam.findUnique({ where: { id: examId } })) === null
+    ) {
+      throw new HttpException(
+        `Exam with id ${examId} does not exist`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
     const emails = data.emails.map((userEmail) => userEmail.email);
 
     const users = await this.prisma.user.findMany({
@@ -354,7 +367,10 @@ export class ExamService {
       for (const email of emails) {
         const userId = userMap.get(email);
         if (userId === undefined) {
-          throw new NotFoundException(`User with email ${email} not found`);
+          throw new HttpException(
+            `User with email ${email} does not exist`,
+            HttpStatus.NOT_FOUND,
+          );
         }
         await tx.invitedExam.create({
           data: {
@@ -378,5 +394,34 @@ export class ExamService {
         },
       },
     });
+  }
+
+  async getInvitedUsers(id: number): Promise<{ user: any }[]> {
+    try {
+      const exam = await this.prisma.exam.findUnique({
+        where: { id },
+      });
+
+      if (!exam) {
+        throw new HttpException(
+          `Exam with ID ${id} not found`,
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
+      return await this.prisma.invitedExam.findMany({
+        where: { examId: id },
+        select: { user: true },
+      });
+    } catch (error) {
+      if (error.status === HttpStatus.NOT_FOUND) {
+        throw error;
+      } else {
+        throw new HttpException(
+          `Error fetching invited users for exam ${id}`,
+          error,
+        );
+      }
+    }
   }
 }
