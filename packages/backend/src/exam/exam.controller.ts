@@ -340,7 +340,9 @@ export class ExamController {
   @ApiResponse({ status: 404, description: 'Exams not found' })
   @ApiParam({ name: 'id', required: true, description: 'ID of the exam' })
   @Get(':id/invited-users')
-  async getInvitedUsers(@Param('id', new ParseIntPipe()) id: number): Promise<{ user: any }[]> {
+  async getInvitedUsers(
+    @Param('id', new ParseIntPipe()) id: number,
+  ): Promise<{ user: any }[]> {
     return await this.examService.getInvitedUsers(id);
   }
 }

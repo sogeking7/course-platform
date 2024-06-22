@@ -1,9 +1,5 @@
-import {
-  Injectable,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
-import { Prisma, Exam, ExamAttempt, User } from '@prisma/client';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Prisma, Exam, ExamAttempt } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import {
   ExamCheckDto,
@@ -342,10 +338,12 @@ export class ExamService {
     examId: number,
     data: InviteUsersDto,
   ): Promise<{ message: string }> {
-    if (await this.prisma.exam.findUnique({ where: { id: examId } }) === null) {
+    if (
+      (await this.prisma.exam.findUnique({ where: { id: examId } })) === null
+    ) {
       throw new HttpException(
         `Exam with id ${examId} does not exist`,
-        HttpStatus.NOT_FOUND
+        HttpStatus.NOT_FOUND,
       );
     }
 
@@ -372,7 +370,7 @@ export class ExamService {
         if (userId === undefined) {
           throw new HttpException(
             `User with email ${email} does not exist`,
-            HttpStatus.NOT_FOUND, 
+            HttpStatus.NOT_FOUND,
           );
         }
         await tx.invitedExam.create({
@@ -404,14 +402,14 @@ export class ExamService {
       const exam = await this.prisma.exam.findUnique({
         where: { id },
       });
-  
+
       if (!exam) {
         throw new HttpException(
           `Exam with ID ${id} not found`,
-          HttpStatus.NOT_FOUND
+          HttpStatus.NOT_FOUND,
         );
       }
-  
+
       return await this.prisma.invitedExam.findMany({
         where: { examId: id },
         select: { user: true },
@@ -421,7 +419,8 @@ export class ExamService {
         throw error;
       } else {
         throw new HttpException(
-          `Error fetching invited users for exam ${id}`, error
+          `Error fetching invited users for exam ${id}`,
+          error,
         );
       }
     }
