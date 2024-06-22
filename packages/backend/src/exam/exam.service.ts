@@ -399,10 +399,31 @@ export class ExamService {
     });
   }
 
-  async getInvitedUsers(id: number): Promise<any[]> {
-    return await this.prisma.invitedExam.findMany({
-      where: { examId: id },
-      select: { user: true },
-    });
+  async getInvitedUsers(id: number): Promise<{ user: any }[]> {
+    try {
+      const exam = await this.prisma.exam.findUnique({
+        where: { id },
+      });
+  
+      if (!exam) {
+        throw new HttpException(
+          `Exam with ID ${id} not found`,
+          HttpStatus.NOT_FOUND
+        );
+      }
+  
+      return await this.prisma.invitedExam.findMany({
+        where: { examId: id },
+        select: { user: true },
+      });
+    } catch (error) {
+      if (error.status === HttpStatus.NOT_FOUND) {
+        throw error;
+      } else {
+        throw new HttpException(
+          `Error fetching invited users for exam ${id}`, error
+        );
+      }
+    }
   }
 }

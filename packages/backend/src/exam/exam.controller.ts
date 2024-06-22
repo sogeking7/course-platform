@@ -303,9 +303,9 @@ export class ExamController {
     return await this.examService.resetResult(examId, userEmail);
   }
 
-  // @ApiBearerAuth()
-  // @UseGuards(RolesGuard)
-  // @Roles('ADMIN')
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
   @ApiOperation({ summary: 'Invite user to the exam' })
   @ApiResponse({ status: 200, description: 'Invited successfully' })
   @ApiResponse({ status: 404, description: 'Users not found' })
@@ -340,7 +340,7 @@ export class ExamController {
   @ApiResponse({ status: 404, description: 'Exams not found' })
   @ApiParam({ name: 'id', required: true, description: 'ID of the exam' })
   @Get(':id/invited-users')
-  async getInvitedUsers(@Param('id', new ParseIntPipe()) id: number): Promise<any[]> {
+  async getInvitedUsers(@Param('id', new ParseIntPipe()) id: number): Promise<{ user: any }[]> {
     return await this.examService.getInvitedUsers(id);
   }
 }
