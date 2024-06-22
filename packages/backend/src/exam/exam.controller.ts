@@ -242,16 +242,11 @@ export class ExamController {
     const token = request.headers.authorization.replace('Bearer ', '');
     const payload = this.jwtUtils.parseJwtToken(token);
     const userId = payload.id;
-
     try {
       const examResult = await this.examService.getResultByUserIdExamId(
         userId,
         examId,
       );
-      // console.log('examResult', examResult);
-      // if (!examResult) {
-      //   throw new HttpException('Attempt not found', HttpStatus.NOT_FOUND);
-      // }
       return { result: examResult };
     } catch (error) {
       if (error instanceof HttpException) {
@@ -280,15 +275,8 @@ export class ExamController {
   > {
     try {
       const results = await this.examService.getAllResultsByExamId(examId);
-      // if (results.length === 0) {
-      //   throw new HttpException(
-      //     'No results found for the given exam',
-      //     HttpStatus.NOT_FOUND,
-      //   );
-      // }
       return results;
     } catch (error) {
-      // console.log(error.message);
       if (error instanceof HttpException) {
         throw error;
       } else {
@@ -315,9 +303,9 @@ export class ExamController {
     return await this.examService.resetResult(examId, userEmail);
   }
 
-  @ApiBearerAuth()
-  @UseGuards(RolesGuard)
-  @Roles('ADMIN')
+  // @ApiBearerAuth()
+  // @UseGuards(RolesGuard)
+  // @Roles('ADMIN')
   @ApiOperation({ summary: 'Invite user to the exam' })
   @ApiResponse({ status: 200, description: 'Invited successfully' })
   @ApiResponse({ status: 404, description: 'Users not found' })
@@ -327,6 +315,7 @@ export class ExamController {
     @Param('examId', new ParseIntPipe()) examId: number,
     @Body() data: InviteUsersDto,
   ): Promise<{ message: string }> {
+    console.log('email', data);
     return await this.examService.inviteUsers(examId, data);
   }
 
@@ -341,5 +330,17 @@ export class ExamController {
     const payload = this.jwtUtils.parseJwtToken(token);
     const userId = payload.id;
     return await this.examService.getInvitedExams(userId);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
+  @ApiOperation({ summary: 'Get invited users' })
+  @ApiResponse({ status: 200, description: 'Got successfully' })
+  @ApiResponse({ status: 404, description: 'Exams not found' })
+  @ApiParam({ name: 'id', required: true, description: 'ID of the exam' })
+  @Get(':id/invited-users')
+  async getInvitedUsers(@Param('id', new ParseIntPipe()) id: number): Promise<any[]> {
+    return await this.examService.getInvitedUsers(id);
   }
 }
