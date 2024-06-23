@@ -69,6 +69,8 @@ export const QuizForm = ({ examId, questions }: Props) => {
       grade: percentage,
       points: mutation.data.totalPoints,
       state: "Аяқталды",
+      createdAt: "",
+      editedAt: ""
     };
 
     const modColumns = [...columns];
