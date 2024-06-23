@@ -1,4 +1,5 @@
 import { Section } from "@/types";
+import { RowSelectionState } from "@tanstack/react-table";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -35,7 +36,10 @@ export const calcPercentage = (
   return (correct_answers * 100) / total_answers;
 };
 
-export const nextLecture = (lecture_id: number, sections: Section[]): number | null => {
+export const nextLecture = (
+  lecture_id: number,
+  sections: Section[],
+): number | null => {
   let nextLectureId: number | null = null;
 
   for (let i = 0; i < sections.length; i++) {
@@ -44,8 +48,8 @@ export const nextLecture = (lecture_id: number, sections: Section[]): number | n
       if (lecture_id === thisLectureId) {
         if (j < sections[i].lectures.length - 1) {
           nextLectureId = sections[i].lectures[j + 1].id;
-        } 
-        
+        }
+
         // else if (i < sections.length - 1) {
         //   const nextSectionLectures = sections[i + 1]?.lectures;
         //   if (nextSectionLectures && nextSectionLectures.length > 0) {
@@ -53,8 +57,7 @@ export const nextLecture = (lecture_id: number, sections: Section[]): number | n
         //   } else {
         //     return null;
         //   }
-        // } 
-        
+        // }
         else {
           return null;
         }
@@ -65,7 +68,10 @@ export const nextLecture = (lecture_id: number, sections: Section[]): number | n
   return nextLectureId;
 };
 
-export const prevLecture = (lecture_id: number, sections: Section[]): number | null => {
+export const prevLecture = (
+  lecture_id: number,
+  sections: Section[],
+): number | null => {
   let prevLectureId = null;
 
   for (let i = 0; i < sections.length; i++) {
@@ -74,8 +80,8 @@ export const prevLecture = (lecture_id: number, sections: Section[]): number | n
       if (lecture_id === thisLectureId) {
         if (j > 0) {
           prevLectureId = sections[i].lectures[j - 1].id;
-        } 
-        
+        }
+
         // else if (i > 0) {
         //   const previousSectionLectures = sections[i - 1]?.lectures;
         //   if (previousSectionLectures && previousSectionLectures.length > 0) {
@@ -84,8 +90,7 @@ export const prevLecture = (lecture_id: number, sections: Section[]): number | n
         //   } else {
         //     return null;
         //   }
-        // } 
-        
+        // }
         else {
           return null;
         }
@@ -95,3 +100,14 @@ export const prevLecture = (lecture_id: number, sections: Section[]): number | n
 
   return prevLectureId;
 };
+
+export function addMissingKeys(obj: RowSelectionState, maxKey: number) {
+  // Add missing keys with value `false`
+  for (let i = 0; i < maxKey; i++) {
+    if (!(i in obj)) {
+      obj[i] = false;
+    }
+  }
+
+  return obj;
+}

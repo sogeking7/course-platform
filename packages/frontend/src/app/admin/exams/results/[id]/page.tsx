@@ -47,6 +47,10 @@ export default function AdminExamsResultsPage({
 
   const breadcrumbs = [
     {
+      name: "Емтихандар",
+      path: `/admin/exams`,
+    },
+    {
       name: exam.name,
       path: `/admin/exams/edit/${id}`,
     },
@@ -74,7 +78,7 @@ export default function AdminExamsResultsPage({
       <Bread breadcrumbs={breadcrumbs} />
       <TypographyH1>Нәтижелер</TypographyH1>
       {/* <WhiteBox> */}
-        <AdminQuizResultsDataTable columns={modColumns} data={modifiedData} />
+      <AdminQuizResultsDataTable columns={modColumns} data={modifiedData} />
       {/* </WhiteBox> */}
     </>
   );

@@ -25,6 +25,10 @@ type Store = {
     data: { emails: { email: string }[] },
   ) => Promise<any>;
   getInvitedExams: (userId: number) => Promise<any>;
+  deleteUser: (
+    id: number,
+    data: { emails: { email: string }[] },
+  ) => Promise<any>;
 };
 
 export const useExamStore = create<Store>()((set) => {
@@ -54,7 +58,9 @@ export const useExamStore = create<Store>()((set) => {
     resetResultOfUser: async (examId, userEmail) =>
       (await axios.delete(`${url}/${examId}/reset-result/${userEmail}`)).data,
     inviteUser: async (id, data) =>
-      (await axios.post(`${url}/${id}/invite`,data)).data,
+      (await axios.post(`${url}/${id}/invite`, data)).data,
     getInvitedExams: async () => (await axios.get(`${url}/invite`)).data,
+    deleteUser: async (id, data) =>
+      (await axios.delete(`${url}/${id}/invite`, { data })).data,
   };
 });

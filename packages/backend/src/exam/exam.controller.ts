@@ -315,8 +315,22 @@ export class ExamController {
     @Param('examId', new ParseIntPipe()) examId: number,
     @Body() data: InviteUsersDto,
   ): Promise<{ message: string }> {
-    console.log('email', data);
     return await this.examService.inviteUsers(examId, data);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
+  @ApiOperation({ summary: 'Delete user from the exam' })
+  @ApiResponse({ status: 200, description: 'Invited successfully' })
+  @ApiResponse({ status: 404, description: 'Users not found' })
+  @ApiParam({ name: 'examId', required: true, description: 'ID of the exam' })
+  @Delete(':examId/invite')
+  async deleteUsers(
+    @Param('examId', new ParseIntPipe()) examId: number,
+    @Body() data: InviteUsersDto,
+  ): Promise<{ message: string }> {
+    return await this.examService.deleteUsers(examId, data);
   }
 
   @ApiBearerAuth()

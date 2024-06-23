@@ -43,6 +43,13 @@ export const columns: ColumnDef<Exam>[] = [
       return questionsCont;
     },
   },
+  // {
+  //   accessorKey: "questions",
+  //   header: "Оқушылар саны",
+  //   cell: ({ row }) => {
+  //     return row.original?.invitedExam?.length || 0;
+  //   },
+  // },
   {
     header: "Құрылған күні",
     accessorKey: "createdAt",

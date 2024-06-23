@@ -10,7 +10,7 @@ import { useExamStore } from "@/store/exam";
 import { useLectureStore } from "@/store/lecture";
 import { createQuestionSchema } from "@/types";
 import { useQuery } from "@tanstack/react-query";
-import { ClipboardList } from "lucide-react";
+import { ClipboardList, UserRoundPlus } from "lucide-react";
 import Link from "next/link";
 import { z } from "zod";
 import { AdminUsersCreateForm } from "../../create/form";
@@ -42,16 +42,25 @@ export default function AdminsExamsEditPage({
   return (
     <>
       <Bread breadcrumbs={breadcrumbs} />
-      <div className="w-full justify-between flex">
+      <div className="w-full gap-4 justify-between flex">
         <TypographyH1>{data.name}</TypographyH1>
-        <Link href={"/admin/exams/results/" + id}>
-          <Button>
-            <ClipboardList size={16} className="mr-2" />
-            Нәтижелер
-          </Button>
-        </Link>
       </div>
       <WhiteBox>
+        <div className="flex flex-wrap gap-4 justify-end">
+          <Link href={"/admin/exams/invite/" + id}>
+            <Button variant={"outline"}>
+              <UserRoundPlus size={16} className="mr-2" />
+              Оқушы қосу
+            </Button>
+          </Link>
+          <Link href={"/admin/exams/results/" + id}>
+            <Button>
+              <ClipboardList size={16} className="mr-2" />
+              Нәтижелер
+            </Button>
+          </Link>
+        </div>
+
         <AdminUsersCreateForm data={data} mode="edit" />
 
         <div className="mt-6">

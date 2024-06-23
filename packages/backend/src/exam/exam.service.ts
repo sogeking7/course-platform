@@ -35,7 +35,11 @@ export class ExamService {
         where: { id },
         include: {
           examAttempt: true,
-          invitedExam: true,
+          invitedExam: {
+            include: {
+              user: true,
+            },
+          },
         },
       });
     } catch (error) {
@@ -423,5 +427,59 @@ export class ExamService {
         );
       }
     }
+  }
+
+  async deleteUsers(
+    examId: number,
+    data: InviteUsersDto,
+  ): Promise<{ message: string }> {
+    const exam = await this.prisma.exam.findUnique({ where: { id: examId } });
+    if (!exam) {
+      throw new HttpException(
+        `Exam with id ${examId} does not exist`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    const emails = data.emails.map((userEmail) => userEmail.email);
+
+    const users = await this.prisma.user.findMany({
+      where: {
+        email: {
+          in: emails,
+        },
+      },
+      select: {
+        id: true,
+        email: true,
+      },
+    });
+
+    const userMap = new Map(users.map((user) => [user.email, user.id]));
+
+    await this.prisma.$transaction(async (tx) => {
+      for (const email of emails) {
+        const userId = userMap.get(email);
+        if (userId === undefined) {
+          throw new HttpException(
+            `User with email ${email} does not exist`,
+            HttpStatus.NOT_FOUND,
+          );
+        }
+
+        const existingInvite = await tx.invitedExam.findFirst({
+          where: { examId, userId },
+        });
+        if (existingInvite) {
+          await tx.invitedExam.delete({
+            where: {
+              id: existingInvite.id,
+            },
+          });
+        }
+      }
+    });
+
+    return { message: `${users.length} users removed from exam ${examId}` };
   }
 }
