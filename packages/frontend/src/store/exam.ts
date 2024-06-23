@@ -59,7 +59,7 @@ export const useExamStore = create<Store>()((set) => {
       (await axios.delete(`${url}/${examId}/reset-result/${userEmail}`)).data,
     inviteUser: async (id, data) =>
       (await axios.post(`${url}/${id}/invite`, data)).data,
-    getInvitedExams: async () => (await axios.get(`${url}/invite`)).data,
+    getInvitedExams: async () => (await axios.get(`${url}/me/invited`)).data,
     deleteUser: async (id, data) =>
       (await axios.delete(`${url}/${id}/invite`, { data })).data,
   };
