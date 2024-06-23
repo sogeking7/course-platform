@@ -338,7 +338,7 @@ export class ExamController {
   @ApiOperation({ summary: 'Get invited exam' })
   @ApiResponse({ status: 200, description: 'Got successfully' })
   @ApiResponse({ status: 404, description: 'Exams not found' })
-  @Get('invite')
+  @Get('me/invited')
   async getInvitedExams(@Req() request: Request): Promise<Exam[]> {
     const token = request.headers.authorization.replace('Bearer ', '');
     const payload = this.jwtUtils.parseJwtToken(token);
