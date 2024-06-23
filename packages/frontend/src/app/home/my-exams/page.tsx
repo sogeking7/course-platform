@@ -19,7 +19,7 @@ export default function MyExamsPage() {
 
   const { data, isLoading } = useQuery({
     queryKey: ["exams-invited"],
-    queryFn: () => examStore.getAll(),
+    queryFn: () => examStore.getInvitedExams(),
     enabled: !!user?.id,
   });
 

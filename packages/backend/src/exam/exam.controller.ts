@@ -335,6 +335,7 @@ export class ExamController {
 
   @ApiBearerAuth()
   @UseGuards(RolesGuard)
+  @Roles('ADMIN', 'USER')
   @ApiOperation({ summary: 'Get invited exam' })
   @ApiResponse({ status: 200, description: 'Got successfully' })
   @ApiResponse({ status: 404, description: 'Exams not found' })
