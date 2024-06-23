@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import {
   ClipboardList,
+  ExternalLink,
   MoreHorizontal,
   Pencil,
   UserRoundPlus,
@@ -58,51 +59,26 @@ export const columns: ColumnDef<Exam>[] = [
       return <Moment format="DD-MM-YYYY" date={date} />;
     },
   },
-  {
-    header: "Өңделген күні",
-    accessorKey: "editedAt",
-    cell: ({ row }) => {
-      const date = row.original.editedAt;
-      return <Moment locale="kk" date={date} fromNow />;
-    },
-  },
+  // {
+  //   header: "Өңделген күні",
+  //   accessorKey: "editedAt",
+  //   cell: ({ row }) => {
+  //     const date = row.original.editedAt;
+  //     return <Moment locale="kk" date={date} fromNow />;
+  //   },
+  // },
   {
     id: "actions",
     cell: ({ row }) => {
       const id = row.original.id;
 
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              size={"icon"}
-              variant="ghost"
-              className="!min-h-8 !min-w-8 p-0"
-            >
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem asChild>
-              <Link href={`/admin/exams/invite/${id}`}>
-                <UserRoundPlus className="mr-2" size={20} />
-                Оқушы қосу
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href={`/admin/exams/edit/${id}`}>
-                <Pencil className="mr-2" size={20} />
-                Өңдеу
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href={`/admin/exams/results/${id}`}>
-                <ClipboardList className="mr-2" size={20} />
-                Нәтижелер
-              </Link>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Link href={`/home/my-exams/exam/${id}`}>
+          <Button size={"sm"}>
+            <ExternalLink size={16} className="mr-2" />
+            Ашу
+          </Button>
+        </Link>
       );
     },
   },

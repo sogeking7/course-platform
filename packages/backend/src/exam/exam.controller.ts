@@ -45,7 +45,7 @@ export class ExamController {
 
   @ApiBearerAuth()
   @UseGuards(RolesGuard)
-  @Roles('ADMIN')
+  @Roles('ADMIN', 'USER')
   @ApiOperation({ summary: 'Get all exams' })
   @ApiResponse({ status: 200, type: Promise<Exam | null> })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })

@@ -4,19 +4,22 @@ import { CourseCard } from "@/components/course/course-card";
 import { LayoutLoader } from "@/components/loader";
 import { TypographyH1 } from "@/components/ui/typography";
 import { useCourseStore } from "@/store/course";
+import { useExamStore } from "@/store/exam";
 import { Course } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
+import { columns } from "./columns";
+import { AdminExamsDataTable } from "./data-table";
 
 export default function MyExamsPage() {
   const { data: session } = useSession();
   const user = session?.user;
 
-  const courseStore = useCourseStore();
+  const examStore = useExamStore();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["users-courses"],
-    queryFn: () => courseStore.getAllCoursesByUserId(user?.id!),
+    queryKey: ["exams-invited"],
+    queryFn: () => examStore.getAll(),
     enabled: !!user?.id,
   });
 
@@ -27,15 +30,7 @@ export default function MyExamsPage() {
   return (
     <div>
       <TypographyH1>Емтихандар</TypographyH1>
-      <div className="grid lg:grid-cols-4 xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 sm:gap-6">
-        {data.map((course: Course) => (
-          <CourseCard
-            link={`/course/${course.id}/learning/lecture/default`}
-            key={course.id}
-            item={course as Course}
-          />
-        ))}
-      </div>
+      <AdminExamsDataTable columns={columns} data={data} />
     </div>
   );
 }

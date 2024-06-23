@@ -24,7 +24,7 @@ type Store = {
     id: number,
     data: { emails: { email: string }[] },
   ) => Promise<any>;
-  getInvitedExams: (userId: number) => Promise<any>;
+  getInvitedExams: () => Promise<any>;
   deleteUser: (
     id: number,
     data: { emails: { email: string }[] },

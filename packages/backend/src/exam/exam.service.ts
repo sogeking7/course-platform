@@ -389,15 +389,23 @@ export class ExamService {
   }
 
   async getInvitedExams(userId: number): Promise<Exam[]> {
-    return await this.prisma.exam.findMany({
-      where: {
-        invitedExam: {
-          some: {
-            userId,
+    try {
+      return await this.prisma.exam.findMany({
+        where: {
+          invitedExam: {
+            some: {
+              userId,
+            },
           },
         },
-      },
-    });
+      });
+    } catch (error) {
+      if (error.status === HttpStatus.NOT_FOUND) {
+        throw error;
+      } else {
+        throw new HttpException(`Error`, error);
+      }
+    }
   }
 
   async getInvitedUsers(id: number): Promise<{ user: any }[]> {

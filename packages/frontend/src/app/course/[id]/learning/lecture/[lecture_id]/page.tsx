@@ -201,10 +201,12 @@ export default function LectureIdPage({
                           {
                             grade: calcPercentage(
                               examResults.result,
-                              points,
+                              points
                             ),
                             points: examResults.result,
                             state: "Аяқталды",
+                            createdAt: "",
+                            editedAt: ""
                           },
                         ]}
                       />
