@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { axiosPublic } from "@/lib/axios";
 import { Metadata } from "next";
 import { Course } from "@/types";
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Курстар",
