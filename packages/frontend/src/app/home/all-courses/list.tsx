@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -27,13 +27,13 @@ export const AllCoursesList = ({ data }: { data: Course[] }) => {
           value={searchQuery}
           onChange={handleSearchChange}
         />
-        <Button className="max-md:hidden">
+        {/* <Button className="max-md:hidden">
           <Search size={20} className="mr-2 " />
           Іздеу
         </Button>
         <Button size={"icon"} className="md:hidden">
           <Search size={20} />
-        </Button>
+        </Button> */}
       </div>
       <div className="text-neutral-500 mb-4 pl-2 flex items-center text-sm">
         <Search size={16} className="mr-2 " />

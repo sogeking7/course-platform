@@ -11,7 +11,7 @@ export const CourseCard = ({
 }) => {
   return (
     <Link href={link ? link : `/course/${item.id}`}>
-      <div className="relative flex sm:flex-col-reverse max-sm:flex-row bg-white border-2 p-3 rounded-3xl hover:scale-105 transition-all hover:shadow-[rgba(17,_17,_26,_0.1)_0px_0px_16px]">
+      <div className="relative hover:underline flex sm:flex-col-reverse max-sm:flex-row bg-white border-2 p-3 rounded-3xl  transition-all">
         <div className="py-2 pb-8 h-min sm:pt-4 max-sm:pl-0 max-sm:pr-4 w-full">
           <h1 className="font-semibold break-all line-clamp-2">{item.name}</h1>
         </div>

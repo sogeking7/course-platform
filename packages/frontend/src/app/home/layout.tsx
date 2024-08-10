@@ -18,7 +18,7 @@ export default function HomeLayout({
         <SideBarSkeleton />
         <div className="relative pb-[calc(226px+48px)] sm:pb-[calc(138px+48px)] w-full pt-[56px]">
           <MyContainer>{children}</MyContainer>
-          <Footer />
+          {/* <Footer /> */}
         </div>
       </main>
     </div>

@@ -245,7 +245,7 @@ export const createCourseSchema = z
 export const editUserSchema = z.object({
   firstName: z.string().trim().min(1, { message: "Қажет" }),
   lastName: z.string().trim().min(1, { message: "Қажет" }),
-  email: z.string().trim().email(),
+  email: z.string().trim().email("Электрондық почта дұрыс емес"),
 });
 
 export const createUserSchema = z
@@ -254,16 +254,16 @@ export const createUserSchema = z
     lastName: z.string().trim().min(1, { message: "Қажет" }),
     email: z.string().trim().email("Электрондық почта дұрыс емес"),
     password: z
-      .string()
+      .string({ message: "Қажет" })
       .trim()
-      .min(6, { message: "Құпия сөз кемінде 6 таңбадан тұруы керек" })
+      .min(8, { message: "Құпия сөз кемінде 8 таңбадан тұруы керек" })
       .regex(/(?=.*[0-9])(?=.*[a-zA-Z])/, {
         message: "Құпия сөзде кем дегенде бір әріп және бір сан болуы керек",
       }),
     repeatPassword: z
-      .string()
+      .string({ message: "Қажет" })
       .trim()
-      .min(6, { message: "Құпия сөз кемінде 6 таңбадан тұруы керек" }),
+      .min(8, { message: "Құпия сөз кемінде 8 таңбадан тұруы керек" }),
   })
   .refine((data) => data.password === data.repeatPassword, {
     message: "Құпия сөздер сәйкес келмейді",
@@ -276,14 +276,17 @@ export type Error = {
 };
 
 export const loginSchema = z.object({
-  email: z.string().trim().email("Электрондық почта дұрыс емес"),
-  password: z
-    .string()
+  email: z
+    .string({ message: "Қажет" })
     .trim()
-    .min(6, { message: "Құпия сөз кемінде 6 таңбадан тұруы керек" })
-    .regex(/(?=.*[0-9])(?=.*[a-zA-Z])/, {
-      message: "Құпия сөзде кем дегенде бір әріп және бір сан болуы керек",
-    }),
+    .email("Электрондық почта дұрыс емес"),
+  password: z
+    .string({ message: "Қажет" })
+    .trim()
+    .min(8, { message: "Құпия сөз кемінде 8 таңбадан тұруы керек" })
+    // .regex(/(?=.*[0-9])(?=.*[a-zA-Z])/, {
+    //   message: "Құпия сөзде кем дегенде бір әріп және бір сан болуы керек",
+    // }),
 });
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 3; // 3MB
