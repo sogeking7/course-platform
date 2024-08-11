@@ -10,22 +10,22 @@ export const CourseCard = ({
   link?: string;
 }) => {
   return (
-    <Link href={link ? link : `/course/${item.id}`}>
-      <div className="relative hover:underline flex sm:flex-col-reverse max-sm:flex-row bg-white border-2 p-3 rounded-3xl  transition-all">
-        <div className="py-2 pb-8 h-min sm:pt-4 max-sm:pl-0 max-sm:pr-4 w-full">
-          <h1 className="font-semibold break-all line-clamp-2">{item.name}</h1>
+    <Link href={link ? link : `/course/${item.id}`} className="h-full sm:row-span-full">
+      <div className="relative sm:justify-end hover:underline flex h-full sm:flex-col-reverse max-sm:flex-row bg-white border border-zinc-300 p-[18px] rounded-2xl transition-all">
+        <div className="my-2 sm:mt-4 max-sm:pl-0 max-sm:mr-4 w-full">
+          <h1 className="font-semibold  line-clamp-2">{item.name}</h1>
         </div>
         <img
           className={cn(
             "object-cover",
-            "rounded-2xl max-sm:aspect-square sm:aspect-video",
+            "rounded-[18px] max-sm:aspect-square sm:aspect-video",
             "max-sm:w-[80px] max-sm:h-[80px]",
           )}
           src={item.profilePictureLink || "/placeholder-course.jpg"}
         />
-        <span className="absolute bottom-3 left-3 text-sm text-neutral-500">
+        {/* <span className="absolute bottom-3 left-3 text-sm text-neutral-500">
           Курс
-        </span>
+        </span> */}
       </div>
     </Link>
   );

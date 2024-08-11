@@ -125,7 +125,7 @@ export default function LectureIdPage({
           <LayoutLoader />
         ) : (
           <MyContainer>
-            <div className=" border rounded-xl bg-white">
+            <div className=" border rounded-lg bg-white">
               <button
                 onClick={() => setIsSheetOpen(true)}
                 className="flex hover:underline font-semibold items-center md:hidden max-md:px-4 max-md:pt-5 "
@@ -199,14 +199,11 @@ export default function LectureIdPage({
                         ]}
                         data={[
                           {
-                            grade: calcPercentage(
-                              examResults.result,
-                              points
-                            ),
+                            grade: calcPercentage(examResults.result, points),
                             points: examResults.result,
                             state: "Аяқталды",
                             createdAt: "",
-                            editedAt: ""
+                            editedAt: "",
                           },
                         ]}
                       />

@@ -31,10 +31,10 @@ export const columns: ColumnDef<Exam>[] = [
     accessorKey: "name",
     header: "Аты",
   },
-  {
-    accessorKey: "description",
-    header: "Сипаттамасы",
-  },
+  // {
+  //   accessorKey: "description",
+  //   header: "Сипаттамасы",
+  // },
   {
     accessorKey: "questions",
     header: "Сұрақтар саны",
@@ -69,40 +69,19 @@ export const columns: ColumnDef<Exam>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const id = row.original.id;
+      const course = row.original;
 
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              size={"icon"}
-              variant="ghost"
-              className="!min-h-8 !min-w-8 p-0"
-            >
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem asChild>
-              <Link href={`/admin/exams/invite/${id}`}>
-                <UserRoundPlus className="mr-2" size={20} />
-                Оқушы қосу
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href={`/admin/exams/edit/${id}`}>
-                <Pencil className="mr-2" size={20} />
-                Өңдеу
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href={`/admin/exams/results/${id}`}>
-                <ClipboardList className="mr-2" size={20} />
-                Нәтижелер
-              </Link>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Button
+          size={"icon"}
+          variant="ghost"
+          className="!min-h-8 !min-w-8 p-0"
+          asChild
+        >
+          <Link href={`/admin/exams/edit/${course.id}`}>
+            <Pencil className="h-4 w-4" />
+          </Link>
+        </Button>
       );
     },
   },

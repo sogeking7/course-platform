@@ -35,7 +35,7 @@ export async function generateMetadata(
   // read route params
   const id = Number(params.id);
 
-  // fetch data 
+  // fetch data
   const data = await getCourse(id);
 
   // optionally access and extend (rather than replace) parent metadata
@@ -62,94 +62,76 @@ export default async function CoursePage({ params }: Props) {
     <Suspense fallback={<LayoutLoader />}>
       <HomeLayout>
         <Bread breadcrumbs={breadcrumbs} />
-        <WhiteBox>
-          <div className="flex gap-6 xl:flex-row flex-col">
-            {/* <div className="w-full max-w-[420px] h-[250px] bg-neutral-400 rounded-xl"></div> */}
-            <div>
-              <img
-                className="sm:min-w-[240px] border rounded-2xl sm:max-w-[300px]"
-                src={data.profilePictureLink || "/placeholder-course.jpg"}
-              />
-            </div>
-            <div>
+        <div className="flex gap-4 md:gap-2 lg:gap-6 md:flex-row flex-col-reverse">
+          <div className="flex flex-col gap-4 md:gap-2 lg:gap-6 md:w-3/5 lg:w-2/3">
+            <WhiteBox>
               <h1 className="text-2xl font-bold">{data.name}</h1>
               <p className="mt-4">{data.description}</p>
-            </div>
-          </div>
-        </WhiteBox>
-        {!!(!!data.sections.length || data.content) && (
-          <WhiteBox>
-            {data.content && (
-              <div className="w-full mb-6">
-                <article className="prose !max-w-full w-full ">
-                  {/* <TypographyH2>Cипаттамасы</TypographyH2> */}
-                  <ReactMarkdown className="w-full" rehypePlugins={[rehypeRaw]}>
-                    {data.content}
-                  </ReactMarkdown>
-                </article>
-              </div>
-            )}
-            {!!data.sections.length && (
-              <>
-                <TypographyH2>Курс мазмұны</TypographyH2>
-                <Accordion
-                  type="multiple"
-                  className="gap-0 border-t-none rounded-xl border-x border-b  flex-col flex"
-                  /* @ts-ignore */
-                  collapsible={true}
-                >
-                  {data.sections.map((section, index) => (
-                    <AccordionItem
-                      key={section.id}
-                      value={`item-${section.id}`}
+            </WhiteBox>
+            <WhiteBox>
+              <TypographyH2>Курс мазмұны</TypographyH2>
+              <Accordion
+                type="multiple"
+                className="gap-0 border-t-none rounded-lg border-x border-b  flex-col flex"
+                /* @ts-ignore */
+                collapsible={true}
+              >
+                {data.sections.map((section, index) => (
+                  <AccordionItem key={section.id} value={`item-${section.id}`}>
+                    <AccordionTrigger
+                      className={cn(
+                        "w-full bg-white px-5 py-4 border-t ",
+                        index === 0 ? "rounded-t-xl" : "",
+                        index === data.sections.length - 1
+                          ? "rounded-b-xl"
+                          : "",
+                      )}
                     >
-                      <AccordionTrigger
-                        className={cn(
-                          "w-full bg-white px-5 py-4 border-t ",
-                          index === 0 ? "rounded-t-xl" : "",
-                          index === data.sections.length - 1
-                            ? "rounded-b-xl"
-                            : "",
-                        )}
-                      >
-                        <label className=" flex gap-2 items-center min-w-max">
-                          {/* <File size={14} /> */}
-                          {/* <span>sections {index + 1}:</span> */}
-                          <span className="  font-semibold">
-                            {index + 1}. {section.name}
-                          </span>
-                        </label>
-                      </AccordionTrigger>
-                      <AccordionContent className="py-4 px-5 border-t  bg-white">
-                        <ul className="flex flex-col gap-4">
-                          {section.lectures.map((lecture, index) => {
-                            const hasVideo = lecture.videoUrl?.includes(
-                              "drive.google.com/file/d/",
-                            );
-                            const icon = hasVideo ? (
-                              <MonitorPlay size={14} />
-                            ) : (
-                              <File size={14} />
-                            );
-                            return (
-                              <li
-                                key={lecture.id}
-                                className="flex items-center gap-4"
-                              >
-                                {icon}
-                                <label>{lecture.name}</label>
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      </AccordionContent>
-                    </AccordionItem>
-                  ))}
-                </Accordion>
-              </>
-            )}
-          </WhiteBox>
-        )}
+                      <label className=" flex gap-2 items-center min-w-max">
+                        {/* <File size={14} /> */}
+                        {/* <span>sections {index + 1}:</span> */}
+                        <span className="  font-semibold">
+                          {index + 1}. {section.name}
+                        </span>
+                      </label>
+                    </AccordionTrigger>
+                    <AccordionContent className="py-4 px-5 border-t  bg-white">
+                      <ul className="flex flex-col gap-4">
+                        {section.lectures.map((lecture, index) => {
+                          const hasVideo = lecture.videoUrl?.includes(
+                            "drive.google.com/file/d/",
+                          );
+                          const icon = hasVideo ? (
+                            <MonitorPlay size={14} />
+                          ) : (
+                            <File size={14} />
+                          );
+                          return (
+                            <li
+                              key={lecture.id}
+                              className="flex items-center gap-4"
+                            >
+                              {icon}
+                              <label>{lecture.name}</label>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </WhiteBox>
+          </div>
+          <div className="md:w-2/5 lg:w-1/3">
+            <WhiteBox>
+              <img
+                className="border rounded-2xl "
+                src={data.profilePictureLink || "/placeholder-course.jpg"}
+              />
+            </WhiteBox>
+          </div>
+        </div>
       </HomeLayout>
     </Suspense>
   );

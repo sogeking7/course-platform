@@ -61,7 +61,7 @@ export const AdminUsersCreateForm = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-5 p-5 bg-white border rounded-xl"
+      className="space-y-5 p-5 bg-white border rounded-lg"
     >
       <div className="space-y-3 max-w-[320px]">
         {(

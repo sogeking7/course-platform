@@ -18,6 +18,12 @@ const config = {
       },
     },
     extend: {
+      width: {
+        '7': '26px'
+      },
+      height: {
+        '7': '26px'
+      },
       typography: (theme: (arg0: string) => any[]) => ({
         DEFAULT: {
           css: {
@@ -169,7 +175,7 @@ const config = {
         },
       }),
       fontFamily: {
-        sans: ["Montserrat", "sans-serif"],
+        sans: ["Inter", "sans-serif"],
       },
       colors: {
         my_cyan: "#048998",

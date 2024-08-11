@@ -166,7 +166,7 @@ export const createLectureSchema = z
   );
 
 const questionSchema = z.object({
-  name: z.string().trim().min(1, { message: "Сурақ қажет" }),
+  name: z.string().trim().min(1, { message: "Сұрақ қажет" }),
   answers: z
     .array(
       z.object({
@@ -283,10 +283,10 @@ export const loginSchema = z.object({
   password: z
     .string({ message: "Қажет" })
     .trim()
-    .min(8, { message: "Құпия сөз кемінде 8 таңбадан тұруы керек" })
-    // .regex(/(?=.*[0-9])(?=.*[a-zA-Z])/, {
-    //   message: "Құпия сөзде кем дегенде бір әріп және бір сан болуы керек",
-    // }),
+    .min(8, { message: "Құпия сөз кемінде 8 таңбадан тұруы керек" }),
+  // .regex(/(?=.*[0-9])(?=.*[a-zA-Z])/, {
+  //   message: "Құпия сөзде кем дегенде бір әріп және бір сан болуы керек",
+  // }),
 });
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 3; // 3MB

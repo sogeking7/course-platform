@@ -300,7 +300,7 @@ export const PictureForm = ({
             <img
               className={cn(
                 cropShape === "round" ? "rounded-full " : "",
-                "w-full h-full border rounded-2xl",
+                "w-full h-full border rounded-md",
               )}
               src={
                 entityType === "user"

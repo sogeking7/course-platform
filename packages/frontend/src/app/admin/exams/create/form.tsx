@@ -47,8 +47,11 @@ export const AdminUsersCreateForm = ({ data, mode = "new" }: Props) => {
       return examStore.update(data?.id!, newData);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["exam", { id: data?.id! }] }),
+      queryClient.invalidateQueries({ queryKey: ["exam", { id: data?.id! }] });
+      form.reset(form.getValues());
+      if (mode !== "edit") {
         router.back();
+      }
     },
   });
 
@@ -72,7 +75,7 @@ export const AdminUsersCreateForm = ({ data, mode = "new" }: Props) => {
             </FormItem>
           )}
         />
-        <FormField
+        {/* <FormField
           control={form.control}
           name="description"
           render={({ field }) => (
@@ -83,13 +86,13 @@ export const AdminUsersCreateForm = ({ data, mode = "new" }: Props) => {
               </FormControl>
             </FormItem>
           )}
-        />
+        /> */}
         <div className="flex justify-end">
           <Button disabled={!form.formState.isDirty} type="submit">
             {mutation.isPending && (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             )}
-            {mode === "edit" ? "Өзгерту" : "Қосу"}
+            Сақтау
           </Button>
         </div>
       </form>

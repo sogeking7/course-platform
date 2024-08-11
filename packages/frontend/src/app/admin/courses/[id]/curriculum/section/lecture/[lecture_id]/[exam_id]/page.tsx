@@ -77,7 +77,7 @@ export default function AdminLecturePage({
           </Button>
         </Link>
       </div>
-      <div className="sm:p-6 mt-3 sm:border sm:bg-white rounded-3xl sm:shadow-sm mb-6">
+      <div className="sm:p-6 mt-3 sm:border sm:bg-white rounded-lg sm:shadow-sm mb-6">
         {!!data.length && (
           <div className="flex flex-col gap-6 mb-6">
             {data.map((question, index) => {

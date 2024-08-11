@@ -3,7 +3,7 @@ import { AdminUsersCreateForm } from "./form";
 import { Bread } from "@/components/bread";
 
 export default async function AdminUsersCreatePage() {
-  const breadcrumbs = [{ name: " Қолданушылар", path: "/admin/users" }];
+  const breadcrumbs = [{ name: " Оқушылар", path: "/admin/users" }];
   return (
     <>
       <Bread breadcrumbs={breadcrumbs} />

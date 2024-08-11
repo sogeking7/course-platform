@@ -20,7 +20,7 @@ export const AllCoursesList = ({ data }: { data: Course[] }) => {
 
   return (
     <>
-      <div className="mb-3 md:bg-white rounded-2xl md:shadow-sm md:border md:p-5 flex gap-3 md:gap-4">
+      <div className="mb-3 md:bg-white rounded-2xl md:shadow-sm md:border border-zinc-300 md:p-5 flex gap-3 md:gap-4">
         <Input
           placeholder="Курс іздеу"
           className="w-full"
@@ -40,7 +40,7 @@ export const AllCoursesList = ({ data }: { data: Course[] }) => {
         {filteredCourses.length} нәтижелер табылды
       </div>
 
-      <div className="grid lg:grid-cols-4 xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 sm:gap-6">
+      <div className="grid lg:grid-cols-4 xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-2 sm:gap-2">
         {filteredCourses.map((course: Course) => (
           <CourseCard key={course.id} item={course as Course} />
         ))}

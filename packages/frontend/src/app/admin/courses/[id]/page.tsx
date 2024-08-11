@@ -29,7 +29,7 @@ export default function AdminCourseEditPage({
   return (
     <>
       <Bread breadcrumbs={breadcrumbs} />
-      <TypographyH1>Курсты өңдеу </TypographyH1>
+      <TypographyH1>{data.name} </TypographyH1>
       <AdminCourseCreateForm mode={"edit"} data={data} />
     </>
   );

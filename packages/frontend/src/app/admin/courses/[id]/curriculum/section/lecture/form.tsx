@@ -187,7 +187,7 @@ export default function LectureForm({
       )}
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="border bg-white border-neutral-300 rounded-xl p-4 space-y-4"
+        className="border bg-white border-neutral-300 rounded-lg p-4 space-y-4"
       >
         <FormField
           control={form.control}
@@ -208,7 +208,7 @@ export default function LectureForm({
           control={form.control}
           name="content_checked"
           render={({ field }) => (
-            <div className="border-neutral-300 border rounded-xl p-4 flex flex-col gap-4">
+            <div className="border-neutral-300 border rounded-lg p-4 flex flex-col gap-4">
               <FormItem className="flex flex-row items-center justify-between">
                 <div className="space-y-0.5">
                   <FormLabel className="text-base">Мазмұн қосу</FormLabel>
@@ -247,7 +247,7 @@ export default function LectureForm({
           control={form.control}
           name="videoUrl_checked"
           render={({ field }) => (
-            <div className="border-neutral-300 border rounded-xl p-4 flex flex-col gap-4">
+            <div className="border-neutral-300 border rounded-lg p-4 flex flex-col gap-4">
               <FormItem className="flex flex-row items-center justify-between">
                 <div className="space-y-0.5">
                   <FormLabel className="text-base">Видео қосу</FormLabel>
