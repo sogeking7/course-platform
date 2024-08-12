@@ -6,14 +6,14 @@ import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { admin_links, default_links, sidebar_links } from "../../public/shared";
 import { Logo, LogoSmall } from "./logo";
-import { signOut, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { LogOut } from "lucide-react";
+import { LogIn, LogOut } from "lucide-react";
 
 export const SideBar = () => {
   const { data: session } = useSession();
@@ -61,6 +61,8 @@ export const SideBarSkeleton = () => {
 };
 
 export const SideBarResizable = () => {
+  const { data: session, status } = useSession();
+  const user = session?.user;
   return (
     <aside
       className={cn(
@@ -82,14 +84,25 @@ export const SideBarResizable = () => {
         <SideBar />
       </div>
       <div className={cn("px-3", "w-full")}>
-        <SideBarButton
-          item={{
-            title: "Шығу",
-            href: "",
-            icon: <LogOut size={26} strokeWidth={1.8} />,
-            action: signOut,
-          }}
-        />
+        {status === "loading" || !user ? (
+          <SideBarButton
+            item={{
+              title: "Кіру",
+              href: "",
+              icon: <LogIn size={26} strokeWidth={1.8} />,
+              action: signIn,
+            }}
+          />
+        ) : (
+          <SideBarButton
+            item={{
+              title: "Шығу",
+              href: "",
+              icon: <LogOut size={26} strokeWidth={1.8} />,
+              action: signOut,
+            }}
+          />
+        )}
       </div>
     </aside>
   );

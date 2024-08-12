@@ -2,7 +2,6 @@
 
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Error, User, createUserSchema } from "@/types";
 import { Loader2 } from "lucide-react";
@@ -13,14 +12,16 @@ import { useAuthStore } from "@/store/auth";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
 import { useUserStore } from "@/store/user";
-
-const placeholders = {
-  firstName: "Аты",
-  lastName: "Тегі",
-  email: "Почта",
-  password: "Құпия сөз",
-  repeatPassword: "Құпия сөзді қайталау",
-};
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Switch } from "@/components/ui/switch";
+import { PasswordInput } from "@/components/ui/password-input";
 
 export const AdminUsersCreateForm = ({
   mode = "create",
@@ -30,29 +31,21 @@ export const AdminUsersCreateForm = ({
   mode?: "create" | "edit";
 }) => {
   const router = useRouter();
-  const { data: session } = useSession();
-  const user = session?.user;
   const queryClient = useQueryClient();
 
   const userStore = useUserStore();
   const authStore = useAuthStore();
 
-  const {
-    register,
-    handleSubmit,
-    setError,
-    reset,
-    getValues,
-    formState: { errors, isDirty },
-  } = useForm<z.infer<typeof createUserSchema>>({
+  const form = useForm<z.infer<typeof createUserSchema>>({
     resolver: zodResolver(createUserSchema),
     criteriaMode: "all",
     defaultValues: {
       firstName: data?.firstName || "",
       lastName: data?.lastName || "",
       email: data?.email || "",
-      password: data?.password ? "qwerty123" : "",
-      repeatPassword: data?.password ? "qwerty123" : "",
+      password: "",
+      repeatPassword: "",
+      changePassword_checked: mode === "create" ? true : false,
     },
   });
 
@@ -66,7 +59,7 @@ export const AdminUsersCreateForm = ({
     onError: (error: AxiosError) => {
       const errorData = error.response?.data as Error;
       if (mode === "create") {
-        setError("root.serverError", {
+        form.setError("root.serverError", {
           type: errorData.statusCode.toString(),
           message: errorData.message,
         });
@@ -75,7 +68,10 @@ export const AdminUsersCreateForm = ({
     onSuccess: (data) => {
       if (mode === "edit") {
         queryClient.setQueryData(["user", { id: data.id }], data);
-        reset(getValues());
+        form.resetField("password");
+        form.resetField("repeatPassword");
+        form.resetField("changePassword_checked");
+        form.reset(form.getValues());
         return;
       }
       queryClient.invalidateQueries({ queryKey: ["users"] });
@@ -84,76 +80,128 @@ export const AdminUsersCreateForm = ({
   });
 
   const onSubmit = (data: z.infer<typeof createUserSchema>) => {
-    const { repeatPassword, ...resgisterData } = data;
-    if (mode === "edit") {
-      const editData: Omit<
-        z.infer<typeof createUserSchema>,
-        "password" | "repeatPassword"
-      > = {
-        firstName: data.firstName,
-        lastName: data.lastName,
-        email: data.email,
-      };
-      mutation.mutate(editData);
-    }
+    const { repeatPassword, changePassword_checked, ...resgisterData } = data;
+
     mutation.mutate(resgisterData);
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="space-y-5 p-5 bg-white border rounded-lg"
-    >
-      <div className="space-y-3 max-w-[320px]">
-        {(
-          [
-            "firstName",
-            "lastName",
-            "email",
-            mode === "create" ? "password" : "",
-            mode === "create" ? "repeatPassword" : "",
-          ] as const
-        ).map((field) => {
-          if (field) {
-            return (
-              <div key={field}>
-                <Input
-                  type={
-                    ["password", "repeatPassword"].includes(field)
-                      ? "password"
-                      : "text"
-                  }
-                  placeholder={placeholders[field]}
-                  {...register(field)}
-                />
-                {errors[field] && (
-                  <span className="text-sm text-destructive">
-                    {errors[field]?.message}
-                  </span>
-                )}
-              </div>
-            );
-          }
-        })}
-      </div>
-      {errors.root?.serverError.type === "400" && (
-        <p className="text-sm text-destructive">
-          {errors.root?.serverError.message}
-        </p>
-      )}
-      {isDirty && (
-        <div className="flex gap-4">
-          <Button variant={"outline"} onClick={() => reset()}>
-            Болдырмау
-          </Button>
-          <Button type="submit">
-            {mutation.isPending && (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-5 p-5 bg-white border rounded-lg"
+      >
+        <div className="space-y-3 max-w-[320px]">
+          <FormField
+            control={form.control}
+            name="firstName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Аты</FormLabel>
+                <FormControl>
+                  <Input placeholder="Аты" {...field} />
+                </FormControl>
+              </FormItem>
             )}
-            Сақтау
-          </Button>
+          />
+          <FormField
+            control={form.control}
+            name="lastName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Тегі</FormLabel>
+                <FormControl>
+                  <Input placeholder="Тегі" {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Почта</FormLabel>
+                <FormControl>
+                  <Input placeholder="Почта" {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="changePassword_checked"
+            render={({ field }) => (
+              <>
+                {mode === "edit" && (
+                  <FormItem>
+                    <div className="py-5 flex items-center space-x-2">
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormLabel>Құпия сөзді өзгерту</FormLabel>
+                    </div>
+                  </FormItem>
+                )}
+                {form.getValues("changePassword_checked") && (
+                  <>
+                    <FormField
+                      control={form.control}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Құпия сөз</FormLabel>
+                          <FormControl>
+                            <PasswordInput placeholder="Құпия сөз" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="repeatPassword"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Құпия сөзді қайталау</FormLabel>
+                          <FormControl>
+                            <PasswordInput
+                              placeholder="Құпия сөзді қайталау"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </>
+                )}
+              </>
+            )}
+          />
         </div>
-      )}
-    </form>
+        {form.formState.errors.root?.serverError.type === "400" && (
+          <p className="text-sm text-destructive">
+            {form.formState.errors.root?.serverError.message}
+          </p>
+        )}
+        {form.formState.isDirty && (
+          <div className="flex gap-4">
+            <Button variant={"outline"} onClick={() => form.reset()}>
+              Болдырмау
+            </Button>
+            <Button type="submit">
+              {mutation.isPending && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              Сақтау
+            </Button>
+          </div>
+        )}
+      </form>
+    </Form>
   );
 };

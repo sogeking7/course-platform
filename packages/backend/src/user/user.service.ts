@@ -4,6 +4,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { unlink } from 'fs/promises';
 import { join } from 'path';
 import * as dotenv from 'dotenv';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UserService {
@@ -47,6 +48,11 @@ export class UserService {
     data: Prisma.UserUpdateInput;
   }): Promise<User> {
     const { where, data } = params;
+    if (data.password) {
+      const hashedPassword = bcrypt.hashSync(data.password, 10);
+      data.password = hashedPassword;
+    }
+
     return await this.prisma.user.update({
       data,
       where,
