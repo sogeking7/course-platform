@@ -53,15 +53,15 @@ export default async function RootLayout({
       <body>
         <Providers session={session}>
           {/* Uncomment and configure ThemeProvider as needed */}
-          {/* <ThemeProvider
+          <ThemeProvider
             attribute="class"
             defaultTheme="light"
             enableSystem
             disableTransitionOnChange
-          > */}
+          >
           {children}
           <TokenHandler />
-          {/* </ThemeProvider> */}
+          </ThemeProvider>
         </Providers>
       </body>
     </html>

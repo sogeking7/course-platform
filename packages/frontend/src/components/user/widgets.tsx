@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
+import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 
 export default function UserButton() {
   const { data: session, status } = useSession();
@@ -28,14 +29,20 @@ export default function UserButton() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Image
+        <Avatar>
+          <AvatarImage src={""} />
+          <AvatarFallback>
+            {user.firstName.charAt(0) + user.lastName.charAt(0)}
+          </AvatarFallback>
+        </Avatar>
+        {/* <Image
           unoptimized
           width={40}
           height={40}
           className="border border-[#1f2d5a] w-10 h-10 rounded-full"
           src={user?.profilePictureLink || "/placeholder.jpg"}
           alt="user"
-        />
+        /> */}
       </DropdownMenuTrigger>
       <DropdownMenuContent side="top">
         <DropdownMenuLabel>
@@ -59,7 +66,7 @@ export default function UserButton() {
         )}
         <Link href={"/home/profile"}>
           <DropdownMenuItem className="bg-transparent hover:!bg-neutral-100 hover:!text-neutral-700">
-            Баптаулар
+            Жеке ақпарат
           </DropdownMenuItem>
         </Link>
         <DropdownMenuItem

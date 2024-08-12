@@ -81,10 +81,11 @@
     /* word-break: break-all; */
     overflow-wrap: break-word;
     @apply border-zinc-300;
+    /* @apply text-black dark:text-zinc-300; */
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground dark:bg-gray-800 bg-white;
   }
 
   * {
@@ -117,7 +118,7 @@
 
   .tiptap p.is-editor-empty:first-child::before {
     color: hsl(var(--muted-foreground));
-  content: attr(data-placeholder);
+    content: attr(data-placeholder);
     float: left;
     height: 0;
     pointer-events: none;

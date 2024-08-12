@@ -34,7 +34,7 @@ export const CourseSectionManager = (props: Props) => {
 
   return (
     <div className="space-y-6 list-none">
-      {props.sections.map((section, index) => {
+      {props.sections?.map((section, index) => {
         return (
           <li
             key={section.id}
