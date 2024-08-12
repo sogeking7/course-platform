@@ -33,7 +33,7 @@ export const AdminUsersCreateForm = ({ data, mode = "new" }: Props) => {
     resolver: zodResolver(createExamSchema),
     defaultValues: {
       name: data?.name || "",
-      description: data?.description || "",
+      description: data?.description || "null",
       lectureId: 0,
       questions: data?.questions || "[]",
     },
@@ -42,6 +42,7 @@ export const AdminUsersCreateForm = ({ data, mode = "new" }: Props) => {
   const mutation = useMutation({
     mutationFn: (newData: any) => {
       if (mode === "new") {
+        console.log(newData);
         return examStore.create(newData);
       }
       return examStore.update(data?.id!, newData);
@@ -75,6 +76,9 @@ export const AdminUsersCreateForm = ({ data, mode = "new" }: Props) => {
             </FormItem>
           )}
         />
+
+        {/* !!! NO DESCRIPTION !!! */}
+
         {/* <FormField
           control={form.control}
           name="description"
@@ -87,14 +91,24 @@ export const AdminUsersCreateForm = ({ data, mode = "new" }: Props) => {
             </FormItem>
           )}
         /> */}
-        <div className="flex justify-end">
-          <Button disabled={!form.formState.isDirty} type="submit">
-            {mutation.isPending && (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            Сақтау
-          </Button>
-        </div>
+
+        {form.formState.isDirty && (
+          <div className="flex justify-end gap-4">
+            <Button
+              type="button"
+              variant={"outline"}
+              onClick={() => form.reset()}
+            >
+              Болдырмау
+            </Button>
+            <Button type="submit">
+              {mutation.isPending && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              Сақтау
+            </Button>
+          </div>
+        )}
       </form>
     </Form>
   );

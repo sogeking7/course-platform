@@ -46,11 +46,11 @@ export const MyAlert = ({ size = "default", mutation, id, name }: Props) => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Болдырмау</AlertDialogCancel>
-          <AlertDialogAction onClick={() => mutation.mutate(id)}>
+          <AlertDialogAction className="bg-destructive hover:bg-destructive/90" onClick={() => mutation.mutate(id)}>
             {mutation.isPending && (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Жалғастыру
+            Өшіру
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

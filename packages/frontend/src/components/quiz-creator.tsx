@@ -164,7 +164,7 @@ export const QuizCreator = ({
                     </FormControl>
                     <Button
                       type="button"
-                      variant="ghost"
+                      variant={"outline"}
                       size={"icon"}
                       onClick={() => remove(index)}
                     >
@@ -184,7 +184,7 @@ export const QuizCreator = ({
                         });
                       }}
                     >
-                      <Plus size={20} className="mr-2" /> Вариант
+                      <Plus size={20} className="mr-2" /> Жаңа Вариант
                     </Button>
                   )}
                 </div>
@@ -204,15 +204,21 @@ export const QuizCreator = ({
                 id={data?.id!}
               />
             )}
-            <Button
-              type="submit"
-              disabled={mode === "new" ? false : !form.formState.isDirty}
-            >
-              {mutation.isPending && (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              {mode === "new" ? "Қосу" : "Өзгерту"}
-            </Button>
+            {(mode === "new" || form.formState.isDirty) && (
+              <>
+                {form.formState.isDirty && (
+                  <Button variant={"outline"} onClick={() => form.reset()}>
+                    Болдырмау
+                  </Button>
+                )}
+                <Button type="submit">
+                  {mutation.isPending && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  Сақтау
+                </Button>
+              </>
+            )}
           </div>
         </form>
       </Form>

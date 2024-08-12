@@ -210,14 +210,16 @@ export const AdminExamsUserInviteDataTable = <TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex justify-end mt-4">
-        <Button onClick={handleChangeButtonClick} disabled={!selectionChanged}>
-          {(deleteUserFromExam.isPending || inviteUserToExam.isPending) && (
-            <Loader className="mr-2" size={14} />
-          )}
-          Өзгерту
-        </Button>
-      </div>
+      {selectionChanged && (
+        <div className="flex justify-end mt-4">
+          <Button onClick={handleChangeButtonClick}>
+            {(deleteUserFromExam.isPending || inviteUserToExam.isPending) && (
+              <Loader className="mr-2" size={14} />
+            )}
+            Сақтау
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

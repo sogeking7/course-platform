@@ -156,7 +156,7 @@ export const AdminCourseCreateForm = ({
                 <FormItem>
                   <FormLabel>Cипаттамасы</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Cипаттамасы" {...field} />
+                    <Textarea className="" placeholder="Cипаттамасы" {...field} />
                   </FormControl>
                 </FormItem>
               )}
@@ -175,15 +175,19 @@ export const AdminCourseCreateForm = ({
                 mutation={mutationDelete}
               />
             )}
-            <Button asChild variant={"outline"}>
-              <Link href={`/admin/courses`}>Болдырмау</Link>
-            </Button>
-            <Button disabled={!form.formState.isDirty} type="submit">
-              {mutation.isPending && (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              {mode === "edit" ? "Өзгерту" : "Cақтау"}
-            </Button>
+            {form.formState.isDirty && (
+              <>
+                <Button variant={"outline"} onClick={() => form.reset()}>
+                  Болдырмау
+                </Button>
+                <Button type="submit">
+                  {mutation.isPending && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  Сақтау
+                </Button>
+              </>
+            )}
           </div>
         </form>
       </Form>

@@ -20,7 +20,7 @@ export const AllCoursesList = ({ data }: { data: Course[] }) => {
 
   return (
     <>
-      <div className="mb-3 md:bg-white rounded-2xl md:shadow-sm md:border border-zinc-300 md:p-5 flex gap-3 md:gap-4">
+      <div className="mb-3 md:bg-white rounded-lg md:shadow-sm md:border border-zinc-300 md:p-5 flex gap-3 md:gap-4">
         <Input
           placeholder="Курс іздеу"
           className="w-full"

@@ -71,7 +71,7 @@ export const LectureManager = (props: Props) => {
           onClick={() => setMode("new")}
         >
           <Plus size={20} className="mr-2" />
-          Сабақ
+          Жаңа Сабақ
         </Button>
       )}
     </div>

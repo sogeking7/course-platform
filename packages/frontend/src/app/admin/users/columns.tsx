@@ -6,6 +6,9 @@ import { UseMutationResult } from "@tanstack/react-query";
 import { MyAlert } from "@/components/my-alert";
 import Moment from "react-moment";
 import "moment/locale/kk";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { Pencil } from "lucide-react";
 
 export const columns = (
   mutation?: UseMutationResult<any, Error, number, unknown>,
@@ -16,9 +19,9 @@ export const columns = (
     cell: ({ row }) => {
       const data = row.original;
       const image =
-        data.role === "ADMIN"
-          ? "/icons/profile.png"
-          : "/icons/graduation-hat.png";
+      data.role === "ADMIN"
+      ? "/icons/profile.png"
+      : "/icons/graduation-hat.png";
       return <img src={image} className="inline min-w-7 min-h-7" />;
     },
   },
@@ -29,6 +32,10 @@ export const columns = (
   {
     accessorKey: "lastName",
     header: "Жөні",
+  },
+  {
+    accessorKey: "id",
+    header: "ID",
   },
   {
     accessorKey: "email",
@@ -61,17 +68,36 @@ export const columns = (
   {
     id: "actions",
     cell: ({ row }) => {
-      if (!mutation) return null;
-      const data = row.original;
-      if (data.role === "ADMIN") return null;
+      const course = row.original;
+
       return (
-        <MyAlert
-          size="icon"
-          name={data?.firstName!}
-          id={data.id}
-          mutation={mutation}
-        />
+        <Button
+          size={"icon"}
+          variant={"outline"}
+          className="!min-h-8 !min-w-8 p-0"
+          asChild
+        >
+          <Link href={`/admin/users/${course.id}`}>
+            <Pencil className="h-4 w-4" />
+          </Link>
+        </Button>
       );
     },
   },
+  // {
+  //   id: "actions",
+  //   cell: ({ row }) => {
+  //     if (!mutation) return null;
+  //     const data = row.original;
+  //     if (data.role === "ADMIN") return null;
+  //     return (
+  //       <MyAlert
+  //         size="icon"
+  //         name={data?.firstName!}
+  //         id={data.id}
+  //         mutation={mutation}
+  //       />
+  //     );
+  //   },
+  // },
 ];

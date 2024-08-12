@@ -32,10 +32,14 @@ export const columns: ColumnDef<Exam>[] = [
     accessorKey: "name",
     header: "Аты",
   },
-  {
-    accessorKey: "description",
-    header: "Сипаттамасы",
-  },
+  // {
+  //   accessorKey: "description",
+  //   header: "Сипаттамасы",
+  // },
+  // {
+  //   accessorKey: "id",
+  //   header: "ID",
+  // },
   {
     accessorKey: "questions",
     header: "Сұрақтар саны",

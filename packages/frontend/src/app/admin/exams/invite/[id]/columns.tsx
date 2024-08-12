@@ -54,6 +54,10 @@ export const columns = (
     header: "Жөні",
   },
   {
+    accessorKey: "id",
+    header: "ID",
+  },
+  {
     accessorKey: "email",
     header: "Почта",
   },

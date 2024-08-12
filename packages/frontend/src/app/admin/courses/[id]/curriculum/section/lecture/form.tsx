@@ -211,7 +211,7 @@ export default function LectureForm({
             <div className="border-neutral-300 border rounded-lg p-4 flex flex-col gap-4">
               <FormItem className="flex flex-row items-center justify-between">
                 <div className="space-y-0.5">
-                  <FormLabel className="text-base">Мазмұн қосу</FormLabel>
+                  <FormLabel className="text-base">Контент қосу</FormLabel>
                   <FormDescription>Текст</FormDescription>
                 </div>
                 <FormControl>
@@ -281,7 +281,7 @@ export default function LectureForm({
           {mode === "new" && (
             <Button
               type="button"
-              variant="ghost"
+              variant={"outline"}
               onClick={() => setOpen("default")}
             >
               Болдырмау
@@ -294,12 +294,21 @@ export default function LectureForm({
               mutation={mutationDelete}
             />
           )}
-          <Button disabled={!form.formState.isDirty} type="submit">
-            {mutation.isPending && (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            {mode === "new" ? "Косу" : "Сақтау"}
-          </Button>
+          {form.formState.isDirty && (
+            <>
+              {mode === "edit" && (
+                <Button variant={"outline"} onClick={() => form.reset()}>
+                  Болдырмау
+                </Button>
+              )}
+              <Button type="submit">
+                {mutation.isPending && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                Сақтау
+              </Button>
+            </>
+          )}
         </div>
       </form>
     </Form>

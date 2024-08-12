@@ -36,6 +36,10 @@ export const columns: ColumnDef<Exam>[] = [
   //   header: "Сипаттамасы",
   // },
   {
+    accessorKey: "id",
+    header: "ID",
+  },
+  {
     accessorKey: "questions",
     header: "Сұрақтар саны",
     cell: ({ row }) => {
@@ -74,7 +78,7 @@ export const columns: ColumnDef<Exam>[] = [
       return (
         <Button
           size={"icon"}
-          variant="ghost"
+          variant={"outline"}
           className="!min-h-8 !min-w-8 p-0"
           asChild
         >

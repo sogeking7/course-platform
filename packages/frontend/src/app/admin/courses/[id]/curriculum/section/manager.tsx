@@ -92,7 +92,7 @@ export const CourseSectionManager = (props: Props) => {
           onClick={() => setMode("new")}
         >
           <Plus size={20} className="mr-2" />
-          Модуль
+          Жаңа Модуль
         </Button>
       )}
     </div>

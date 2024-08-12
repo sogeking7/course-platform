@@ -8,7 +8,7 @@ export const MyContainer = ({ children }: { children: React.ReactNode }) => {
 
 export const WhiteBox = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="p-4 lg:p-6 border bg-white rounded-2xl shadow-sm ">
+    <div className="p-4 lg:p-6 border bg-white rounded-lg shadow-sm ">
       {children}
     </div>
   );

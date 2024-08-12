@@ -126,7 +126,7 @@ export default async function CoursePage({ params }: Props) {
           <div className="md:w-2/5 lg:w-1/3">
             <WhiteBox>
               <img
-                className="border rounded-2xl "
+                className="border rounded-lg "
                 src={data.profilePictureLink || "/placeholder-course.jpg"}
               />
             </WhiteBox>
