@@ -26,9 +26,6 @@ export const CourseCard = ({
           )}
           src={item.profilePictureLink || "/placeholder-course.jpg"}
         />
-        {/* <span className="absolute bottom-3 left-3 text-sm text-neutral-500">
-          Курс
-        </span> */}
       </div>
     </Link>
   );

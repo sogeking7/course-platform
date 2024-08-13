@@ -23,6 +23,7 @@ import Link from "next/link";
 import { useExamStore } from "@/store/exam";
 import { MyAlert } from "@/components/my-alert";
 import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
 
 type Props = {
   sectionId: number;
@@ -227,13 +228,14 @@ export default function LectureForm({
                   name="content"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Мазмұн</FormLabel>
+                      <FormLabel>Контент</FormLabel>
                       <FormControl>
-                        <Tiptap
+                        {/* <Tiptap
                           placeholder={"Мазмұн"}
                           editorState={field.value || ""}
                           setEditorState={field.onChange}
-                        />
+                        /> */}
+                        <Textarea placeholder={"Мазмұн"} {...field} />
                       </FormControl>
                       {/* <FormMessage /> */}
                     </FormItem>

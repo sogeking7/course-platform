@@ -157,7 +157,7 @@ const SideBarButton = ({
               "items-center",
               hide ? "" : "p-3 xl:justify-start xl:px-5",
               "p-3",
-              "!min-w-[50px] w-full !transition-none font-normal file:text-base",
+              "!min-w-[50px] w-full !transition-none font-normal",
               "gap-3",
               pathname === item.href
                 ? "bg-neutral-200 dark:bg-neutral-700 font-medium hover:bg-neutral-200/80 "
