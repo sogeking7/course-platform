@@ -15,11 +15,18 @@ import { WhiteBox } from "@/components/container";
 import { cn } from "@/lib/utils";
 import { useCourseStore } from "@/store/course";
 import { useQuery } from "@tanstack/react-query";
+import { Course } from "@/types";
+import { axiosPublic } from "@/lib/axios";
 
 type Props = {
   params: { id: string };
   searchParams: { [key: string]: string | string[] | undefined };
 };
+
+const getCourse = (async (id: number) => {
+  const data: Course = (await axiosPublic.get(`/course/public/${id}`)).data;
+  return data;
+});
 
 export default function CoursePage({ params }: Props) {
   const id = Number(params.id);
@@ -28,7 +35,7 @@ export default function CoursePage({ params }: Props) {
 
   const { data, isSuccess, isLoading } = useQuery({
     queryKey: ["course", { id: Number(id) }],
-    queryFn: () => courseStore.findCourseById(id),
+    queryFn: () => getCourse(id)
   });
 
   if (!data || isLoading) {
