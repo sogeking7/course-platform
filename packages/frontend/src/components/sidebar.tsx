@@ -155,7 +155,7 @@ const SideBarButton = ({
           <Button
             className={cn(
               "items-center",
-              hide ? "" : "p-3 xl:justify-start xl:pl-4 xl:pr-2",
+              hide ? "" : "p-3 xl:justify-start xl:px-5",
               "p-3",
               "!min-w-[50px] w-full !transition-none font-normal file:text-base",
               "gap-3",

@@ -29,6 +29,11 @@ export const UserEditForm = () => {
 
   const form = useForm<z.infer<typeof editUserSchema>>({
     resolver: zodResolver(editUserSchema),
+    defaultValues: {
+      firstName: user?.firstName,
+      lastName: user?.lastName,
+      email: user?.email,
+    },
   });
 
   const mutation = useMutation({
@@ -126,12 +131,23 @@ export const UserEditForm = () => {
               )}
             />
           </div>
-          <Button disabled={!form.formState.isDirty} type="submit">
-            {form.formState.isSubmitting && (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            Сақтау
-          </Button>
+          {form.formState.isDirty && (
+            <div className="flex w-full gap-4 mt-4">
+              <Button
+                className="w-1/2"
+                variant={"outline"}
+                onClick={() => form.reset()}
+              >
+                Болдырмау
+              </Button>
+              <Button className="w-1/2" type="submit">
+                {form.formState.isSubmitting && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                Сақтау
+              </Button>
+            </div>
+          )}
         </form>
       </Form>
     </div>

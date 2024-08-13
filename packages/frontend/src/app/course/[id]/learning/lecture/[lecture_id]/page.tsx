@@ -31,6 +31,7 @@ import { columns } from "./quiz/columns";
 import { Question } from "@/types";
 import { MyContainer } from "@/components/container";
 import { useSectionStore } from "@/store/section";
+import { HomeHeader } from "@/components/header";
 
 export default function LectureIdPage({
   params,
@@ -125,7 +126,8 @@ export default function LectureIdPage({
           <LayoutLoader />
         ) : (
           <MyContainer>
-            <div className=" border rounded-lg bg-white">
+            <HomeHeader />
+            <div className="border rounded-lg bg-white">
               <button
                 onClick={() => setIsSheetOpen(true)}
                 className="flex hover:underline font-semibold items-center md:hidden max-md:px-4 max-md:pt-5 "

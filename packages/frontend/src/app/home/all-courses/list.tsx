@@ -40,7 +40,7 @@ export const AllCoursesList = ({ data }: { data: Course[] }) => {
         {filteredCourses.length} нәтижелер табылды
       </div>
 
-      <div className="grid lg:grid-cols-4 xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-2 sm:gap-2">
+      <div className="grid lg:grid-cols-4 xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-2">
         {filteredCourses.map((course: Course) => (
           <CourseCard key={course.id} item={course as Course} />
         ))}
