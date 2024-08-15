@@ -83,12 +83,12 @@ export const SideBarResizable = () => {
         "z-10 fixed",
         "min-w-[75px]",
         hide ? "" : "xl:min-w-[320px]",
-        "bg-white  dark:bg-[#1f1f1f] flex flex-col justify-between py-8 fixed border-r border-neutral-300 dark:border-neutral-700 min-h-screen max-h-full ",
+        "bg-white  dark:bg-[#1f1f1f] flex flex-col justify-between py-6 md:py-8 fixed border-r border-neutral-300 dark:border-neutral-700 min-h-screen max-h-full ",
       )}
     >
       <div>
         <div
-          className={cn(hide ? "hidden" : "max-xl:hidden", "w-full px-5 pb-5")}
+          className={cn(hide ? "hidden" : "max-xl:hidden", "w-full px-5 pb-8")}
         >
           <div className="ml-3 w-[160px]">
             <Logo />
@@ -97,7 +97,7 @@ export const SideBarResizable = () => {
         <div
           className={cn(
             hide ? "" : "xl:hidden",
-            "w-full px-2 pb-4 flex justify-center",
+            "w-full px-2 pb-8 flex justify-center",
           )}
         >
           <div className="w-[30px]">
