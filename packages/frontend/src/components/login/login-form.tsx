@@ -96,7 +96,7 @@ export default function LoginForm() {
           {form.formState.isSubmitting && (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           )}
-          Жіберу
+          Логин
         </Button>
       </form>
     </Form>

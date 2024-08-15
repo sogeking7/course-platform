@@ -1,8 +1,10 @@
 import {
   Award,
+  Book,
   BookOpen,
   Home,
   LayoutDashboard,
+  LayoutGrid,
   LibraryBig,
   Trophy,
   Users,
@@ -13,12 +15,12 @@ export const default_links = [
   {
     title: "Басты бет",
     href: "/",
-    icon: <Home size={20} />,
+    icon: <Home strokeWidth={1.8} />,
   },
   {
     title: "Барлық курстар",
     href: "/home/all-courses",
-    icon: <LibraryBig size={20} />,
+    icon: <Book strokeWidth={1.8} />,
   },
 ];
 
@@ -26,12 +28,12 @@ export const sidebar_links = [
   {
     title: "Менің курстарым",
     href: "/home/my-courses",
-    icon: <BookOpen size={20} />,
+    icon: <BookOpen strokeWidth={1.8} />,
   },
   {
     title: "Емтихандар",
     href: "/home/my-exams",
-    icon: <Trophy size={20} />,
+    icon: <Trophy strokeWidth={1.8} />,
   },
   // {
   //   title: "Байқау тесті",
@@ -44,27 +46,27 @@ export const admin_links = [
   {
     title: "Админ панель",
     href: "/admin",
-    icon: <LayoutDashboard size={20} />,
+    icon: <LayoutGrid strokeWidth={1.8} />,
   },
   {
-    title: "Қолданушылар",
+    title: "Оқушылар",
     href: "/admin/users",
-    icon: <UsersRound size={20} />,
+    icon: <UsersRound strokeWidth={1.8} />,
   },
   {
     title: "Курстар",
     href: "/admin/courses",
-    icon: <LibraryBig size={20} />,
+    icon: <LibraryBig strokeWidth={1.8} />,
   },
   {
     title: "Емтихандар",
     href: "/admin/exams",
-    icon: <Trophy size={20} />,
+    icon: <Trophy strokeWidth={1.8} />,
   },
   // {
   //   title: "Менің курстарым",
   //   href: "/home/my-courses",
-  //   icon: <BookOpen size={20} />,
+  //   icon: <BookOpen  strokeWidth={1.8} />,
   // },
 ];
 

@@ -73,46 +73,44 @@ export default function ClientQuizPage({
 
   if (examResults?.result) {
     return (
-      <div className="w-full h-full">
-        <MyContainer>
-          <Bread breadcrumbs={breadcrumbs} />
-          <TypographyH1>{exam.name}</TypographyH1>
-          <WhiteBox>
-            {!!(examResults.result !== null) && (
-              <LectureQuizResultsTable
-                columns={[
-                  { ...columns[0] },
-                  {
-                    ...columns[1],
-                    header: `Балл / ${points.toFixed(2)}`,
-                  },
-                  {
-                    ...columns[2],
-                    header: `Баға / ${Number(100).toFixed(2)}%`,
-                  },
-                ]}
-                data={[
-                  {
-                    grade: calcPercentage(examResults.result, points),
-                    points: examResults.result,
-                    state: "Аяқталды",
-                    createdAt: "",
-                    editedAt: "",
-                  },
-                ]}
-              />
-            )}
-            <>
-              {/* Сіз quiz-ды өттіңіз */}
-              <div className="flex w-full mt-6 justify-end">
-                <Button onClick={router.back} variant={"outline"}>
-                  Артқа қайту
-                </Button>
-              </div>
-            </>
-          </WhiteBox>
-        </MyContainer>
-      </div>
+      <>
+        <Bread breadcrumbs={breadcrumbs} />
+        <TypographyH1>{exam.name}</TypographyH1>
+        <WhiteBox>
+          {!!(examResults.result !== null) && (
+            <LectureQuizResultsTable
+              columns={[
+                { ...columns[0] },
+                {
+                  ...columns[1],
+                  header: `Балл / ${points.toFixed(2)}`,
+                },
+                {
+                  ...columns[2],
+                  header: `Баға / ${Number(100).toFixed(2)}%`,
+                },
+              ]}
+              data={[
+                {
+                  grade: calcPercentage(examResults.result, points),
+                  points: examResults.result,
+                  state: "Аяқталды",
+                  createdAt: "",
+                  editedAt: "",
+                },
+              ]}
+            />
+          )}
+          <>
+            {/* Сіз quiz-ды өттіңіз */}
+            <div className="flex w-full mt-6 justify-end">
+              <Button onClick={router.back} variant={"outline"}>
+                Артқа қайту
+              </Button>
+            </div>
+          </>
+        </WhiteBox>
+      </>
     );
   }
 

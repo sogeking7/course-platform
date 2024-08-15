@@ -142,14 +142,14 @@ export const AdminExamsUserInviteDataTable = <TData, TValue>({
           onChange={(event) =>
             table.getColumn("firstName")?.setFilterValue(event.target.value)
           }
-          className="w-full sm:max-w-sm"
+          className="max-sm:max-w-40 sm:max-w-sm"
         />
         <div>
           <span className="text-neutral-500">Барлығы:</span>{" "}
           <b>{table.getFilteredRowModel().rows.length}</b>
         </div>
       </div>
-      <div className="rounded-2xl border bg-white">
+      <div className="rounded-lg border bg-white">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -210,14 +210,16 @@ export const AdminExamsUserInviteDataTable = <TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex justify-end mt-4">
-        <Button onClick={handleChangeButtonClick} disabled={!selectionChanged}>
-          {(deleteUserFromExam.isPending || inviteUserToExam.isPending) && (
-            <Loader className="mr-2" size={14} />
-          )}
-          Өзгерту
-        </Button>
-      </div>
+      {selectionChanged && (
+        <div className="flex justify-end mt-4">
+          <Button onClick={handleChangeButtonClick}>
+            {(deleteUserFromExam.isPending || inviteUserToExam.isPending) && (
+              <Loader className="mr-2" size={14} />
+            )}
+            Сақтау
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

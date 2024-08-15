@@ -49,7 +49,7 @@ export default function AdminCoursesCurriculum({
     <>
       <Bread breadcrumbs={breadcrumbs} />
       <TypographyH1>Курс бағдарламасы</TypographyH1>
-      <div className="sm:p-6 sm:border sm:bg-white rounded-3xl sm:shadow-sm mb-6">
+      <div className="sm:p-6 sm:border sm:bg-white rounded-lg sm:shadow-sm mb-6">
         <CourseSectionManager courseId={data.id} sections={data.sections} />
       </div>
     </>

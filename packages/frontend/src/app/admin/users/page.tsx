@@ -34,7 +34,7 @@ export default function AdminUsersPage() {
   return (
     <>
       <div className="flex justify-between">
-        <TypographyH1>Қолданушылар</TypographyH1>
+        <TypographyH1>Оқушылар</TypographyH1>
         <Link href="/admin/users/create">
           <Button>
             <Plus className="mr-2" size={20} /> Қосу

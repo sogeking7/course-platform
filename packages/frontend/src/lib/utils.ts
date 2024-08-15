@@ -48,17 +48,14 @@ export const nextLecture = (
       if (lecture_id === thisLectureId) {
         if (j < sections[i].lectures.length - 1) {
           nextLectureId = sections[i].lectures[j + 1].id;
-        }
-
-        // else if (i < sections.length - 1) {
-        //   const nextSectionLectures = sections[i + 1]?.lectures;
-        //   if (nextSectionLectures && nextSectionLectures.length > 0) {
-        //     nextLectureId = nextSectionLectures[0]?.id || null;
-        //   } else {
-        //     return null;
-        //   }
-        // }
-        else {
+        } else if (i < sections.length - 1) {
+          const nextSectionLectures = sections[i + 1]?.lectures;
+          if (nextSectionLectures && nextSectionLectures.length > 0) {
+            nextLectureId = nextSectionLectures[0]?.id || null;
+          } else {
+            return null;
+          }
+        } else {
           return null;
         }
       }
@@ -66,39 +63,6 @@ export const nextLecture = (
   }
 
   return nextLectureId;
-};
-
-export const prevLecture = (
-  lecture_id: number,
-  sections: Section[],
-): number | null => {
-  let prevLectureId = null;
-
-  for (let i = 0; i < sections.length; i++) {
-    for (let j = 0; j < sections[i].lectures.length; j++) {
-      const thisLectureId = sections[i].lectures[j].id;
-      if (lecture_id === thisLectureId) {
-        if (j > 0) {
-          prevLectureId = sections[i].lectures[j - 1].id;
-        }
-
-        // else if (i > 0) {
-        //   const previousSectionLectures = sections[i - 1]?.lectures;
-        //   if (previousSectionLectures && previousSectionLectures.length > 0) {
-        //     prevLectureId =
-        //       previousSectionLectures[previousSectionLectures.length - 1].id;
-        //   } else {
-        //     return null;
-        //   }
-        // }
-        else {
-          return null;
-        }
-      }
-    }
-  }
-
-  return prevLectureId;
 };
 
 export function addMissingKeys(obj: RowSelectionState, maxKey: number) {

@@ -27,6 +27,7 @@ import { PictureForm } from "@/components/picture-form";
 import { WhiteBox } from "@/components/container";
 import { MyAlert } from "@/components/my-alert";
 import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
 
 export const AdminCourseCreateForm = ({
   mode = "create",
@@ -155,49 +156,9 @@ export const AdminCourseCreateForm = ({
                 <FormItem>
                   <FormLabel>Cипаттамасы</FormLabel>
                   <FormControl>
-                    <Input placeholder="Cипаттамасы" {...field} />
+                    <Textarea className="" placeholder="Cипаттамасы" {...field} />
                   </FormControl>
                 </FormItem>
-              )}
-            />
-            <hr className="border-none" />
-            <FormField
-              control={form.control}
-              name="content_checked"
-              render={({ field }) => (
-                <div className="border-neutral-300 border rounded-xl p-4 flex flex-col gap-4">
-                  <FormItem className="flex flex-row items-center justify-between">
-                    <div className="space-y-0.5">
-                      <FormLabel className="text-base">Мазмұн қосу</FormLabel>
-                      <FormDescription>Текст</FormDescription>
-                    </div>
-                    <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                  </FormItem>
-                  {form.getValues("content_checked") && (
-                    <FormField
-                      control={form.control}
-                      name="content"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Мазмұн</FormLabel>
-                          <FormControl>
-                            <Tiptap
-                              placeholder={"Мазмұн"}
-                              editorState={field.value || ""}
-                              setEditorState={field.onChange}
-                            />
-                          </FormControl>
-                          {/* <FormMessage /> */}
-                        </FormItem>
-                      )}
-                    />
-                  )}
-                </div>
               )}
             />
           </div>
@@ -214,12 +175,19 @@ export const AdminCourseCreateForm = ({
                 mutation={mutationDelete}
               />
             )}
-            <Button disabled={!form.formState.isDirty} type="submit">
-              {mutation.isPending && (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              {mode === "edit" ? "Өзгерту" : "Қосу"}
-            </Button>
+            {form.formState.isDirty && (
+              <>
+                <Button variant={"outline"} onClick={() => form.reset()}>
+                  Болдырмау
+                </Button>
+                <Button type="submit">
+                  {mutation.isPending && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  Сақтау
+                </Button>
+              </>
+            )}
           </div>
         </form>
       </Form>

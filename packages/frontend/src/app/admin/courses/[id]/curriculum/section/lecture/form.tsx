@@ -23,6 +23,7 @@ import Link from "next/link";
 import { useExamStore } from "@/store/exam";
 import { MyAlert } from "@/components/my-alert";
 import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
 
 type Props = {
   sectionId: number;
@@ -187,7 +188,7 @@ export default function LectureForm({
       )}
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="border bg-white border-neutral-300 rounded-xl p-4 space-y-4"
+        className="border bg-white border-neutral-300 rounded-lg p-4 space-y-4"
       >
         <FormField
           control={form.control}
@@ -208,10 +209,10 @@ export default function LectureForm({
           control={form.control}
           name="content_checked"
           render={({ field }) => (
-            <div className="border-neutral-300 border rounded-xl p-4 flex flex-col gap-4">
+            <div className="border-neutral-300 border rounded-lg p-4 flex flex-col gap-4">
               <FormItem className="flex flex-row items-center justify-between">
                 <div className="space-y-0.5">
-                  <FormLabel className="text-base">Мазмұн қосу</FormLabel>
+                  <FormLabel className="text-base">Контент қосу</FormLabel>
                   <FormDescription>Текст</FormDescription>
                 </div>
                 <FormControl>
@@ -227,13 +228,14 @@ export default function LectureForm({
                   name="content"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Мазмұн</FormLabel>
+                      <FormLabel>Контент</FormLabel>
                       <FormControl>
-                        <Tiptap
+                        {/* <Tiptap
                           placeholder={"Мазмұн"}
                           editorState={field.value || ""}
                           setEditorState={field.onChange}
-                        />
+                        /> */}
+                        <Textarea placeholder={"Мазмұн"} {...field} />
                       </FormControl>
                       {/* <FormMessage /> */}
                     </FormItem>
@@ -247,7 +249,7 @@ export default function LectureForm({
           control={form.control}
           name="videoUrl_checked"
           render={({ field }) => (
-            <div className="border-neutral-300 border rounded-xl p-4 flex flex-col gap-4">
+            <div className="border-neutral-300 border rounded-lg p-4 flex flex-col gap-4">
               <FormItem className="flex flex-row items-center justify-between">
                 <div className="space-y-0.5">
                   <FormLabel className="text-base">Видео қосу</FormLabel>
@@ -281,7 +283,7 @@ export default function LectureForm({
           {mode === "new" && (
             <Button
               type="button"
-              variant="ghost"
+              variant={"outline"}
               onClick={() => setOpen("default")}
             >
               Болдырмау
@@ -294,12 +296,21 @@ export default function LectureForm({
               mutation={mutationDelete}
             />
           )}
-          <Button disabled={!form.formState.isDirty} type="submit">
-            {mutation.isPending && (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            {mode === "new" ? "Косу" : "Сақтау"}
-          </Button>
+          {form.formState.isDirty && (
+            <>
+              {mode === "edit" && (
+                <Button variant={"outline"} onClick={() => form.reset()}>
+                  Болдырмау
+                </Button>
+              )}
+              <Button type="submit">
+                {mutation.isPending && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                Сақтау
+              </Button>
+            </>
+          )}
         </div>
       </form>
     </Form>

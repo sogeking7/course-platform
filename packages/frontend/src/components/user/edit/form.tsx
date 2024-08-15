@@ -20,6 +20,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 export const UserEditForm = () => {
   const { data: session, update, status } = useSession();
@@ -28,6 +29,11 @@ export const UserEditForm = () => {
 
   const form = useForm<z.infer<typeof editUserSchema>>({
     resolver: zodResolver(editUserSchema),
+    defaultValues: {
+      firstName: user?.firstName,
+      lastName: user?.lastName,
+      email: user?.email,
+    },
   });
 
   const mutation = useMutation({
@@ -57,8 +63,18 @@ export const UserEditForm = () => {
   }
 
   return (
-    <div className="flex flex-col gap-5">
-      <PictureForm
+    <div className="flex flex-col gap-5 py-5">
+      {user && (
+        <div className="w-full flex justify-center">
+          <Avatar className="!w-32 !h-32 md:!w-40 md:!h-40">
+            <AvatarImage src={""} />
+            <AvatarFallback className="!text-4xl md:!text-5xl">
+              {user.firstName.charAt(0) + user.lastName.charAt(0)}
+            </AvatarFallback>
+          </Avatar>
+        </div>
+      )}
+      {/* <PictureForm
         uploadPhoto={userStore.uploadPhoto}
         entityData={{
           id: user?.id || 0,
@@ -68,7 +84,7 @@ export const UserEditForm = () => {
         aspect={4 / 4}
         entityType="user"
         onSuccess={(newData: any) => mutation.mutate(newData)}
-      />
+      /> */}
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -115,12 +131,23 @@ export const UserEditForm = () => {
               )}
             />
           </div>
-          <Button disabled={!form.formState.isDirty} type="submit">
-            {form.formState.isSubmitting && (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            Сақтау
-          </Button>
+          {form.formState.isDirty && (
+            <div className="flex w-full gap-4 mt-4">
+              <Button
+                className="w-1/2"
+                variant={"outline"}
+                onClick={() => form.reset()}
+              >
+                Болдырмау
+              </Button>
+              <Button className="w-1/2" type="submit">
+                {form.formState.isSubmitting && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                Сақтау
+              </Button>
+            </div>
+          )}
         </form>
       </Form>
     </div>

@@ -5,120 +5,46 @@ import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { admin_links, default_links, sidebar_links } from "../../public/shared";
-
-import { CircleX, MenuIcon, X } from "lucide-react";
-import { useSidebar } from "@/store/sidebar";
-import { Sheet, SheetHeader, SheetContent } from "@/components/ui/sheet";
-import { Logo } from "./logo";
-import { useSession } from "next-auth/react";
+import { Logo, LogoSmall } from "./logo";
+import { signIn, signOut, useSession } from "next-auth/react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { LogIn, LogOut } from "lucide-react";
 
-export const MySheetTrigger = () => {
-  const { isMySheetOpen, setIsMySheetOpen } = useSidebar();
-  return (
-    <button
-      onClick={() => setIsMySheetOpen(!isMySheetOpen)}
-      className="rounded-xl hover:bg-slate-300 bg-slate-200 text-neutral-700 w-[40px] h-[40px] flex items-center justify-center hover:opacity-100"
-    >
-      {isMySheetOpen ? (
-        // <div className="h-[22px] w-[22px] border-neutral-700  rounded-full border flex items-center justify-center">
-        <X size={20} />
-      ) : (
-        // </div>
-        <MenuIcon strokeWidth={2.25} size={20} className="rounded-none" />
-      )}
-    </button>
-  );
-};
-
-export const MySheet = () => {
-  const { isMySheetOpen, setIsMySheetOpen } = useSidebar();
-
-  return (
-    <Sheet
-      open={isMySheetOpen}
-      onOpenChange={() => {
-        setIsMySheetOpen(!isMySheetOpen);
-      }}
-    >
-      <SheetContent className="w-[300px] h-full bg-white" side={"left"}>
-        <SheetHeader className="py-3 px-20 !h-[56px] flex items-center border-b border-neutral-300 shadow-sm">
-          <Logo />
-        </SheetHeader>
-        <SideBar str />
-      </SheetContent>
-    </Sheet>
-  );
-};
-
-export const SideBarTrigger = () => {
-  const pathname = usePathname();
-  const { isSideBarOpen, setIsSideBarOpen } = useSidebar();
-
-  if (pathname.includes("/lecture")) {
-    return <MySheetTrigger />;
-  }
-  return (
-    <button
-      onClick={() => setIsSideBarOpen(!isSideBarOpen)}
-      className="rounded-xl hover:bg-slate-300 bg-slate-200 text-neutral-700 w-[56px] h-[40px] flex items-center justify-center "
-    >
-      {isSideBarOpen ? (
-        // <div className="h-[22px] w-[22px] border-neutral-700 rounded-full border flex items-center justify-center">
-        <X size={20} />
-      ) : (
-        // </div>
-        // <CircleX size={20}/>
-        <MenuIcon strokeWidth={2.25} size={20} className="rounded-none" />
-      )}
-    </button>
-  );
-};
-
-export const SideBar = ({ noText = false }: any) => {
+export const SideBar = () => {
   const { data: session } = useSession();
   const user = session?.user;
   const role = user?.role;
 
   return (
-    <nav className="my-4 h-full bg-white transition-none">
+    <nav className="my-4 h-full dark:bg-transparent bg-white transition-none">
       <ul className="space-y-2">
         {default_links.map((item) => (
-          <li
-            className={cn(noText ? "px-2" : "px-4", "w-full")}
-            key={item.title}
-          >
-            <SideBarButton noText={noText} isSheet item={item} />
+          <li className={cn("px-3", "w-full")} key={item.title}>
+            <SideBarButton item={item} />
           </li>
         ))}
       </ul>
       {role === "USER" && (
         <ul className="space-y-1 mt-2">
           {sidebar_links.map((item) => (
-            <li
-              className={cn(noText ? "px-2" : "px-4", "w-full")}
-              key={item.title}
-            >
-              <SideBarButton noText={noText} isSheet item={item} />
+            <li className={cn("px-3", "w-full")} key={item.title}>
+              <SideBarButton item={item} />
             </li>
           ))}
         </ul>
       )}
       {role === "ADMIN" && (
         <>
-          <hr className="my-2" />
+          <hr className="my-2 dark:border"/>
           <ul className="space-y-2">
             {admin_links.map((item) => (
-              <li
-                className={cn(noText ? "px-2" : "px-4", "w-full")}
-                key={item.title}
-              >
-                <SideBarButton noText={noText} isSheet item={item} />
+              <li className={cn("px-3", "w-full")} key={item.title}>
+                <SideBarButton item={item} />
               </li>
             ))}
           </ul>
@@ -130,41 +56,94 @@ export const SideBar = ({ noText = false }: any) => {
 
 export const SideBarSkeleton = () => {
   const pathname = usePathname();
-  const { isSideBarOpen } = useSidebar();
 
-  if (!isSideBarOpen || pathname.includes("/lecture")) {
-    return (
-      <aside className="min-w-[65px] max-xl:hidden min-h-screen max-h-full"></aside>
-    );
-  }
+  const hide = pathname.includes("/lecture");
+
   return (
-    <aside className="min-w-[300px] max-xl:hidden min-h-screen max-h-full"></aside>
+    <aside
+      className={cn(
+        "min-w-[75px]",
+        hide ? "" : "xl:min-w-[320px]",
+        "min-h-screen max-h-full",
+      )}
+    ></aside>
   );
 };
 
-export const SideBarResizable = (props: any) => {
+export const SideBarResizable = () => {
   const pathname = usePathname();
-  const { isSideBarOpen } = useSidebar();
 
-  if (!isSideBarOpen || pathname.includes("/lecture")) {
-    return (
-      <aside className="max-xl:hidden z-10 bg-white pt-[56px] fixed border-r border-neutral-300 min-h-screen max-h-full ">
-        <SideBar noText />
-      </aside>
-    );
-  }
+  const hide = pathname.includes("/lecture");
 
+  const { data: session, status } = useSession();
+  const user = session?.user;
   return (
-    <aside className="max-xl:hidden bg-white min-w-[300px] pt-[56px] fixed border-r border-neutral-300 min-h-screen max-h-full ">
-      <SideBar />
+    <aside
+      className={cn(
+        "z-10 fixed",
+        "min-w-[75px]",
+        hide ? "" : "xl:min-w-[320px]",
+        "bg-white  dark:bg-[#1f1f1f] flex flex-col justify-between py-6 md:py-8 fixed border-r border-neutral-300 dark:border-neutral-700 min-h-screen max-h-full ",
+      )}
+    >
+      <div>
+        <div
+          className={cn(hide ? "hidden" : "max-xl:hidden", "w-full px-5 pb-8")}
+        >
+          <div className="ml-3 w-[160px]">
+            <Logo />
+          </div>
+        </div>
+        <div
+          className={cn(
+            hide ? "" : "xl:hidden",
+            "w-full px-2 pb-8 flex justify-center",
+          )}
+        >
+          <div className="w-[30px]">
+            <LogoSmall />
+          </div>
+        </div>
+        <SideBar />
+      </div>
+      <div className={cn("px-3", "w-full")}>
+        {status === "loading" || !user ? (
+          <SideBarButton
+            item={{
+              title: "Кіру",
+              href: "",
+              icon: <LogIn size={26} strokeWidth={1.8} />,
+              action: signIn,
+            }}
+          />
+        ) : (
+          <SideBarButton
+            item={{
+              title: "Шығу",
+              href: "",
+              icon: <LogOut size={26} strokeWidth={1.8} />,
+              action: signOut,
+            }}
+          />
+        )}
+      </div>
     </aside>
   );
 };
 
-const SideBarButton = (props: any) => {
+const SideBarButton = ({
+  item,
+}: {
+  item: {
+    title: string;
+    href: string;
+    action?: any;
+    icon: JSX.Element;
+  };
+}) => {
   const pathname = usePathname();
-  const { item, isSheet, noText } = props;
-  const { setIsMySheetOpen } = useSidebar();
+  const hide = pathname.includes("/lecture");
+
   return (
     <TooltipProvider
       disableHoverableContent={true}
@@ -174,41 +153,41 @@ const SideBarButton = (props: any) => {
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
-            disabled={item.disabled}
+            className={cn(
+              "items-center",
+              hide ? "" : "p-3 xl:justify-start xl:px-5",
+              "p-3",
+              "!min-w-[50px] w-full !transition-none font-normal",
+              "gap-3",
+              pathname === item.href
+                ? "bg-neutral-200 dark:bg-neutral-700 font-medium hover:bg-neutral-200/80 "
+                : "hover:border-neutral-200/50 dark:bg-transparent hover:bg-neutral-200/50",
+            )}
             onClick={() => {
-              if (isSheet) {
-                setIsMySheetOpen(false);
+              if (item.action) {
+                return item.action();
               }
             }}
-            className={cn(
-              noText ? "!justify-center" : "justify-start pl-4 pr-2",
-              "!min-w-[50px] w-full !transition-none rounded-xl   text-base",
-              "py-[15px]  gap-3",
-              pathname === item.href
-                ? "bg-neutral-200  hover:bg-neutral-200/80 "
-                : "hover:border-neutral-200/50 hover:bg-neutral-200/50",
-            )}
             variant={"sidebar"}
             size={"reset"}
             asChild
           >
             <Link href={item.href}>
-              <i className="text-neutral-700 h-5">{item.icon}</i>
-              {noText ? null : (
-                <label className="text-neutral-800 leading-tight">
-                  {item.title}
-                </label>
-              )}
+              <i className="dark:text-white text-neutral-700">{item.icon}</i>
+              <label
+                className={cn(
+                  hide ? "hidden" : "max-xl:hidden",
+                  "dark:text-white text-neutral-800",
+                )}
+              >
+                {item.title}
+              </label>
             </Link>
           </Button>
         </TooltipTrigger>
-        {noText ? (
-          <TooltipContent side="right">
-            <p>{item.title}</p>
-          </TooltipContent>
-        ) : (
-          noText
-        )}
+        <TooltipContent className={cn(hide ? "" : "xl:hidden")} side="right">
+          <p>{item.title}</p>
+        </TooltipContent>
       </Tooltip>
     </TooltipProvider>
   );

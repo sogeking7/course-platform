@@ -166,7 +166,7 @@ export const createLectureSchema = z
   );
 
 const questionSchema = z.object({
-  name: z.string().trim().min(1, { message: "Сурақ қажет" }),
+  name: z.string().trim().min(1, { message: "Сұрақ қажет" }),
   answers: z
     .array(
       z.object({
@@ -237,7 +237,7 @@ export const createCourseSchema = z
       return true;
     },
     {
-      message: "Content is required",
+      message: "Қажет",
       path: ["content"],
     },
   );
@@ -245,7 +245,7 @@ export const createCourseSchema = z
 export const editUserSchema = z.object({
   firstName: z.string().trim().min(1, { message: "Қажет" }),
   lastName: z.string().trim().min(1, { message: "Қажет" }),
-  email: z.string().trim().email(),
+  email: z.string().trim().email("Электрондық почта дұрыс емес"),
 });
 
 export const createUserSchema = z
@@ -254,21 +254,62 @@ export const createUserSchema = z
     lastName: z.string().trim().min(1, { message: "Қажет" }),
     email: z.string().trim().email("Электрондық почта дұрыс емес"),
     password: z
-      .string()
-      .trim()
-      .min(6, { message: "Құпия сөз кемінде 6 таңбадан тұруы керек" })
-      .regex(/(?=.*[0-9])(?=.*[a-zA-Z])/, {
-        message: "Құпия сөзде кем дегенде бір әріп және бір сан болуы керек",
-      }),
+      .union([
+        z
+          .string({ message: "Қажет" })
+          .trim()
+          .min(8, { message: "Құпия сөз кемінде 8 таңбадан тұруы керек" })
+          .max(20, { message: "Құпия сөз 20 таңбадан аспауы керек" })
+          .regex(/(?=.*[0-9])(?=.*[a-zA-Z])/, {
+            message:
+              "Құпия сөзде кем дегенде бір әріп және бір сан болуы керек",
+          }),
+        z.string().length(0),
+      ])
+      .optional()
+      .transform((e) => (e === "" ? undefined : e)),
     repeatPassword: z
-      .string()
-      .trim()
-      .min(6, { message: "Құпия сөз кемінде 6 таңбадан тұруы керек" }),
+      .union([z.string().length(0), z.string({ message: "Қажет" }).trim()])
+      .optional()
+      .transform((e) => (e === "" ? undefined : e)),
+    changePassword_checked: z.boolean().default(false),
   })
-  .refine((data) => data.password === data.repeatPassword, {
-    message: "Құпия сөздер сәйкес келмейді",
-    path: ["repeatPassword"], // path indicates where the error message should be placed
-  });
+  .refine(
+    (data) => {
+      if (data.changePassword_checked === false) return true;
+      else {
+        return data.password === data.repeatPassword;
+      }
+    },
+    {
+      message: "Құпия сөздер сәйкес келмейді",
+      path: ["repeatPassword"], // path indicates where the error message should be placed
+    },
+  )
+  .refine(
+    (data) => {
+      if (data.changePassword_checked) {
+        // return data.password && data.password.trim().length > 0;
+      }
+      return true;
+    },
+    {
+      message: "Қажет",
+      path: ["password", "repeatPassword"],
+    },
+  )
+  .refine(
+    (data) => {
+      if (data.changePassword_checked) {
+        // return data.repeatPassword && data.repeatPassword.trim().length > 0;
+      }
+      return true;
+    },
+    {
+      message: "Қажет",
+      path: ["repeatPassword"],
+    },
+  );
 
 export type Error = {
   statusCode: number;
@@ -276,14 +317,17 @@ export type Error = {
 };
 
 export const loginSchema = z.object({
-  email: z.string().trim().email("Электрондық почта дұрыс емес"),
-  password: z
-    .string()
+  email: z
+    .string({ message: "Қажет" })
     .trim()
-    .min(6, { message: "Құпия сөз кемінде 6 таңбадан тұруы керек" })
-    .regex(/(?=.*[0-9])(?=.*[a-zA-Z])/, {
-      message: "Құпия сөзде кем дегенде бір әріп және бір сан болуы керек",
-    }),
+    .email("Электрондық почта дұрыс емес"),
+  password: z
+    .string({ message: "Қажет" })
+    .trim()
+    .min(8, { message: "Құпия сөз кемінде 8 таңбадан тұруы керек" }),
+  // .regex(/(?=.*[0-9])(?=.*[a-zA-Z])/, {
+  //   message: "Құпия сөзде кем дегенде бір әріп және бір сан болуы керек",
+  // }),
 });
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 3; // 3MB

@@ -33,7 +33,7 @@ export const AdminUsersCreateForm = ({ data, mode = "new" }: Props) => {
     resolver: zodResolver(createExamSchema),
     defaultValues: {
       name: data?.name || "",
-      description: data?.description || "",
+      description: data?.description || "null",
       lectureId: 0,
       questions: data?.questions || "[]",
     },
@@ -42,13 +42,17 @@ export const AdminUsersCreateForm = ({ data, mode = "new" }: Props) => {
   const mutation = useMutation({
     mutationFn: (newData: any) => {
       if (mode === "new") {
+        console.log(newData);
         return examStore.create(newData);
       }
       return examStore.update(data?.id!, newData);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["exam", { id: data?.id! }] }),
+      queryClient.invalidateQueries({ queryKey: ["exam", { id: data?.id! }] });
+      form.reset(form.getValues());
+      if (mode !== "edit") {
         router.back();
+      }
     },
   });
 
@@ -72,7 +76,10 @@ export const AdminUsersCreateForm = ({ data, mode = "new" }: Props) => {
             </FormItem>
           )}
         />
-        <FormField
+
+        {/* !!! NO DESCRIPTION !!! */}
+
+        {/* <FormField
           control={form.control}
           name="description"
           render={({ field }) => (
@@ -83,15 +90,25 @@ export const AdminUsersCreateForm = ({ data, mode = "new" }: Props) => {
               </FormControl>
             </FormItem>
           )}
-        />
-        <div className="flex justify-end">
-          <Button disabled={!form.formState.isDirty} type="submit">
-            {mutation.isPending && (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            {mode === "edit" ? "Өзгерту" : "Қосу"}
-          </Button>
-        </div>
+        /> */}
+
+        {form.formState.isDirty && (
+          <div className="flex justify-end gap-4">
+            <Button
+              type="button"
+              variant={"outline"}
+              onClick={() => form.reset()}
+            >
+              Болдырмау
+            </Button>
+            <Button type="submit">
+              {mutation.isPending && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              Сақтау
+            </Button>
+          </div>
+        )}
       </form>
     </Form>
   );

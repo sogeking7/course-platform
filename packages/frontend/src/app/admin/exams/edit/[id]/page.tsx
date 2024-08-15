@@ -42,11 +42,10 @@ export default function AdminsExamsEditPage({
   return (
     <>
       <Bread breadcrumbs={breadcrumbs} />
-      <div className="w-full gap-4 justify-between flex">
+
+      <div className="w-full md:flex-row flex-col md:gap-4 justify-between flex pb-4">
         <TypographyH1>{data.name}</TypographyH1>
-      </div>
-      <WhiteBox>
-        <div className="flex flex-wrap gap-4 justify-end">
+        <div className="flex flex-wrap gap-2 md:gap-4 justify-end">
           <Link href={"/admin/exams/invite/" + id}>
             <Button variant={"outline"}>
               <UserRoundPlus size={16} className="mr-2" />
@@ -60,10 +59,14 @@ export default function AdminsExamsEditPage({
             </Button>
           </Link>
         </div>
+      </div>
 
+      <WhiteBox>
         <AdminUsersCreateForm data={data} mode="edit" />
+      </WhiteBox>
 
-        <div className="mt-6">
+      <div className="mt-6">
+        <WhiteBox>
           {!!examQuestions.length && (
             <div className="flex flex-col gap-6 mb-6">
               {examQuestions.map((question, index) => {
@@ -89,9 +92,9 @@ export default function AdminsExamsEditPage({
               })}
             </div>
           )}
-        </div>
-        <QuizCreator examId={id} mode="new" />
-      </WhiteBox>
+          <QuizCreator examId={id} mode="new" />
+        </WhiteBox>
+      </div>
     </>
   );
 }

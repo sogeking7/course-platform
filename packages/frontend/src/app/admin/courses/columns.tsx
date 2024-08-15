@@ -32,9 +32,13 @@ export const columns: ColumnDef<Course>[] = [
     accessorKey: "name",
     header: "Аты",
   },
+  // {
+  //   accessorKey: "description",
+  //   header: "Сипаттамасы",
+  // },
   {
-    accessorKey: "description",
-    header: "Сипаттамасы",
+    accessorKey: "id",
+    header: "ID",
   },
   {
     header: "Құрылған күні",
@@ -58,42 +62,16 @@ export const columns: ColumnDef<Course>[] = [
       const course = row.original;
 
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              size={"icon"}
-              variant="ghost"
-              className="!min-h-8 !min-w-8 p-0"
-            >
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {/* <DropdownMenuLabel>Actions</DropdownMenuLabel> */}
-            <DropdownMenuItem asChild>
-              <Link href={`/admin/courses/${course.id}/curriculum`}>
-                <CircleFadingPlus className="mr-2" size={20} />
-                Курс бағдарламасы
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href={`/admin/courses/${course.id}/invite`}>
-                <UserRoundPlus className="mr-2" size={20} />
-                Оқушы қосу
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href={`/admin/courses/${course.id}`}>
-                <Pencil className="mr-2" size={20} />
-                Өңдеу
-              </Link>
-            </DropdownMenuItem>
-
-            {/* <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem> */}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Button
+          size={"icon"}
+          variant={"outline"}
+          className="!min-h-8 !min-w-8 p-0"
+          asChild
+        >
+          <Link href={`/admin/courses/${course.id}`}>
+            <Pencil className="h-4 w-4" />
+          </Link>
+        </Button>
       );
     },
   },

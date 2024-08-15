@@ -1,6 +1,6 @@
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createQuestionSchema } from "@/types";
+import { createQuestionSchema, Question } from "@/types";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,7 +12,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Plus, X } from "lucide-react";
+import { Loader2, Plus, X } from "lucide-react";
 import { useExamStore } from "@/store/exam";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MyAlert } from "./my-alert";
@@ -58,10 +58,14 @@ export const QuizCreator = ({
     },
     onSuccess: () => {
       if (mode === "edit") {
-        queryClient.invalidateQueries({ queryKey: ["exam-questions", { id: examId! }] });
+        queryClient.invalidateQueries({
+          queryKey: ["exam-questions", { id: examId! }],
+        });
         form.reset(form.getValues());
       } else {
-        queryClient.invalidateQueries({ queryKey: ["exam-questions", { id: examId! }] });
+        queryClient.invalidateQueries({
+          queryKey: ["exam-questions", { id: examId! }],
+        });
         form.reset();
       }
     },
@@ -93,7 +97,7 @@ export const QuizCreator = ({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="border w-full bg-white border-neutral-300 rounded-2xl p-4 space-y-3"
+          className="border w-full bg-white border-neutral-300 rounded-lg p-4 space-y-3"
         >
           <div className="w-full flex gap-4">
             <FormField
@@ -101,9 +105,9 @@ export const QuizCreator = ({
               name="text"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>Сурақ</FormLabel>
+                  <FormLabel>Сұрақ</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Сурақ" {...field} />
+                    <Textarea placeholder="Сұрақ" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -160,7 +164,7 @@ export const QuizCreator = ({
                     </FormControl>
                     <Button
                       type="button"
-                      variant="ghost"
+                      variant={"outline"}
                       size={"icon"}
                       onClick={() => remove(index)}
                     >
@@ -180,7 +184,7 @@ export const QuizCreator = ({
                         });
                       }}
                     >
-                      <Plus size={20} className="mr-2" /> Вариант
+                      <Plus size={20} className="mr-2" /> Жаңа Вариант
                     </Button>
                   )}
                 </div>
@@ -200,12 +204,21 @@ export const QuizCreator = ({
                 id={data?.id!}
               />
             )}
-            <Button
-              type="submit"
-              disabled={mode === "new" ? false : !form.formState.isDirty}
-            >
-              {mode === "new" ? "Қосу" : "Өзгерту"}
-            </Button>
+            {(mode === "new" || form.formState.isDirty) && (
+              <>
+                {form.formState.isDirty && (
+                  <Button variant={"outline"} onClick={() => form.reset()}>
+                    Болдырмау
+                  </Button>
+                )}
+                <Button type="submit">
+                  {mutation.isPending && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  Сақтау
+                </Button>
+              </>
+            )}
           </div>
         </form>
       </Form>

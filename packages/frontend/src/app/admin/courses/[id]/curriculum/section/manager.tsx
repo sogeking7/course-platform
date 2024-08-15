@@ -34,11 +34,11 @@ export const CourseSectionManager = (props: Props) => {
 
   return (
     <div className="space-y-6 list-none">
-      {props.sections.map((section, index) => {
+      {props.sections?.map((section, index) => {
         return (
           <li
             key={section.id}
-            className="p-4 sm:p-6 bg-white sm:bg-neutral-100 rounded-2xl border border-neutral-300"
+            className="p-4 sm:p-6 bg-white sm:bg-neutral-100 rounded-lg border border-neutral-300"
           >
             {!edits.find((x) => section.id === x) && (
               <div className="flex w-full justify-end max-sm:flex-wrap gap-4 items-center">
@@ -81,7 +81,7 @@ export const CourseSectionManager = (props: Props) => {
         );
       })}
       {mode === "new" && (
-        <div className="border bg-white border-neutral-300 rounded-xl p-6">
+        <div className="border bg-white border-neutral-300 rounded-lg p-6">
           <Form courseId={props.courseId} mode={mode} setOpen={setMode} />
         </div>
       )}
@@ -92,7 +92,7 @@ export const CourseSectionManager = (props: Props) => {
           onClick={() => setMode("new")}
         >
           <Plus size={20} className="mr-2" />
-          Модуль
+          Жаңа Модуль
         </Button>
       )}
     </div>

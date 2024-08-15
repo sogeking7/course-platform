@@ -56,7 +56,7 @@ export const AdminQuizResultsDataTable = <TData, TValue>({
           <b>{table.getFilteredRowModel().rows.length}</b>
         </div>
       </div>
-      <div className="rounded-2xl border bg-white ">
+      <div className="rounded-lg border bg-white ">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

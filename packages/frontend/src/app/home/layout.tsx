@@ -1,24 +1,34 @@
+"use client";
+
 import { MyContainer } from "@/components/container";
-import { Footer } from "@/components/footer";
 import { HomeHeader } from "@/components/header";
 import { SideBarResizable, SideBarSkeleton } from "@/components/sidebar";
+import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 
 export default function HomeLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+  const hide = pathname.includes("/lecture");
+
   return (
-    <div className="flex w-full min-h-screen">
+    <div className="flex w-full min-h-screen bg-[#F0F2F5] dark:bg-[#121212]">
       <SideBarResizable />
-      <div className="fixed top-0 w-full bg-white z-50">
-        <HomeHeader />
-      </div>
-      <main className="w-full overflow-y-auto flex bg-[#F0F2F5]">
+      <main className="w-full flex ">
         <SideBarSkeleton />
-        <div className="relative pb-[calc(226px+48px)] sm:pb-[calc(138px+48px)] w-full pt-[56px]">
-          <MyContainer>{children}</MyContainer>
-          <Footer />
+        <div
+          className={cn(
+            hide ? "" : "xl:w-[calc(100%-320px)]",
+            "w-[calc(100%-75px)]",
+          )}
+        >
+          <MyContainer>
+            <HomeHeader />
+            {children}
+          </MyContainer>
         </div>
       </main>
     </div>

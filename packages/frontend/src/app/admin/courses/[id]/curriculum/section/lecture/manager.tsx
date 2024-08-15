@@ -36,7 +36,7 @@ export const LectureManager = (props: Props) => {
       >
         {props.lectures.map((lecture, index) => (
           <AccordionItem key={lecture.id} value={`item-${lecture.id}`}>
-            <AccordionTrigger className="w-full bg-white px-3 py-4 border data-[state=closed]:rounded-xl data-[state=open]:rounded-t-xl border-neutral-300">
+            <AccordionTrigger className="w-full bg-white px-3 py-4 border data-[state=closed]:rounded-lg data-[state=open]:rounded-t-xl border-neutral-300">
               <label className=" flex gap-2 items-center">
                 <File size={14} className="min-w-[14px] min-h-[14px]" />
                 <span>Сабақ {index + 1}:</span>
@@ -71,7 +71,7 @@ export const LectureManager = (props: Props) => {
           onClick={() => setMode("new")}
         >
           <Plus size={20} className="mr-2" />
-          Сабақ
+          Жаңа Сабақ
         </Button>
       )}
     </div>

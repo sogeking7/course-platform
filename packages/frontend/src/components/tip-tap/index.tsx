@@ -18,8 +18,16 @@ export const Tiptap = ({
 }: Props) => {
   const editor = useEditor({
     autofocus: false,
+  
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        heading: {
+          levels: []
+        },
+        listItem: false,
+        bulletList: false,
+        orderedList: false,
+      }),
       Placeholder.configure({
         // Use a placeholder:
         placeholder: `${placeholder}…`,
@@ -37,7 +45,9 @@ export const Tiptap = ({
     editorProps: {
       attributes: {
         class: "prose p-5 !max-w-full",
+
       },
+      
     },
 
     onUpdate: ({ editor }) => {
@@ -49,7 +59,7 @@ export const Tiptap = ({
 
   if (!editor) {
     return (
-      <div className="p-5 !w-full bg-white border border-neutral-300 rounded-xl">
+      <div className="p-5 !w-full bg-white border border-neutral-300 rounded-lg">
         Жүктелуде...
       </div>
     );
@@ -57,12 +67,12 @@ export const Tiptap = ({
 
   return (
     <div>
-      <div className="flex justify-between p-1 border-neutral-300 border rounded-t-xl">
+      <div className="flex justify-between p-1 border-neutral-300 border rounded-t-lg">
         {editor && <ToolBar editor={editor} />}
       </div>
       <EditorContent
         placeholder={placeholder}
-        className="border-x border-b border-neutral-300 rounded-b-xl"
+        className="border-x border-b border-neutral-300 rounded-b-lg"
         editor={editor}
       />
     </div>

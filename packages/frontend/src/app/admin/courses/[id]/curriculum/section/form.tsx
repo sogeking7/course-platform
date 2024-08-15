@@ -87,6 +87,8 @@ export default function SectionForm({
             </FormItem>
           )}
         />
+        {/* !!! NO DESCRIPTION !!! */}
+
         {/* <FormField
           control={form.control}
           name="description"
@@ -102,10 +104,11 @@ export default function SectionForm({
             </FormItem>
           )}
         /> */}
+
         <div className="flex justify-end w-full gap-4">
           <Button
             type="button"
-            variant="ghost"
+            variant={"outline"}
             onClick={() => {
               if (mode === "edit") {
                 setEdits!((x) => x.filter((y) => y !== data?.id!));
@@ -116,12 +119,14 @@ export default function SectionForm({
           >
             Болдырмау
           </Button>
-          <Button disabled={!form.formState.isDirty} type="submit">
-            {mutation.isPending && (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            {mode === "new" ? "Косу" : "Сақтау"}
-          </Button>
+          {form.formState.isDirty && (
+            <Button type="submit">
+              {mutation.isPending && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              {mode === "new" ? "Косу" : "Сақтау"}
+            </Button>
+          )}
         </div>
       </form>
     </Form>

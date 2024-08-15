@@ -29,6 +29,10 @@ export const columns = (
     header: "Тегі",
   },
   {
+    accessorKey: "id",
+    header: "ID",
+  },
+  {
     accessorKey: "email",
     header: "Почта",
   },
