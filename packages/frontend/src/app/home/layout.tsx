@@ -25,10 +25,10 @@ export default function HomeLayout({
             "w-[calc(100%-75px)] max-sm:w-full",
           )}
         >
-          <MyContainer>
+          <MyContainer className={"max-sm:border-b max-sm:bg-white !py-2.5"}>
             <HomeHeader />
-            {children}
           </MyContainer>
+          <MyContainer>{children}</MyContainer>
         </div>
       </main>
     </div>

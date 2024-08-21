@@ -124,13 +124,17 @@ export default function CoursePage({ params }: Props) {
             </Accordion>
           </WhiteBox>
         </div>
-        <div className="md:w-2/5 lg:w-1/3">
+        <div className=" md:w-2/5 lg:w-1/3 ">
           <WhiteBox>
-            <Image
-              alt="course image"
-              className="border rounded-lg "
-              src={data.profilePictureLink || "/placeholder-course.jpg"}
-            />
+            <div className="w-full relative aspect-video">
+              <Image
+                alt="course image"
+                className="border rounded-lg object-cover aspect-video"
+                src={data.profilePictureLink || "/placeholder-course.jpg"}
+                fill
+                sizes="(min-width: 640px) 100vw"
+              />
+            </div>
           </WhiteBox>
         </div>
       </div>

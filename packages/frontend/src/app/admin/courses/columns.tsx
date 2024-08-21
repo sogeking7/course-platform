@@ -26,7 +26,15 @@ export const columns: ColumnDef<Course>[] = [
     header: "#",
     cell: () => {
       const image = "/icons/course.png";
-      return <Image alt="icon" src={image} className="inline min-w-7 min-h-7" />;
+      return (
+        <Image
+          alt="icon"
+          width={28}
+          height={28}
+          src={image}
+          className="inline min-w-7 min-h-7"
+        />
+      );
     },
   },
   {

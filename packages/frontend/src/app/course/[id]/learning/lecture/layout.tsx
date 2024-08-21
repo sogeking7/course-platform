@@ -17,15 +17,21 @@ export default function LearningLayout({
   return (
     <div className="flex w-full min-h-screen bg-[#F0F2F5]">
       <SideBarResizable />
-      <main className="w-full flex">
+      <main className="w-full sm:flex">
         <SideBarSkeleton />
         <div
           className={cn(
             hide ? "" : "xl:w-[calc(100%-320px)]",
-            "w-[calc(100%-75px)]",
+            "w-[calc(100%-75px)] max-sm:w-full",
+            "max-md:flex max-md:flex-col w-full",
           )}
         >
-          {children}
+          <div className="md:hidden w-full">
+            <MyContainer className={"max-sm:border-b max-sm:bg-white !py-2.5"}>
+              <HomeHeader />
+            </MyContainer>
+          </div>
+          <div>{children}</div>
         </div>
       </main>
     </div>

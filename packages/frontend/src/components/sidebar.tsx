@@ -165,7 +165,7 @@ const SideBarButton = ({
           <Button
             className={cn(
               "items-center",
-              hide ? "" : "p-3 justify-start xl:px-5",
+              hide && !text ? "" : "p-3 justify-start xl:px-5",
               "p-3",
               "!min-w-[50px] w-full !transition-none font-normal",
               "gap-3",
@@ -186,7 +186,7 @@ const SideBarButton = ({
               <i className="dark:text-white text-neutral-700">{item.icon}</i>
               <label
                 className={cn(
-                  hide ? "hidden" : text ? "" : "max-xl:hidden",
+                  hide ? text ? "" : "hidden" : text ? "" : "max-xl:hidden",
                   "dark:text-white text-neutral-800",
                 )}
               >
@@ -196,7 +196,7 @@ const SideBarButton = ({
           </Button>
         </TooltipTrigger>
         <TooltipContent
-          className={cn(hide ? "" : text ? "hidden" : "xl:hidden")}
+          className={cn(hide ? text ? "hidden" : "" : text ? "hidden" : "xl:hidden")}
           side="right"
         >
           <p>{item.title}</p>
@@ -227,7 +227,7 @@ export const SideBarSheet = () => {
                 <Logo />
               </div>
             </div>
-            <SideBar text={true} />
+            <SideBar text />
           </SheetDescription>
         </SheetHeader>
       </SheetContent>

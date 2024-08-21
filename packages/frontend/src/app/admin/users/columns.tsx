@@ -20,10 +20,18 @@ export const columns = (
     cell: ({ row }) => {
       const data = row.original;
       const image =
-      data.role === "ADMIN"
-      ? "/icons/profile.png"
-      : "/icons/graduation-hat.png";
-      return <Image alt="icon" src={image} className="inline min-w-7 min-h-7" />;
+        data.role === "ADMIN"
+          ? "/icons/profile.png"
+          : "/icons/graduation-hat.png";
+      return (
+        <Image
+          alt="icon"
+          width={28}
+          height={28}
+          src={image}
+          className="inline min-w-7 min-h-7"
+        />
+      );
     },
   },
   {

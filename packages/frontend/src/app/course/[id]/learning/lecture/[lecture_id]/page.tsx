@@ -129,13 +129,13 @@ export default function LectureIdPage({
         ) : (
           <MyContainer>
             <div className="border shadow-sm rounded-lg bg-white">
-              {/* <button
+              <button
                 onClick={() => setIsSheetOpen(true)}
-                className="flex hover:underline font-semibold items-center md:hidden max-md:px-4 max-md:pt-5 "
+                className="flex hover:underline font-semibold items-center md:hidden max-md:px-4 max-md:py-5 "
               >
                 <ListCollapse className="mr-2" />
                 Мазмұн
-              </button> */}
+              </button>
               <div className="border-b p-4 md:p-5 flex justify-between items-center gap-4">
                 <div className="w-full">
                   <p className="text-primary text-sm mb-1 font-medium">
