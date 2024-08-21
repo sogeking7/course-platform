@@ -4,6 +4,7 @@ import { ExamResult } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { MyAlert } from "@/components/my-alert";
 import { UseMutationResult } from "@tanstack/react-query";
+import Image from "next/image";
 
 export const columns = (
   mutation: UseMutationResult<any, Error, string, unknown>,
@@ -17,7 +18,7 @@ export const columns = (
         data.role === "ADMIN"
           ? "/icons/profile.png"
           : "/icons/graduation-hat.png";
-      return <img src={image} className="inline min-w-7 min-h-7" />;
+      return <Image alt="icon" src={image} className="inline min-w-7 min-h-7" />;
     },
   },
   {

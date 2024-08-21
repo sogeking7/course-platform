@@ -50,7 +50,7 @@ export default function UserButton() {
           src={user?.profilePictureLink || "/placeholder.jpg"}
           alt="user"
         /> */}
-      </DropdownMenuTrigger>
+    </DropdownMenuTrigger>
       <DropdownMenuContent  >
         <DropdownMenuLabel>
           {user.firstName + " " + user.lastName}

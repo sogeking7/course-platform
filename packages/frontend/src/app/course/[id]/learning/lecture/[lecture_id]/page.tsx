@@ -105,6 +105,15 @@ export default function LectureIdPage({
     points = sum;
   }
 
+  const currentSection = sections?.find((s) =>
+    s.lectures.some((l) => l.id === lectureId),
+  );
+  const currentLectureIndex = currentSection?.lectures.findIndex(
+    (l) => l.id === lectureId,
+  );
+  const totalLectures = currentSection?.lectures.length ?? 0;
+  const currentLectureNumber = (currentLectureIndex ?? -1) + 1;
+
   return (
     <>
       <AccordionContents lectureId={lecture?.id} courseId={course_id} />
@@ -130,7 +139,9 @@ export default function LectureIdPage({
               <div className="border-b p-4 md:p-5 flex justify-between items-center gap-4">
                 <div className="w-full">
                   <p className="text-primary text-sm mb-1 font-medium">
-                    {`${sections?.find((s) => s.lectures.some((l) => l.id === lectureId))?.lectures.findIndex((l) => l.id === lectureId) + 1}/${sections?.find((s) => s.lectures.some((l) => l.id === lectureId))?.lectures.length} Сабақ - ${lecture.name}`}
+                    {currentLectureNumber > 0 && totalLectures > 0
+                      ? `${currentLectureNumber}/${totalLectures} Сабақ - ${lecture?.name ?? ""}`
+                      : "Сабақ туралы ақпарат қолжетімді емес"}
                   </p>
                   <h1 className="text-slate-900 font-semibold">
                     {

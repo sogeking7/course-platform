@@ -17,16 +17,17 @@ import { useCourseStore } from "@/store/course";
 import { useQuery } from "@tanstack/react-query";
 import { Course } from "@/types";
 import { axiosPublic } from "@/lib/axios";
+import Image from "next/image";
 
 type Props = {
   params: { id: string };
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
-const getCourse = (async (id: number) => {
+const getCourse = async (id: number) => {
   const data: Course = (await axiosPublic.get(`/course/public/${id}`)).data;
   return data;
-});
+};
 
 export default function CoursePage({ params }: Props) {
   const id = Number(params.id);
@@ -35,7 +36,7 @@ export default function CoursePage({ params }: Props) {
 
   const { data, isSuccess, isLoading } = useQuery({
     queryKey: ["course", { id: Number(id) }],
-    queryFn: () => getCourse(id)
+    queryFn: () => getCourse(id),
   });
 
   if (!data || isLoading) {
@@ -55,7 +56,7 @@ export default function CoursePage({ params }: Props) {
           </WhiteBox>
           <WhiteBox>
             <TypographyH2>Курс бағдарламасы</TypographyH2>
-            <ul className="mb-4 text-gray-500 font-semibold flex gap-3">
+            <ul className="mb-6 text-gray-500 font-semibold flex gap-3">
               <li className="flex items-center">
                 <BookOpen
                   strokeWidth={2.4}
@@ -87,10 +88,10 @@ export default function CoursePage({ params }: Props) {
                       index === data.sections.length - 1 ? "rounded-b-lg" : "",
                     )}
                   >
-                    <label className=" flex gap-2 items-center min-w-max">
+                    <label className="flex gap-2 items-center text-left">
                       {/* <File size={14} /> */}
                       {/* <span>sections {index + 1}:</span> */}
-                      <span className="  font-semibold">
+                      <span className="font-semibold">
                         {index + 1}. {section.name}
                       </span>
                     </label>
@@ -125,7 +126,8 @@ export default function CoursePage({ params }: Props) {
         </div>
         <div className="md:w-2/5 lg:w-1/3">
           <WhiteBox>
-            <img
+            <Image
+              alt="course image"
               className="border rounded-lg "
               src={data.profilePictureLink || "/placeholder-course.jpg"}
             />

@@ -9,6 +9,7 @@ import "moment/locale/kk";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Pencil } from "lucide-react";
+import Image from "next/image";
 
 export const columns = (
   mutation?: UseMutationResult<any, Error, number, unknown>,
@@ -22,7 +23,7 @@ export const columns = (
       data.role === "ADMIN"
       ? "/icons/profile.png"
       : "/icons/graduation-hat.png";
-      return <img src={image} className="inline min-w-7 min-h-7" />;
+      return <Image alt="icon" src={image} className="inline min-w-7 min-h-7" />;
     },
   },
   {

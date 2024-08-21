@@ -18,6 +18,7 @@ import {
 import Link from "next/link";
 import Moment from "react-moment";
 import "moment/locale/kk";
+import Image from "next/image";
 
 export const columns: ColumnDef<Course>[] = [
   {
@@ -25,7 +26,7 @@ export const columns: ColumnDef<Course>[] = [
     header: "#",
     cell: () => {
       const image = "/icons/course.png";
-      return <img src={image} className="inline min-w-7 min-h-7" />;
+      return <Image alt="icon" src={image} className="inline min-w-7 min-h-7" />;
     },
   },
   {

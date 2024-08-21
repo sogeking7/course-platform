@@ -13,9 +13,17 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { LogIn, LogOut } from "lucide-react";
+import { LogIn, LogOut, Menu } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
-export const SideBar = () => {
+export const SideBar = ({ text = false }: { text?: boolean }) => {
   const { data: session } = useSession();
   const user = session?.user;
   const role = user?.role;
@@ -25,7 +33,7 @@ export const SideBar = () => {
       <ul className="space-y-2">
         {default_links.map((item) => (
           <li className={cn("px-3", "w-full")} key={item.title}>
-            <SideBarButton item={item} />
+            <SideBarButton text={text} item={item} />
           </li>
         ))}
       </ul>
@@ -33,18 +41,18 @@ export const SideBar = () => {
         <ul className="space-y-1 mt-2">
           {sidebar_links.map((item) => (
             <li className={cn("px-3", "w-full")} key={item.title}>
-              <SideBarButton item={item} />
+              <SideBarButton text={text} item={item} />
             </li>
           ))}
         </ul>
       )}
       {role === "ADMIN" && (
         <>
-          <hr className="my-2 dark:border"/>
+          <hr className="my-2 dark:border" />
           <ul className="space-y-2">
             {admin_links.map((item) => (
               <li className={cn("px-3", "w-full")} key={item.title}>
-                <SideBarButton item={item} />
+                <SideBarButton text={text} item={item} />
               </li>
             ))}
           </ul>
@@ -62,7 +70,7 @@ export const SideBarSkeleton = () => {
   return (
     <aside
       className={cn(
-        "min-w-[75px]",
+        "min-w-[75px] max-sm:hidden",
         hide ? "" : "xl:min-w-[320px]",
         "min-h-screen max-h-full",
       )}
@@ -81,7 +89,7 @@ export const SideBarResizable = () => {
     <aside
       className={cn(
         "z-10 fixed",
-        "min-w-[75px]",
+        "min-w-[75px] max-sm:hidden",
         hide ? "" : "xl:min-w-[320px]",
         "bg-white  dark:bg-[#1f1f1f] flex flex-col justify-between py-6 md:py-8 fixed border-r border-neutral-300 dark:border-neutral-700 min-h-screen max-h-full ",
       )}
@@ -133,6 +141,7 @@ export const SideBarResizable = () => {
 
 const SideBarButton = ({
   item,
+  text = false,
 }: {
   item: {
     title: string;
@@ -140,6 +149,7 @@ const SideBarButton = ({
     action?: any;
     icon: JSX.Element;
   };
+  text?: boolean;
 }) => {
   const pathname = usePathname();
   const hide = pathname.includes("/lecture");
@@ -155,7 +165,7 @@ const SideBarButton = ({
           <Button
             className={cn(
               "items-center",
-              hide ? "" : "p-3 xl:justify-start xl:px-5",
+              hide ? "" : "p-3 justify-start xl:px-5",
               "p-3",
               "!min-w-[50px] w-full !transition-none font-normal",
               "gap-3",
@@ -176,7 +186,7 @@ const SideBarButton = ({
               <i className="dark:text-white text-neutral-700">{item.icon}</i>
               <label
                 className={cn(
-                  hide ? "hidden" : "max-xl:hidden",
+                  hide ? "hidden" : text ? "" : "max-xl:hidden",
                   "dark:text-white text-neutral-800",
                 )}
               >
@@ -185,10 +195,42 @@ const SideBarButton = ({
             </Link>
           </Button>
         </TooltipTrigger>
-        <TooltipContent className={cn(hide ? "" : "xl:hidden")} side="right">
+        <TooltipContent
+          className={cn(hide ? "" : text ? "hidden" : "xl:hidden")}
+          side="right"
+        >
           <p>{item.title}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
+  );
+};
+
+export const SideBarSheet = () => {
+  return (
+    <Sheet>
+      <SheetTrigger asChild className="sm:hidden">
+        <Button
+          size={"icon"}
+          variant={"outline"}
+          className="!min-w-11 !min-h-11"
+        >
+          <Menu size={24} strokeWidth={1.8} />
+        </Button>
+      </SheetTrigger>
+      <SheetContent side={"left"} className="!px-0 w-[320px]">
+        <SheetHeader>
+          {/* <SheetTitle>Are you absolutely sure?</SheetTitle> */}
+          <SheetDescription>
+            <div className={cn("w-full px-5 pb-8")}>
+              <div className="ml-3 w-[160px]">
+                <Logo />
+              </div>
+            </div>
+            <SideBar text={true} />
+          </SheetDescription>
+        </SheetHeader>
+      </SheetContent>
+    </Sheet>
   );
 };

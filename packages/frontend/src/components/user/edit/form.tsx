@@ -56,7 +56,7 @@ export const UserEditForm = () => {
     if (status === "authenticated") {
       form.reset(user);
     }
-  }, [status, form.reset, user]);
+  }, [status, form.reset, user, form]);
 
   if (status === "loading") {
     return <div className="">Жүктелуде...</div>;

@@ -22,7 +22,7 @@ export default function HomeLayout({
         <div
           className={cn(
             hide ? "" : "xl:w-[calc(100%-320px)]",
-            "w-[calc(100%-75px)]",
+            "w-[calc(100%-75px)] max-sm:w-full",
           )}
         >
           <MyContainer>

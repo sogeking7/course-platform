@@ -7,6 +7,7 @@ import { MyAlert } from "@/components/my-alert";
 import Moment from "react-moment";
 import "moment/locale/kk";
 import { Checkbox } from "@/components/ui/checkbox";
+import Image from "next/image";
 
 export const columns = (
   mutation?: UseMutationResult<any, Error, number, unknown>,
@@ -42,7 +43,7 @@ export const columns = (
         data.role === "ADMIN"
           ? "/icons/profile.png"
           : "/icons/graduation-hat.png";
-      return <img src={image} className="inline min-w-7 min-h-7" />;
+      return <Image alt="icon" src={image} className="inline min-w-7 min-h-7" />;
     },
   },
   {

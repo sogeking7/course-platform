@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Course } from "../../types";
 import Link from "next/link";
+import Image from "next/image";
 
 export const CourseCard = ({
   item,
@@ -18,7 +19,8 @@ export const CourseCard = ({
         <div className="my-2 sm:mt-4 max-sm:pl-0 max-sm:mr-4 w-full">
           <h1 className="font-semibold  line-clamp-2">{item.name}</h1>
         </div>
-        <img
+        <Image
+          alt="course image"
           className={cn(
             "object-cover",
             "rounded-lg max-sm:aspect-square sm:aspect-video",

@@ -18,13 +18,14 @@ import {
 import Link from "next/link";
 import Moment from "react-moment";
 import "moment/locale/kk";
+import Image from "next/image";
 
 export const columns: ColumnDef<Exam>[] = [
   {
     id: "icon",
     header: "#",
     cell: ({ row }) => {
-      return <img src="/icons/test.png" className="inline min-w-7 min-h-7" />;
+      return <Image alt="icon" src="/icons/test.png" className="inline min-w-7 min-h-7" />;
     },
   },
   {

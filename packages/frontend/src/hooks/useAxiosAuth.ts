@@ -33,7 +33,7 @@ export const useAxiosAuth = () => {
     return () => {
       axios.interceptors.request.eject(requestIntercept);
     };
-  }, [session]);
+  }, [mutation, session]);
 
   // return axios;
 };

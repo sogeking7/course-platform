@@ -78,6 +78,7 @@ export const AdminExamsUserInviteDataTable = <TData, TValue>({
       JSON.stringify(addMissingKeys(rowSelection, data.length)) !==
         JSON.stringify(addMissingKeys(initialRow, data.length)),
     );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rowSelection, initialRow]);
 
   // useEffect(() => {

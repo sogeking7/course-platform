@@ -201,7 +201,7 @@ export const PictureForm = ({
           </DialogHeader>
           {imageObj ? (
             // <div className={`aspect-[${aspect}]`}>
-            <img
+            <Image
               className={cn(
                 cropShape === "round" ? "rounded-full " : "",
                 "w-full h-full border",
@@ -297,7 +297,7 @@ export const PictureForm = ({
           </>
         ) : (
           <div className="min-w-[240px] max-w-[300px] ">
-            <img
+            <Image
               className={cn(
                 cropShape === "round" ? "rounded-full " : "",
                 "w-full h-full border rounded-md",
